@@ -2,7 +2,6 @@ package io.w4t3rcs.python.local.impl;
 
 import io.w4t3rcs.python.local.ProcessFinisher;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 /**
  * Implementation of the {@link ProcessFinisher} interface that logs process completion.
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
  * based on whether the process completed successfully or with errors.
  */
 @Slf4j
-@Service
 public class ProcessFinisherImpl implements ProcessFinisher {
     @Override
     public void finish(Process process) {

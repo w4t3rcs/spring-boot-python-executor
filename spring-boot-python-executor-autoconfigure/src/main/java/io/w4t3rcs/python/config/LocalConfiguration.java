@@ -22,8 +22,8 @@ import org.springframework.context.annotation.Configuration;
  * <p>The configuration is conditionally enabled based on the "spring.python.executor.type" property</p>
  */
 @Configuration
-@ConditionalOnProperty(name = "spring.python.executor.type", havingValue = "LOCAL")
-public class LocalConfig {
+@ConditionalOnProperty(name = "spring.python.executor.type", havingValue = "local")
+public class LocalConfiguration {
     @Bean
     public ProcessStarter processStarter(PythonExecutorProperties executorProperties, PythonFileHandler pythonFileHandler) {
         return new ProcessStarterImpl(executorProperties, pythonFileHandler);

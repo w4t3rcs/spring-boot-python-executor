@@ -1,12 +1,11 @@
 package io.w4t3rcs.python.local.impl;
 
-import io.w4t3rcs.python.config.PythonExecutorProperties;
-import io.w4t3rcs.python.config.PythonResolverProperties;
 import io.w4t3rcs.python.exception.PythonReadingException;
 import io.w4t3rcs.python.local.ProcessHandler;
+import io.w4t3rcs.python.properties.PythonExecutorProperties;
+import io.w4t3rcs.python.properties.PythonResolverProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +19,6 @@ import java.util.concurrent.atomic.AtomicReference;
  * <p>It is typically used to capture the results of Python script execution.</p>
  */
 @Slf4j
-@Service
 @RequiredArgsConstructor
 public class InputProcessHandler implements ProcessHandler<String> {
     private final PythonExecutorProperties executorProperties;

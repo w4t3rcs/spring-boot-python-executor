@@ -27,7 +27,9 @@ public class GrpcPythonExecutor implements PythonExecutor {
                     .setScript(script)
                     .build());
             String result = response.getResult();
-            return objectMapper.readValue(result, resultClass);
+            return resultClass == null || result.isBlank()
+                    ? null
+                    : objectMapper.readValue(result, resultClass);
         } catch (Exception e) {
             throw new PythonScriptExecutionException(e);
         }

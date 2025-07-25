@@ -5,7 +5,6 @@ import io.w4t3rcs.python.file.PythonFileHandler;
 import io.w4t3rcs.python.processor.PythonProcessor;
 import io.w4t3rcs.python.resolver.PythonResolver;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,6 @@ import java.util.Map;
  * Basic Processor implementation that processes default behavior of declared beans:
  * {@link PythonExecutor} and {@link PythonResolver}
  */
-@Service
 @RequiredArgsConstructor
 public class PythonProcessorImpl implements PythonProcessor {
     private final PythonFileHandler pythonFileHandler;

@@ -10,7 +10,6 @@ import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
@@ -20,7 +19,6 @@ import java.util.Map;
  * annotations and executes the specified Python scripts before or after the method execution.
  */
 @Aspect
-@Component
 @RequiredArgsConstructor
 public class PythonAspect {
     private final PythonProcessor pythonProcessor;

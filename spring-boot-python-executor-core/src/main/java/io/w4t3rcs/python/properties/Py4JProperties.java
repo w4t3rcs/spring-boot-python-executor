@@ -1,8 +1,6 @@
-package io.w4t3rcs.python.config;
+package io.w4t3rcs.python.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.bind.DefaultValue;
-import py4j.GatewayServer;
 
 /**
  * Configuration properties for Py4J integration.
@@ -11,11 +9,5 @@ import py4j.GatewayServer;
  * <p>Properties are bound from the application configuration using the prefix "spring.python.py4j".</p>
  */
 @ConfigurationProperties("spring.python.py4j")
-public record Py4JProperties(@DefaultValue("false") boolean enabled,
-                             @DefaultValue(GatewayServer.DEFAULT_ADDRESS) String host,
-                             @DefaultValue("25333") int port,
-                             @DefaultValue("25334") int pythonPort,
-                             @DefaultValue("0") int connectTimeout,
-                             @DefaultValue("0") int readTimeout,
-                             @DefaultValue("true") boolean loggable) {
+public record Py4JProperties(boolean enabled, String host, int port, int pythonPort, int connectTimeout, int readTimeout, boolean loggable) {
 }

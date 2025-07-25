@@ -3,10 +3,11 @@ package io.w4t3rcs.python.config;
 import io.w4t3rcs.python.aspect.PythonAspect;
 import io.w4t3rcs.python.executor.PythonExecutor;
 import io.w4t3rcs.python.file.PythonFileHandler;
-import io.w4t3rcs.python.file.impl.PythonFileHandlerImpl;
+import io.w4t3rcs.python.file.impl.BasicPythonFileHandler;
+import io.w4t3rcs.python.file.impl.CachingBasicPythonFileHandler;
 import io.w4t3rcs.python.processor.PythonProcessor;
 import io.w4t3rcs.python.processor.impl.PythonProcessorImpl;
-import io.w4t3rcs.python.properties.PythonProperties;
+import io.w4t3rcs.python.properties.PythonFileProperties;
 import io.w4t3rcs.python.resolver.PythonResolver;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.*;
@@ -19,19 +20,27 @@ import java.util.List;
  * 
  * <p>It enables:</p>
  * <ul>
- *   <li>Component scanning for all classes in the io.w4t3rcs.python package</li>
+ *   <li>Importing necessary configuration classes</li>
  *   <li>Aspect-oriented programming support for Python script execution via annotations</li>
- *   <li>Configuration properties for Python execution, SpEL integration, and result processing</li>
  * </ul>
  */
 @Configuration
 @EnableAspectJAutoProxy
-@EnableConfigurationProperties(PythonProperties.class)
-@Import({GrpcConfig.class, LocalConfig.class, Py4JConfig.class, PythonExecutorConfig.class, PythonResolverConfig.class})
-public class PythonConfig {
+@EnableConfigurationProperties({
+        PythonFileProperties.class
+})
+@Import({
+        GrpcConfiguration.class,
+        LocalConfiguration.class,
+        Py4JConfiguration.class,
+        PythonExecutorConfiguration.class,
+        PythonResolverConfiguration.class
+})
+@PropertySource("classpath:python-default.properties")
+public class PythonAutoConfiguration {
     @Bean
-    public PythonFileHandler pythonFileHandler(PythonProperties pythonProperties) {
-        return new PythonFileHandlerImpl(pythonProperties);
+    public PythonFileHandler pythonFileHandler(PythonFileProperties fileProperties) {
+        return fileProperties.cacheable() ? new CachingBasicPythonFileHandler(fileProperties) : new BasicPythonFileHandler(fileProperties);
     }
 
     @Bean

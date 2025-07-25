@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties(PythonResolverProperties.class)
-public class PythonResolverConfig {
+public class PythonResolverConfiguration {
     @Bean
     @Conditional(SpelythonResolverCondition.class)
     public PythonResolver spelythonResolver(PythonResolverProperties resolverProperties, ApplicationContext applicationContext, ObjectMapper objectMapper) {

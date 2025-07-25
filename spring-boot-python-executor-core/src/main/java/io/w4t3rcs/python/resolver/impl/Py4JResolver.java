@@ -1,7 +1,6 @@
 package io.w4t3rcs.python.resolver.impl;
 
-import io.w4t3rcs.python.config.Py4JCondition;
-import io.w4t3rcs.python.config.PythonResolverProperties;
+import io.w4t3rcs.python.properties.PythonResolverProperties;
 import io.w4t3rcs.python.resolver.AbstractPythonResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.annotation.Order;
@@ -15,7 +14,7 @@ import java.util.Map;
  * 
  * <p>The resolver can process both inline scripts and scripts loaded from files.</p>
  * 
- * <p>This resolver is conditionally enabled based on the {@link Py4JCondition}.</p>
+ * <p>This resolver is conditionally enabled based on the {@code Py4JCondition}.</p>
  */
 @Order(2)
 @RequiredArgsConstructor

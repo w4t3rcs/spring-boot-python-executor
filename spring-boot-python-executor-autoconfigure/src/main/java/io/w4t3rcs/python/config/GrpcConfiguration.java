@@ -17,8 +17,8 @@ import org.springframework.grpc.client.GrpcChannelFactory;
  * <p>The configuration is conditionally enabled based on the "spring.python.executor.type" property</p>
  */
 @Configuration
-@ConditionalOnProperty(name = "spring.python.executor.type", havingValue = "GRPC")
-public class GrpcConfig {
+@ConditionalOnProperty(name = "spring.python.executor.type", havingValue = "grpc")
+public class GrpcConfiguration {
     private static final String USERNAME_KEY = "X-Username";
     private static final String PASSWORD_KEY = "X-Password";
 

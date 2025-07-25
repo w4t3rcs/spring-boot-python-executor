@@ -26,7 +26,7 @@ import java.net.UnknownHostException;
 @Configuration
 @Conditional(Py4JCondition.class)
 @EnableConfigurationProperties({Py4JProperties.class})
-public class Py4JConfig {
+public class Py4JConfiguration {
     @Bean
     @ConditionalOnMissingBean(GatewayServer.class)
     public GatewayServer py4JGatewayServer(Py4JProperties py4JProperties) {

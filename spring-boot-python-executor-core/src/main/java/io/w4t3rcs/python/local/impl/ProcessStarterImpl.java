@@ -1,12 +1,11 @@
 package io.w4t3rcs.python.local.impl;
 
-import io.w4t3rcs.python.config.PythonExecutorProperties;
 import io.w4t3rcs.python.exception.ProcessStartException;
 import io.w4t3rcs.python.file.PythonFileHandler;
 import io.w4t3rcs.python.local.ProcessStarter;
+import io.w4t3rcs.python.properties.PythonExecutorProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
@@ -16,7 +15,6 @@ import java.io.IOException;
  * script files or from inline Python code.
  */
 @Slf4j
-@Service
 @RequiredArgsConstructor
 public class ProcessStarterImpl implements ProcessStarter {
     private static final String COMMAND_HEADER = "-c";
@@ -24,14 +22,14 @@ public class ProcessStarterImpl implements ProcessStarter {
     private final PythonFileHandler pythonFileHandler;
 
     @Override
-    public Process start(String command) {
+    public Process start(String script) {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder();
             String startCommand = executorProperties.local().startCommand();
-            if (pythonFileHandler.isPythonFile(command)) {
-                processBuilder.command(startCommand, pythonFileHandler.getScriptPath(command).toString());
+            if (pythonFileHandler.isPythonFile(script)) {
+                processBuilder.command(startCommand, pythonFileHandler.getScriptPath(script).toString());
             } else {
-                processBuilder.command(startCommand, COMMAND_HEADER, command);
+                processBuilder.command(startCommand, COMMAND_HEADER, script.replace("\"", "\"\""));
             }
 
             log.info("Python script is going to be executed");

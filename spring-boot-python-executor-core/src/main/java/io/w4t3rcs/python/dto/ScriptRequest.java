@@ -1,4 +1,4 @@
 package io.w4t3rcs.python.dto;
 
-public record ScriptRequest() {
+public record ScriptRequest(String script) {
 }

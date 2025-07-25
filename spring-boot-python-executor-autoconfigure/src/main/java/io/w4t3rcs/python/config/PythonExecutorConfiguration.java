@@ -22,10 +22,10 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties(PythonExecutorProperties.class)
-public class PythonExecutorConfig {
+public class PythonExecutorConfiguration {
     @Bean
     @ConditionalOnMissingBean(PythonExecutor.class)
-    @ConditionalOnProperty(name = "spring.python.executor.type", havingValue = "LOCAL", matchIfMissing = true)
+    @ConditionalOnProperty(name = "spring.python.executor.type", havingValue = "local", matchIfMissing = true)
     public PythonExecutor localPythonExecutor(ProcessStarter processStarter,
                                               ProcessHandler<String> inputProcessHandler,
                                               ProcessHandler<Void> errorProcessHandler,
@@ -36,14 +36,14 @@ public class PythonExecutorConfig {
 
     @Bean
     @ConditionalOnMissingBean(PythonExecutor.class)
-    @ConditionalOnProperty(name = "spring.python.executor.type", havingValue = "REST")
+    @ConditionalOnProperty(name = "spring.python.executor.type", havingValue = "rest")
     public PythonExecutor restPythonExecutor(PythonExecutorProperties properties, ObjectMapper objectMapper) {
         return new RestPythonExecutor(properties, objectMapper);
     }
 
     @Bean
     @ConditionalOnMissingBean(PythonExecutor.class)
-    @ConditionalOnProperty(name = "spring.python.executor.type", havingValue = "GRPC")
+    @ConditionalOnProperty(name = "spring.python.executor.type", havingValue = "grpc")
     public PythonExecutor grpcPythonExecutor(PythonServiceGrpc.PythonServiceBlockingStub stub, ObjectMapper objectMapper) {
         return new GrpcPythonExecutor(stub, objectMapper);
     }

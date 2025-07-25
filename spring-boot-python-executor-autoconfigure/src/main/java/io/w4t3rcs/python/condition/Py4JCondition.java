@@ -1,4 +1,4 @@
-package io.w4t3rcs.python.config;
+package io.w4t3rcs.python.condition;
 
 import io.w4t3rcs.python.metadata.EnablePy4J;
 import org.springframework.beans.factory.config.BeanDefinition;

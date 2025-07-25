@@ -1,13 +1,14 @@
 package io.w4t3rcs.python.file.impl;
 
-import io.w4t3rcs.python.properties.PythonProperties;
 import io.w4t3rcs.python.exception.PythonScriptPathGettingException;
 import io.w4t3rcs.python.exception.PythonScriptReadingFromFileException;
 import io.w4t3rcs.python.exception.PythonScriptWritingToFileException;
 import io.w4t3rcs.python.file.PythonFileHandler;
+import io.w4t3rcs.python.properties.PythonFileProperties;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -26,8 +27,9 @@ import java.util.stream.Collectors;
  * the configured Python properties.</p>
  */
 @RequiredArgsConstructor
-public class PythonFileHandlerImpl implements PythonFileHandler {
-    private final PythonProperties pythonProperties;
+public class BasicPythonFileHandler implements PythonFileHandler {
+    @Getter(AccessLevel.PROTECTED)
+    private final PythonFileProperties fileProperties;
 
     @Override
     public boolean isPythonFile(String filename) {
@@ -81,7 +83,7 @@ public class PythonFileHandlerImpl implements PythonFileHandler {
     @Override
     public Path getScriptPath(String path) {
         try {
-            ClassPathResource classPathResource = new ClassPathResource(pythonProperties.path() + path);
+            ClassPathResource classPathResource = new ClassPathResource(fileProperties.path() + path);
             return classPathResource.getFile().toPath();
         } catch (IOException e) {
             throw new PythonScriptPathGettingException(e);

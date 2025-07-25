@@ -31,7 +31,9 @@ public class LocalPythonExecutor implements PythonExecutor {
             String jsonResult = inputProcessHandler.handle(process);
             errorProcessHandler.handle(process);
             processFinisher.finish(process);
-            return jsonResult != null ? objectMapper.readValue(jsonResult, resultClass) : null;
+            return resultClass == null || jsonResult == null || jsonResult.isBlank()
+                    ? null
+                    : objectMapper.readValue(jsonResult, resultClass);
         } catch (Exception e) {
             throw new PythonScriptExecutionException(e);
         }

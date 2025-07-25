@@ -2,8 +2,8 @@ package io.w4t3rcs.python.resolver.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.w4t3rcs.python.config.PythonResolverProperties;
 import io.w4t3rcs.python.exception.SpelythonProcessingException;
+import io.w4t3rcs.python.properties.PythonResolverProperties;
 import io.w4t3rcs.python.resolver.AbstractPythonResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
@@ -65,7 +65,7 @@ public class SpelythonResolver extends AbstractPythonResolver {
                         Object expressionValue = expression.getValue(context, Object.class);
                         String jsonResult = objectMapper.writeValueAsString(expressionValue);
                         return result.append("json.loads('")
-                                .append(jsonResult.replace("\"", "\"\""))
+                                .append(jsonResult)
                                 .append("')");
                     } catch (JsonProcessingException e) {
                         throw new SpelythonProcessingException(e);

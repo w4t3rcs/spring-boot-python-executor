@@ -2,19 +2,33 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="spring-boot-python-executor-autoconfigure" />
-        <module name="spring-boot-python-executor-starter" />
         <module name="spring-boot-python-executor-core" />
+        <module name="spring-boot-python-executor-starter" />
+      </profile>
+      <profile name="Annotation profile for example" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-configuration-processor/3.5.3/spring-boot-configuration-processor-3.5.3.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+        </processorPath>
+        <module name="example" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="spring-boot-python-executor-core" options="-parameters" />
+      <module name="example" options="-parameters" />
+      <module name="spring-boot-python-executor-autoconfigure" options="" />
+      <module name="spring-boot-python-executor-core" options="" />
+      <module name="spring-boot-python-executor-starter" options="" />
     </option>
   </component>
 </project>

@@ -1,6 +1,6 @@
 package io.w4t3rcs.python.resolver.impl;
 
-import io.w4t3rcs.python.config.PythonResolverProperties;
+import io.w4t3rcs.python.properties.PythonResolverProperties;
 import io.w4t3rcs.python.resolver.AbstractPythonResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.annotation.Order;
