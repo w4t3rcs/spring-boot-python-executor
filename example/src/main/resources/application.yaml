@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: example
+  python:
+    executor:
+      type: grpc
+      grpc:
+        username: root
+        password: password
+    resolver:
+      declared: spelython, restricted_python, result

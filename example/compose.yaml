@@ -1,0 +1,8 @@
+services:
+  python-grpc-server:
+    image: w4t3rcs/spring-boot-python-executor-python-grpc-server
+    environment:
+      PYTHON_SERVER_USERNAME: root
+      PYTHON_SERVER_PASSWORD: password
+    ports:
+      - '50051:50051'

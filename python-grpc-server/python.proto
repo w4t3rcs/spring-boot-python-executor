@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package python;
+
+service PythonService {
+  rpc SendCode(PythonRequest) returns (PythonResponse) {}
+}
+
+message PythonRequest {
+  string script = 1;
+}
+
+message PythonResponse {
+  string result = 1;
+}
