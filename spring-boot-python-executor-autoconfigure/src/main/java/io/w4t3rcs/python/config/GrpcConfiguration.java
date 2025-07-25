@@ -19,8 +19,8 @@ import org.springframework.grpc.client.GrpcChannelFactory;
 @Configuration
 @ConditionalOnProperty(name = "spring.python.executor.type", havingValue = "grpc")
 public class GrpcConfiguration {
-    private static final String USERNAME_KEY = "X-Username";
-    private static final String PASSWORD_KEY = "X-Password";
+    private static final String USERNAME_KEY = "x-username";
+    private static final String PASSWORD_KEY = "x-password";
 
     @Bean
     public PythonServiceGrpc.PythonServiceBlockingStub stub(PythonExecutorProperties properties, GrpcChannelFactory channels) {

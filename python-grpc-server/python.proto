@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-package python;
-
 service PythonService {
   rpc SendCode(PythonRequest) returns (PythonResponse) {}
 }
