@@ -9,3 +9,5 @@ spring:
     py4j:
       enabled: true
       auth-token: token
+    cache:
+      enabled: true

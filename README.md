@@ -17,13 +17,13 @@
 - [Features & Architecture](#-features--architecture)
   - [Core Components](#core-components)
   - [Security](#security)
-  - [Integration](#integration)
 - [Installation and Setup](#-installation-and-setup)
 - [Configuration](#-configuration)
   - [File Properties](#file-properties)
   - [Executor Properties](#executor-properties)
   - [Resolver Properties](#resolver-properties)
   - [Py4J Properties](#py4j-properties)
+  - [Py4J Properties](#cache-properties)
 - [Execution Modes](#-execution-modes)
   - [Local Execution](#local-execution)
   - [REST Execution](#rest-execution)
@@ -120,10 +120,11 @@ classDiagram
 
 The library uses RestrictedPython to create a sandboxed environment for Python execution, preventing potentially harmful operations while allowing controlled script execution.
 
-### Integration
+### Cache
 
-- **AOP Support**: Execute Python before/after Java methods using annotations
-- **SpEL Integration**: Access Java variables in Python code using SpEL expressions
+The library supports transparent result caching via the Spring Cache abstraction.
+It allows storing the results of Python script executions to avoid repeated computation.
+Any Spring-compatible CacheManager can be used, including in-memory, Redis, Caffeine, etc.
 
 ## 📦 Installation and Setup
 
@@ -238,32 +239,28 @@ implementation 'io.github.w4t3rcs:spring-boot-python-executor-starter:1.0.0'
 
 ### Py4J Properties
 
-| Property                             | Description                                       | Default        |
-|--------------------------------------|---------------------------------------------------|----------------|
-| `spring.python.py4j.enabled`         | Whether to enable Py4J                            | `false`        |
-| `spring.python.py4j.host`            | Py4J server host                                  | `localhost`    |
-| `spring.python.py4j.port`            | Py4J server port                                  | `25333`        |
-| `spring.python.py4j.python-host`     | Py4J Python host                                  | `localhost`    |
-| `spring.python.py4j.python-port`     | Py4J Python port                                  | `25334`        |
-| `spring.python.py4j.auth-token`      | Authentication token for Py4J                     | `-` (required) |
-| `spring.python.py4j.connect-timeout` | Connection timeout in milliseconds (0 = infinite) | `0`            |
-| `spring.python.py4j.read-timeout`    | Read timeout in milliseconds (0 = infinite)       | `0`            |
-| `spring.python.py4j.loggable`        | Whether to log Py4J operations                    | `true`         |
+| Property                             | Description                            | Default        |
+|--------------------------------------|----------------------------------------|----------------|
+| `spring.python.py4j.enabled`         | Whether to enable Py4J                 | `false`        |
+| `spring.python.py4j.host`            | Py4J server host                       | `localhost`    |
+| `spring.python.py4j.port`            | Py4J server port                       | `25333`        |
+| `spring.python.py4j.python-host`     | Py4J Python host                       | `localhost`    |
+| `spring.python.py4j.python-port`     | Py4J Python port                       | `25334`        |
+| `spring.python.py4j.auth-token`      | Authentication token for Py4J          | `-` (required) |
+| `spring.python.py4j.connect-timeout` | Connection timeout in milliseconds (0) | `0`            |
+| `spring.python.py4j.read-timeout`    | Read timeout in milliseconds (0)       | `0`            |
+| `spring.python.py4j.loggable`        | Whether to log Py4J operations         | `true`         |
 
-#### Enabling Py4J Gateway Server
+### Cache Properties
 
-The Py4J Gateway Server enables direct communication between Java and Python. You can enable it:
-
-#### Setting the `spring.python.py4j.enabled` property to `true` in your application properties:
-
-```yaml
-spring:
-  python:
-    py4j:
-      enabled: true
-```
-
-When enabled, a Py4J Gateway Server will be started automatically, allowing your Python code to call Java methods directly.
+| Property                                 | Description                                                                                                                | Default       |
+|------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|---------------|
+| `spring.python.cache.enabled`            | Whether to enable caching or not (notice that you must have @EnableCaching and CacheManager bean provider in your project) | `false`       |
+| `spring.python.cache.name`               | Default name for Cache object                                                                                              | `pythonCache` |
+| `spring.python.cache.level`              | Show in which Python script flow phase the needed Caching... bean should be created (`processor` or `executor`)            | `processor`   |
+| `spring.python.cache.key.hash-algorithm` | Key body hash algorithm                                                                                                    | `SHA-256`     |
+| `spring.python.cache.key.charset`        | Key body charset                                                                                                           | `UTF-8`       |
+| `spring.python.cache.key.delimiter`      | Key delimiter between key prefix, key body and key suffix                                                                  | `_`           |
 
 ## 🔄 Execution Modes
 
