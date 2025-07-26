@@ -1,119 +1,88 @@
-# Spring Boot Python Executor
+# 🐍 Spring Boot Python Executor
 
-![Java](https://img.shields.io/badge/Java-17%2B-orange)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.3%2B-green)
-![License](https://img.shields.io/badge/License-MIT-blue)
-![Version](https://img.shields.io/badge/Version-1.0.0-brightgreen)
+<img src="logo.svg" alt="logo :D">
 
-**A powerful bridge between Spring Boot and Python, enabling seamless execution of Python code from Java applications.**
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.w4t3rcs/spring-boot-python-executor.svg)](https://central.sonatype.com/artifact/io.github.w4t3rcs/spring-boot-python-executor-starter)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Java: 17+](https://img.shields.io/badge/Java-17%2B-blue.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+[![Spring Boot: 3.5.3+](https://img.shields.io/badge/Spring%20Boot-3.5.3%2B-brightgreen.svg)](https://spring.io/projects/spring-boot)
+[![Python: 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
+
+<hr>
 
 ## 📋 Table of Contents
 
-- [Overview](#-overview)
-- [Architecture](#-architecture)
-- [Modules](#-modules)
-- [Features](#-features)
-- [Requirements](#-requirements)
-- [Installation](#-installation)
+- [TL;DR](#-tldr)
+- [Introduction](#-introduction)
+- [Features & Architecture](#-features--architecture)
+  - [Core Components](#core-components)
+  - [Security](#security)
+  - [Integration](#integration)
+- [Installation and Setup](#-installation-and-setup)
 - [Configuration](#-configuration)
+  - [File Properties](#file-properties)
+  - [Executor Properties](#executor-properties)
+  - [Resolver Properties](#resolver-properties)
+  - [Py4J Properties](#py4j-properties)
+- [Execution Modes](#-execution-modes)
+  - [Local Execution](#local-execution)
+  - [REST Execution](#rest-execution)
+  - [gRPC Execution](#grpc-execution)
 - [Usage Examples](#-usage-examples)
-- [Example Module](#-example-module)
-- [Advanced Usage](#-advanced-usage)
-- [Python Server Setup](#-python-server-setup)
+  - [Simple Example: Basic Calculation](#simple-example-basic-calculation)
+  - [Realistic Example: Integration with Business Logic](#realistic-example-integration-with-business-logic)
+- [Python Server](#-python-server)
+  - [REST Server](#rest-server)
+  - [gRPC Server](#grpc-server)
+  - [Environment Variables](#environment-variables)
+- [Requirements](#-requirements)
 - [License](#-license)
-- [Author](#-author)
+- [Contributing and Feedback](#-contributing-and-feedback)
+  - [Reporting Issues](#reporting-issues)
+  - [Feature Requests](#feature-requests)
 
-## 🔍 Overview
+<hr>
 
-Spring Boot Python Executor provides a flexible and powerful way to integrate Python functionality into your Spring Boot applications with minimal configuration. It allows you to execute Python code directly from your Java applications using various execution strategies, supporting both annotation-based and programmatic approaches, with Spring Expression Language (SpEL) integration for dynamic value resolution.
+## 🚀 TL;DR
 
-## 🏗️ Architecture
+- **Execute Python scripts** securely from your Spring Boot applications
+- Use **annotations** or direct API calls with **SpEL integration**
+- Supports **local execution**, **REST API**, and **gRPC** communication modes
+- Built-in security with **RestrictedPython**
+- [Jump to Quick Start](#-installation-and-setup)
 
-The library follows a modular architecture designed around several key principles:
+## 📝 Introduction
 
-1. **Separation of Concerns**: Each module has a specific responsibility in the Python execution pipeline
-2. **Extensibility**: The system is designed to be extended with new execution strategies and resolvers
-3. **Integration with Spring Boot**: Seamless integration with Spring Boot's autoconfiguration mechanism
+**Spring Boot Python Executor** is a library that enables secure and extensible execution of Python scripts from Java applications built with Spring Boot. It bridges the gap between Java and Python ecosystems, allowing developers to leverage Python's strengths while maintaining the robustness of Spring Boot applications.
+
+This library is designed for Spring Boot developers who need to integrate Python functionality (like data processing, machine learning algorithms, or specialized libraries) into their Java applications without the complexity of manual process management.
+
+## 🏗️ Features & Architecture
+
+Spring Boot Python Executor provides a flexible architecture for executing Python code from Java:
 
 ### Core Components
 
-- **Resolvers**: Transform Java values into Python code and vice versa or transform Python code to the necessary structure
-- **Executors**: Execute Python code using different strategies (local, gRPC, REST)
-- **Processors**: Orchestrate the execution flow and handle results
-- **Annotations**: Provide declarative Python execution capabilities
+- **PythonExecutor**: Interface for executing Python scripts with three implementations:
+  - Local execution (in-process)
+  - REST-based execution (separate container)
+  - gRPC-based execution (separate container)
+- **PythonResolver**: Processes scripts before execution, supporting:
+  - SpEL integration for accessing Java variables
+  - RestrictedPython for secure execution
+  - Result resolution for capturing Python output
+- **PythonProcessor**: Connects resolvers and executors
 
-## 📦 Modules
+### Security
 
-The project consists of the following modules: each with a specific responsibility:
+The library uses RestrictedPython to create a sandboxed environment for Python execution, preventing potentially harmful operations while allowing controlled script execution.
 
-### Core Module (`spring-boot-python-executor-core`)
+### Integration
 
-The foundation of the library, providing the fundamental API and logic for executing and resolving Python scripts from Java in the Spring Boot ecosystem.
+- **AOP Support**: Execute Python before/after Java methods using annotations
+- **SpEL Integration**: Access Java variables in Python code using SpEL expressions
 
-**Key Components:**
-- `PythonProcessor`: Central component for processing Python scripts
-- `PythonResolver`: Interface for resolving values between Java and Python
-- `PythonExecutor`: Interface for executing Python code
-- Properties classes
-- Annotation definitions (`@PythonBefore`, `@PythonAfter`, `@PythonParam`)
-- gRPC and Py4J integration classes
-
-### Autoconfigure Module (`spring-boot-python-executor-autoconfigure`)
-
-Provides Spring Boot autoconfiguration for the library, automatically configuring components based on application properties.
-
-**Key Components:**
-- `PythonAutoConfiguration`: Main autoconfiguration class
-- Conditional configurations
-- Default property values
-
-### Starter Module (`spring-boot-python-executor-starter`)
-
-Combines the core and autoconfigure modules to provide a seamless integration experience, following the standard Spring Boot starter pattern.
-
-**Dependencies:**
-- Core module
-- Autoconfigure module
-
-### Python REST Server (`python-rest-server`)
-
-A FastAPI-based REST server implementation that executes Python code sent from the Java application, providing an alternative to the gRPC server.
-
-**Key Components:**
-- FastAPI REST endpoints
-- Authentication middleware
-- Request/response handling
-- Error management
-
-
-### Python gRPC Server (`python-grpc-server`)
-
-A Python gRPC server implementation that executes Python code sent from the Java application.
-
-**Key Components:**
-- gRPC service implementation
-- Authentication mechanism
-- Secure execution environment
-- Result serialization
-
-## ✨ Features
-
-- **Multiple Execution Strategies**: Support for both gRPC and REST-based Python execution
-- **Annotation-based Execution**: Execute Python code before or after Java methods using annotations
-- **Programmatic Execution**: Execute Python code programmatically using the `PythonProcessor`
-- **SpEL Integration**: Use Spring Expression Language for dynamic value resolution in Python code
-- **File-based Execution**: Load Python code from external files
-- **Type Conversion**: Automatic conversion of Python results to Java types
-- **Secure Execution**: Authentication and isolated execution environment
-- **Flexible Configuration**: Extensive configuration options for all components
-
-## 📋 Requirements
-
-- Java 17 or higher
-- Spring Boot 3.5.3 or higher
-- Python 3.x (for the Python servers)
-
-## 📥 Installation
+## 📦 Installation and Setup
 
 ### Maven
 
@@ -135,365 +104,259 @@ Add the starter dependency to your `build.gradle`:
 implementation 'io.github.w4t3rcs:spring-boot-python-executor-starter:1.0.0'
 ```
 
-## ⚙️ Configuration
 
-Configure the Python executor in your `application.yaml` or `application.properties`. Below is a comprehensive list of available properties with their default values and descriptions.
+## ⚙️ Configuration
 
 ### File Properties
 
-| Property                       | Default    | Description                                          |
-|--------------------------------|------------|------------------------------------------------------|
-| `spring.python.file.path`      | `/python/` | Base path for Python script files                    |
-| `spring.python.file.cacheable` | `true`     | Whether to cache Python files for better performance |
-
-### Resolver Properties
-
-| Property                          | Default            | Description                              |
-|-----------------------------------|--------------------|------------------------------------------|
-| `spring.python.resolver.declared` | `spelython,result` | Comma-separated list of resolvers to use |
-
-#### Spelython Resolver (SpEL Integration)
-
-| Property                                                     | Default       | Description                                    |
-|--------------------------------------------------------------|---------------|------------------------------------------------|
-| `spring.python.resolver.spelython.regex`                     | `spel\\{.+?}` | Regex pattern to identify SpEL expressions     |
-| `spring.python.resolver.spelython.spel.local-variable-index` | `#`           | Prefix for local variables in SpEL expressions |
-| `spring.python.resolver.spelython.spel.position-from-start`  | `5`           | Position from start in the regex match         |
-| `spring.python.resolver.spelython.spel.position-from-end`    | `1`           | Position from end in the regex match           |
-
-#### Py4J Resolver
-
-| Property                                  | Default                                     | Description                 |
-|-------------------------------------------|---------------------------------------------|-----------------------------|
-| `spring.python.resolver.py4j.import-line` | `from py4j.java_gateway import JavaGateway` | Import statement for Py4J   |
-| `spring.python.resolver.py4j.gateway`     | `gateway = JavaGateway()`                   | Gateway initialization code |
-
-#### Restricted Python Resolver
-
-| Property                                                          | Default                                                                                      | Description                       |
-|-------------------------------------------------------------------|----------------------------------------------------------------------------------------------|-----------------------------------|
-| `spring.python.resolver.restricted-python.import-line`            | `from RestrictedPython import compile_restricted\nfrom RestrictedPython import safe_globals` | Import statements                 |
-| `spring.python.resolver.restricted-python.code-variable-name`     | `source_code`                                                                                | Variable name for the source code |
-| `spring.python.resolver.restricted-python.local-variables-name`   | `execution_result`                                                                           | Variable name for local variables |
-| `spring.python.resolver.restricted-python.safe-result-appearance` | `r4java_restricted`                                                                          | Variable name for the result      |
-| `spring.python.resolver.restricted-python.script-imports-regex`   | `(^import [\\w.]+$)`                                                                         | (^from [\\w.]+ import [\\w.]+$)   |(^from [\\w.]+ import [\\w.]+ as [\\w.]+$)` | Regex for allowed imports |
-| `spring.python.resolver.restricted-python.print-enabled`          | `true`                                                                                       | Whether to allow print statements |
-
-#### Result Resolver
-
-| Property                                            | Default         | Description                                  |
-|-----------------------------------------------------|-----------------|----------------------------------------------|
-| `spring.python.resolver.result.regex`               | `o4java\\{.+?}` | Regex pattern to identify result expressions |
-| `spring.python.resolver.result.appearance`          | `r4java`        | Variable name for the result                 |
-| `spring.python.resolver.result.position-from-start` | `7`             | Position from start in the regex match       |
-| `spring.python.resolver.result.position-from-end`   | `1`             | Position from end in the regex match         |
+| Property                       | Description                          | Default  | Required |
+|--------------------------------|--------------------------------------|----------|----------|
+| `spring.python.file.path`      | Base path for Python script files    | /python/ | No       |
+| `spring.python.file.cacheable` | Whether to cache Python script files | true     | No       |
 
 ### Executor Properties
 
-| Property                      | Default | Description                               |
-|-------------------------------|---------|-------------------------------------------|
-| `spring.python.executor.type` | `local` | Executor type: `local`, `rest`, or `grpc` |
+| Property                      | Description                          | Default | Required |
+|-------------------------------|--------------------------------------|---------|----------|
+| `spring.python.executor.type` | Execution mode: local, rest, or grpc | local   | Yes      |
 
-#### Local Executor
 
-| Property                                     | Default  | Description                      |
-|----------------------------------------------|----------|----------------------------------|
-| `spring.python.executor.local.start-command` | `python` | Command to start Python          |
-| `spring.python.executor.local.loggable`      | `true`   | Whether to log execution details |
+#### Local Executor Properties
 
-#### REST Executor
+| Property                                     | Description                  | Default | Required |
+|----------------------------------------------|------------------------------|---------|----------|
+| `spring.python.executor.local.start-command` | Command to start Python      | python  | No       |
+| `spring.python.executor.local.loggable`      | Whether to log Python output | true    | No       |
 
-| Property                               | Default                                                                          | Description             |
-|----------------------------------------|----------------------------------------------------------------------------------|-------------------------|
-| `spring.python.executor.rest.host`     | `http://localhost`                                                               | REST server host        |
-| `spring.python.executor.rest.port`     | `8000`                                                                           | REST server port        |
-| `spring.python.executor.rest.uri`      | `${spring.python.executor.rest.host}:${spring.python.executor.rest.port}/script` | Full URI                |
-| `spring.python.executor.rest.username` | (none)                                                                           | Authentication username |
-| `spring.python.executor.rest.password` | (none)                                                                           | Authentication password |
+#### REST Executor Properties
 
-#### gRPC Executor
+| Property                               | Description               | Default                                                                          | Required |
+|----------------------------------------|---------------------------|----------------------------------------------------------------------------------|----------|
+| `spring.python.executor.rest.host`     | REST server host          | http://localhost                                                                 | No       |
+| `spring.python.executor.rest.port`     | REST server port          | 8000                                                                             | No       |
+| `spring.python.executor.rest.username` | Authentication username   | -                                                                                | Yes      |
+| `spring.python.executor.rest.password` | Authentication password   | -                                                                                | Yes      |
+| `spring.python.executor.rest.uri`      | Full URI to REST endpoint | `${spring.python.executor.rest.host}:${spring.python.executor.rest.port}/script` | No       |
 
-| Property                               | Default                                                                   | Description             |
-|----------------------------------------|---------------------------------------------------------------------------|-------------------------|
-| `spring.python.executor.grpc.host`     | `localhost`                                                               | gRPC server host        |
-| `spring.python.executor.grpc.port`     | `50051`                                                                   | gRPC server port        |
-| `spring.python.executor.grpc.uri`      | `${spring.python.executor.grpc.host}:${spring.python.executor.grpc.port}` | Full URI                |
-| `spring.python.executor.grpc.username` | (none)                                                                    | Authentication username |
-| `spring.python.executor.grpc.password` | (none)                                                                    | Authentication password |
+#### gRPC Executor Properties
+
+| Property                               | Description              | Default                                                                   | Required |
+|----------------------------------------|--------------------------|---------------------------------------------------------------------------|----------|
+| `spring.python.executor.grpc.host`     | gRPC server host         | localhost                                                                 | No       |
+| `spring.python.executor.grpc.port`     | gRPC server port         | 50051                                                                     | No       |
+| `spring.python.executor.grpc.username` | Authentication username  | -                                                                         | Yes      |
+| `spring.python.executor.grpc.password` | Authentication password  | -                                                                         | Yes      |
+| `spring.python.executor.grpc.uri`      | Full URI to gRPC service | `${spring.python.executor.grpc.host}:${spring.python.executor.grpc.port}` | No       |
+
+### Resolver Properties
+
+#### Core Resolver Properties
+
+| Property                          | Description                                                   | Default          | Required |
+|-----------------------------------|---------------------------------------------------------------|------------------|----------|
+| `spring.python.resolver.declared` | Enabled resolvers: result, spelython, py4j, restricted_python | spelython,result | Yes      |
+
+#### Result Resolver Properties
+
+| Property                                            | Description                                    | Default       | Required |
+|-----------------------------------------------------|------------------------------------------------|---------------|----------|
+| `spring.python.resolver.result.regex`               | Regular expression to match result expressions | o4java\\{.+?} | No       |
+| `spring.python.resolver.result.appearance`          | Variable name for results                      | r4java        | No       |
+| `spring.python.resolver.result.position-from-start` | Position from start of match for extraction    | 7             | No       |
+| `spring.python.resolver.result.position-from-end`   | Position from end of match for extraction      | 1             | No       |
+
+#### Spelython Resolver Properties
+
+| Property                                                     | Description                                  | Default     | Required |
+|--------------------------------------------------------------|----------------------------------------------|-------------|----------|
+| `spring.python.resolver.spelython.regex`                     | Regular expression to match SpEL expressions | spel\\{.+?} | No       |
+| `spring.python.resolver.spelython.spel.local-variable-index` | Prefix for local variables in SpEL           | #           | No       |
+| `spring.python.resolver.spelython.spel.position-from-start`  | Position from start of match for extraction  | 5           | No       |
+| `spring.python.resolver.spelython.spel.position-from-end`    | Position from end of match for extraction    | 1           | No       |
+
+#### Py4J Resolver Properties
+
+| Property                                  | Description                 | Default                                   | Required |
+|-------------------------------------------|-----------------------------|-------------------------------------------|----------|
+| `spring.python.resolver.py4j.import-line` | Import statement for Py4J   | from py4j.java_gateway import JavaGateway | No       |
+| `spring.python.resolver.py4j.gateway`     | Gateway initialization code | gateway = JavaGateway()                   | No       |
+
+#### Restricted Python Resolver Properties
+
+| Property                                                          | Description                                   | Default                                                                                         | Required |
+|-------------------------------------------------------------------|-----------------------------------------------|-------------------------------------------------------------------------------------------------|----------|
+| `spring.python.resolver.restricted-python.import-line`            | Import statements for RestrictedPython        | from RestrictedPython import compile_restricted<br>from RestrictedPython import safe_globals    | No       |
+| `spring.python.resolver.restricted-python.code-variable-name`     | Variable name for source code                 | source_code                                                                                     | No       |
+| `spring.python.resolver.restricted-python.local-variables-name`   | Variable name for local variables             | execution_result                                                                                | No       |
+| `spring.python.resolver.restricted-python.safe-result-appearance` | Variable name for safe results                | r4java_restricted                                                                               | No       |
+| `spring.python.resolver.restricted-python.script-imports-regex`   | Regular expression to match import statements | (^import [\\w.]+$)\|(^from [\\w.]+ import [\\w.]+$)\|(^from [\\w.]+ import [\\w.]+ as [\\w.]+$) | No       |
+| `spring.python.resolver.restricted-python.print-enabled`          | Whether to enable print functionality         | true                                                                                            | No       |
 
 ### Py4J Properties
 
-| Property                             | Default     | Description                         |
-|--------------------------------------|-------------|-------------------------------------|
-| `spring.python.py4j.enabled`         | `false`     | Whether Py4J integration is enabled |
-| `spring.python.py4j.host`            | `127.0.0.1` | Py4J server host                    |
-| `spring.python.py4j.port`            | `25333`     | Py4J server port                    |
-| `spring.python.py4j.python-port`     | `25334`     | Py4J Python port                    |
-| `spring.python.py4j.connect-timeout` | `0`         | Connection timeout (0 = no timeout) |
-| `spring.python.py4j.read-timeout`    | `0`         | Read timeout (0 = no timeout)       |
-| `spring.python.py4j.loggable`        | `true`      | Whether to log Py4J operations      |
+| Property                             | Description                                       | Default   | Required |
+|--------------------------------------|---------------------------------------------------|-----------|----------|
+| `spring.python.py4j.enabled`         | Whether to enable Py4J                            | false     | No       |
+| `spring.python.py4j.host`            | Py4J server host                                  | 127.0.0.1 | No       |
+| `spring.python.py4j.port`            | Py4J server port                                  | 25333     | No       |
+| `spring.python.py4j.python-port`     | Py4J Python port                                  | 25334     | No       |
+| `spring.python.py4j.connect-timeout` | Connection timeout in milliseconds (0 = infinite) | 0         | No       |
+| `spring.python.py4j.read-timeout`    | Read timeout in milliseconds (0 = infinite)       | 0         | No       |
+| `spring.python.py4j.loggable`        | Whether to log Py4J operations                    | true      | No       |
 
-## 🚀 Usage Examples
+## 🔄 Execution Modes
 
-### Annotation-based Execution
+### Local Execution
 
-#### Execute Python code before a Java method
+Execute Python scripts in a local process on the same machine as your Java application.
 
-```java
-@PythonBefore("print(spel{#name} + ' ' + spel{#surname})")
-public void greet(String name, @PythonParam("surname") String surname) {
-    System.out.println("Hello from Java: " + name + " " + surname);
-}
-```
+### REST Execution
 
-#### Execute Python code after a Java method
+Execute Python scripts via REST API in a separate container.
 
-```java
-@PythonAfter("print(spel{#result} + ' ' + spel{#name})")
-public String getMessage(String name) {
-    return "Hello";
-}
-```
+### gRPC Execution
 
-#### Execute Python code from a file
+Execute Python scripts via gRPC in a separate container for better performance.
 
-```java
-@PythonBefore("path/to/script.py")
-public void executeFromFile(String name) {
-    // Method implementation
-}
-```
+## 💻 Usage Examples
 
-### Programmatic Execution
-
-Execute Python code programmatically:
+### Simple Example: Basic Calculation
 
 ```java
 @Service
 @RequiredArgsConstructor
-public class MyService {
+public class CalculationService {
     private final PythonProcessor pythonProcessor;
     
-    public String executePython(String name, String surname) {
+    public int add(int a, int b) {
         String script = """
-                result = spel{#name} + ' ' + spel{#surname}
-                o4java{result}
+                # Simple addition in Python
+                result = spel{#a} + spel{#b}
+                o4java{result}  # This value will be returned to Java
                 """;
-        Map<String, Object> arguments = Map.of("name", name, "surname", surname);
-        return pythonProcessor.process(script, String.class, arguments);
+        Map<String, Object> arguments = Map.of("a", a, "b", b);
+        return pythonProcessor.process(script, Integer.class, arguments);
     }
 }
 ```
 
-## 📝 Example Module
-
-The `example` module provides a complete reference implementation of the library. If you want to see how to use this library in a real application, check this module first.
-
-### Key Components in the Example Module
-
-- `ExamplePythonService`: Demonstrates annotation-based execution
-- `application.yaml`: Shows configuration options
-- Python script files: Examples of external Python scripts
-
-### Advanced Example: Data Processing Service
+### Realistic Example: Integration with Business Logic
 
 ```java
 @Service
 @RequiredArgsConstructor
-public class DataProcessingService {
+public class PricingService {
     private final PythonProcessor pythonProcessor;
     
-    @PythonBefore("""
-                  import pandas as pd
-                  import numpy as np
-                  data = pd.DataFrame(spel{#rawData})
-                  processed_data = data.groupby('category').agg({'value': ['mean', 'sum']})
-                  o4java{processed_data.to_dict()}
-                  """)
-    public void processData(List<Map<String, Object>> rawData) {
-        // The Python code will execute before this method
-        System.out.println("Data processing completed");
-    }
-    
-    public Map<String, Object> analyzeTimeSeriesData(List<Double> timeSeriesData, String analysisType) {
+    public double calculatePrice(Product product, Customer customer) {
         String script = """
-                import numpy as np
-                from statsmodels.tsa.arima.model import ARIMA
+                # Complex pricing algorithm in Python
+                base_price = spel{#product.basePrice}
+                discount = 0
                 
-                data = np.array(spel{#timeSeriesData})
-                analysis_type = spel{#analysisType}
+                # Apply customer loyalty discount
+                if spel{#customer.loyaltyYears} > 2:
+                    discount += 0.05
                 
-                result = {}
+                # Apply volume discount
+                if spel{#product.quantity} > 10:
+                    discount += 0.03
                 
-                if analysis_type == 'basic':
-                    result['mean'] = np.mean(data)
-                    result['std'] = np.std(data)
-                    result['min'] = np.min(data)
-                    result['max'] = np.max(data)
-                elif analysis_type == 'forecast':
-                    model = ARIMA(data, order=(1, 1, 1))
-                    model_fit = model.fit()
-                    forecast = model_fit.forecast(steps=5)
-                    result['forecast'] = forecast.tolist()
-                
-                o4java{result}
+                final_price = base_price * (1 - discount)
+                o4java{final_price}  # Return the calculated price to Java
                 """;
         
         Map<String, Object> arguments = Map.of(
-            "timeSeriesData", timeSeriesData,
-            "analysisType", analysisType
+            "product", product,
+            "customer", customer
         );
         
-        return (Map<String, Object>) pythonProcessor.process(script, Map.class, arguments);
+        return pythonProcessor.process(script, Double.class, arguments);
     }
 }
 ```
 
-## 🔧 Advanced Usage
+## 🐍 Python Server
 
-### SpEL Integration
+### REST Server
 
-Use SpEL expressions in your Python code with the `spel{#expression}` syntax. The following examples demonstrate the syntax:
+The REST server provides an HTTP endpoint for executing Python scripts.
 
-> **Note:** The examples below use special syntax processed by the library, not standard Python syntax.
+#### Running with Docker
 
-```
-# Access method parameters
-name = spel{#name}
-
-# Access Spring beans
-currentUser = spel{@userService.getCurrentUser()}
-
-# Use SpEL operators
-isAdmin = spel{#user.roles.?[name == 'ADMIN'].size() > 0}
-
-# Access nested properties
-address = spel{#customer.address.street}
-
-# Use conditional expressions
-greeting = spel{#time < 12 ? 'Good morning' : 'Good afternoon'}
+```bash
+docker run -p 8000:8000 \
+  -e PYTHON_SERVER_USERNAME=<your-username> \
+  -e PYTHON_SERVER_PASSWORD=<your-password> \
+  w4t3rcs/spring-boot-python-executor-python-rest-server
 ```
 
-### Result Handling
+#### Testing with curl
 
-Return values from Python to Java using the `o4java{variable}` syntax:
-
-> **Note:** The examples below use special syntax processed by the library, not standard Python syntax.
-
-```
-# Simple string result
-result = "Hello, " + spel{#name}
-o4java{result}
-
-# Dictionary result (converts to Java Map)
-user_data = {
-    "name": spel{#user.name},
-    "email": spel{#user.email},
-    "roles": spel{#user.roles}
-}
-o4java{user_data}
-
-# List result (converts to Java List)
-numbers = [1, 2, 3, 4, 5]
-squared = [n * n for n in numbers]
-o4java{squared}
-
-# Complex nested structures
-response = {
-    "user": {
-        "id": spel{#user.id},
-        "name": spel{#user.name}
-    },
-    "permissions": spel{#user.permissions},
-    "metadata": {
-        "lastLogin": spel{#user.lastLogin},
-        "active": spel{#user.active}
-    }
-}
-o4java{response}
+```bash
+curl -X POST http://localhost:8000/script \
+  -H "Content-Type: application/json" \
+  -H "X-Username: <your-username>" \
+  -H "X-Password: <your-password>" \
+  -d '{\"script": \"r4java = 2 + 2\"}'
 ```
 
-### Working with Files
+### gRPC Server
 
-You can store Python scripts in files and reference them in annotations:
+The gRPC server provides a high-performance interface for executing Python scripts.
 
-```java
-@PythonBefore("scripts/data_processing.py")
-public void processData(List<Map<String, Object>> data) {
-    // Implementation
-}
+#### Running with Docker
+
+```bash
+docker run -p 50051:50051 \
+  -e PYTHON_SERVER_USERNAME=<your-username> \
+  -e PYTHON_SERVER_PASSWORD=<your-password> \
+  w4t3rcs/spring-boot-python-executor-python-grpc-server
 ```
 
-The Python file (`data_processing.py`) can use the same SpEL and result syntax:
+#### Testing with grpcurl
 
-> **Note:** The example below uses special syntax processed by the library, not standard Python syntax.
-
+```bash
+grpcurl -plaintext -d '{\"script": \"r4java = 2 + 2\"}' \
+  -H 'x-username: <your-username>' \
+  -H 'x-password: <your-password>' \
+  localhost:50051 PythonService/SendCode
 ```
-import pandas as pd
-import numpy as np
-
-# Access method parameters using SpEL
-raw_data = spel{#data}
-
-# Process the data
-df = pd.DataFrame(raw_data)
-result = {
-    "summary": df.describe().to_dict(),
-    "correlations": df.corr().to_dict()
-}
-
-# Return the result to Java
-o4java{result}
-```
-
-## 🖥️ Python Server Setup
-
-The project includes two Python server implementations: a gRPC server and a REST server. Both servers are designed to be run in Docker containers, but can also be run directly on the host machine.
-
-### Docker Setup (Recommended)
-
-#### gRPC Server
-
-1. Run the container:
-   ```
-   docker run -d --name python-grpc-server \
-     -p 50051:50051 \
-     -e PYTHON_SERVER_USERNAME=your-username \
-     -e PYTHON_SERVER_PASSWORD=your-password \
-     python-executor-grpc
-   ```
-
-#### REST Server
-
-1. Build the Docker image:
-   ```
-   docker run -d -e PYTHON_SERVER_USERNAME=root -e PYTHON_SERVER_PASSWORD=password -p 8000:8000 w4t3rcs/spring-boot-python-executor-python-rest-server
-   ```
-
-2. Run the container:
-   ```
-   docker run -d -e PYTHON_SERVER_USERNAME=root -e PYTHON_SERVER_PASSWORD=password -p 50051:50051 w4t3rcs/spring-boot-python-executor-python-grpc-server
-   ```
 
 ### Environment Variables
 
-Both servers use the following environment variables:
+| Variable                                | Description                | Default                    | Server    |
+|-----------------------------------------|----------------------------|----------------------------|-----------|
+| `PYTHON_SERVER_USERNAME`                | Authentication username    | -                          | Both      |
+| `PYTHON_SERVER_PASSWORD`                | Authentication password    | -                          | Both      |
+| `PYTHON_SERVER_HOST`                    | Server bind address        | 0.0.0.0                    | Both      |
+| `PYTHON_SERVER_PORT`                    | Server port                | 8000 (REST) / 50051 (gRPC) | Both      |
+| `PYTHON_SERVER_THREAD_POOL_MAX_WORKERS` | Max worker threads         | 10                         | gRPC only |
+| `PYTHON_RESULT_APPEARANCE`              | Result variable name       | r4java                     | Both      |
+| `PYTHON_ADDITIONAL_IMPORTS`             | Additional Python packages | -                          | Both      |
+| `PYTHON_ADDITIONAL_IMPORTS_DELIMITER`   | Delimiter for imports      | ,                          | Both      |
 
-| Variable                                | Description                                           | Default    |
-|-----------------------------------------|-------------------------------------------------------|------------|
-| `PYTHON_SERVER_USERNAME`                | Username for authentication                           | (required) |
-| `PYTHON_SERVER_PASSWORD`                | Password for authentication                           | (required) |
-| `PYTHON_SERVER_HOST`                    | Host to bind the server to                            | `0.0.0.0`  |
-| `PYTHON_SERVER_PORT`                    | Port to bind the server to                            | `50051`    |
-| `PYTHON_RESULT_APPEARANCE`              | Variable name for the result in the execution context | `r4java`   |
-| `PYTHON_ADDITIONAL_IMPORTS`             | Additional Python packages to install                 | `""`       |
-| `PYTHON_ADDITIONAL_IMPORTS_DELIMITER`   | Delimiter for additional imports                      | `,`        |
-| `PYTHON_SERVER_THREAD_POOL_MAX_WORKERS` | Maximum number of worker threads (only for gRPC)      | `10`       |
+#### PYTHON_ADDITIONAL_IMPORTS
+
+This environment variable allows you to specify additional Python packages to install in the server container. For example, setting `PYTHON_ADDITIONAL_IMPORTS=numpy,pandas,scikit-learn` will install these packages when the container starts, making them available for your Python scripts.
+
+## 📋 Requirements
+
+- Java 17+
+- Spring Boot 3.5.3+
+- Python 3.10+ (for local execution or server containers)
+- Docker (for REST/gRPC backend)
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the [MIT License](LICENSE).
 
-## 👨‍💻 Author
+## 🤝 Contributing and Feedback
 
-- [w4t3rcs](https://github.com/w4t3rcs) - w4t3rofficial@gmail.com
+### Reporting Issues
+
+If you encounter any issues or have suggestions for improvements, please create an issue in the GitHub repository.
+
+### Feature Requests
+
+For feature requests, please create an issue with a detailed description of the proposed feature and its use cases.
