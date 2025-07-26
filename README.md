@@ -152,114 +152,107 @@ implementation 'io.github.w4t3rcs:spring-boot-python-executor-starter:1.0.0'
 
 ### File Properties
 
-| Property                       | Description                          | Default  | Required |
-|--------------------------------|--------------------------------------|----------|----------|
-| `spring.python.file.path`      | Base path for Python script files    | /python/ | No       |
-| `spring.python.file.cacheable` | Whether to cache Python script files | true     | No       |
+| Property                       | Description                          | Default    |
+|--------------------------------|--------------------------------------|------------|
+| `spring.python.file.path`      | Base path for Python script files    | `/python/` |
+| `spring.python.file.cacheable` | Whether to cache Python script files | `true`     |
 
 ### Executor Properties
 
-| Property                      | Description                          | Default | Required |
-|-------------------------------|--------------------------------------|---------|----------|
-| `spring.python.executor.type` | Execution mode: local, rest, or grpc | local   | Yes      |
+| Property                      | Description                          | Default |
+|-------------------------------|--------------------------------------|---------|
+| `spring.python.executor.type` | Execution mode: local, rest, or grpc | `local` |
 
 
 #### Local Executor Properties
 
-| Property                                     | Description                  | Default | Required |
-|----------------------------------------------|------------------------------|---------|----------|
-| `spring.python.executor.local.start-command` | Command to start Python      | python  | No       |
-| `spring.python.executor.local.loggable`      | Whether to log Python output | true    | No       |
+| Property                                     | Description                  | Default  |
+|----------------------------------------------|------------------------------|----------|
+| `spring.python.executor.local.start-command` | Command to start Python      | `python` |
+| `spring.python.executor.local.loggable`      | Whether to log Python output | `true`   |
 
 #### REST Executor Properties
 
 | Property                               | Description               | Default                                                                          | Required |
 |----------------------------------------|---------------------------|----------------------------------------------------------------------------------|----------|
-| `spring.python.executor.rest.host`     | REST server host          | http://localhost                                                                 | No       |
-| `spring.python.executor.rest.port`     | REST server port          | 8000                                                                             | No       |
-| `spring.python.executor.rest.username` | Authentication username   | -                                                                                | Yes      |
-| `spring.python.executor.rest.password` | Authentication password   | -                                                                                | Yes      |
+| `spring.python.executor.rest.host`     | REST server host          | `http://localhost`                                                               | No       |
+| `spring.python.executor.rest.port`     | REST server port          | `8000`                                                                           | No       |
+| `spring.python.executor.rest.username` | Authentication username   | `-` (required)                                                                   | Yes      |
+| `spring.python.executor.rest.password` | Authentication password   | `-` (required)                                                                   | Yes      |
 | `spring.python.executor.rest.uri`      | Full URI to REST endpoint | `${spring.python.executor.rest.host}:${spring.python.executor.rest.port}/script` | No       |
 
 #### gRPC Executor Properties
 
 | Property                               | Description              | Default                                                                   | Required |
 |----------------------------------------|--------------------------|---------------------------------------------------------------------------|----------|
-| `spring.python.executor.grpc.host`     | gRPC server host         | localhost                                                                 | No       |
-| `spring.python.executor.grpc.port`     | gRPC server port         | 50051                                                                     | No       |
-| `spring.python.executor.grpc.username` | Authentication username  | -                                                                         | Yes      |
-| `spring.python.executor.grpc.password` | Authentication password  | -                                                                         | Yes      |
+| `spring.python.executor.grpc.host`     | gRPC server host         | `localhost`                                                               | No       |
+| `spring.python.executor.grpc.port`     | gRPC server port         | `50051`                                                                   | No       |
+| `spring.python.executor.grpc.username` | Authentication username  | `-` (required)                                                            | Yes      |
+| `spring.python.executor.grpc.password` | Authentication password  | `-` (required)                                                            | Yes      |
 | `spring.python.executor.grpc.uri`      | Full URI to gRPC service | `${spring.python.executor.grpc.host}:${spring.python.executor.grpc.port}` | No       |
 
 ### Resolver Properties
 
 #### Core Resolver Properties
 
-| Property                          | Description                                                   | Default          | Required |
-|-----------------------------------|---------------------------------------------------------------|------------------|----------|
-| `spring.python.resolver.declared` | Enabled resolvers: result, spelython, py4j, restricted_python | spelython,result | Yes      |
+| Property                                      | Description                                                   | Default                                                                                | Required |
+|-----------------------------------------------|---------------------------------------------------------------|----------------------------------------------------------------------------------------|----------|
+| `spring.python.resolver.declared`             | Enabled resolvers: result, spelython, py4j, restricted_python | `spelython,result`                                                                     | Yes      |
+| `spring.python.resolver.script-imports-regex` | Regular expression to match import statements                 | `(^import [\\w.]+$)\|(^import [\\w.]+ as [\\w.]+$)\|(^from [\\w.]+ import [\\w., ]+$)` | No       |
 
 #### Result Resolver Properties
 
-| Property                                            | Description                                    | Default       | Required |
-|-----------------------------------------------------|------------------------------------------------|---------------|----------|
-| `spring.python.resolver.result.regex`               | Regular expression to match result expressions | o4java\\{.+?} | No       |
-| `spring.python.resolver.result.appearance`          | Variable name for results                      | r4java        | No       |
-| `spring.python.resolver.result.position-from-start` | Position from start of match for extraction    | 7             | No       |
-| `spring.python.resolver.result.position-from-end`   | Position from end of match for extraction      | 1             | No       |
+| Property                                            | Description                                    | Default         |
+|-----------------------------------------------------|------------------------------------------------|-----------------|
+| `spring.python.resolver.result.regex`               | Regular expression to match result expressions | `o4java\\{.+?}` |
+| `spring.python.resolver.result.appearance`          | Variable name for results                      | `r4java`        |
+| `spring.python.resolver.result.position-from-start` | Position from start of match for extraction    | `7`             |
+| `spring.python.resolver.result.position-from-end`   | Position from end of match for extraction      | `1`             |
 
 #### Spelython Resolver Properties
 
-| Property                                                     | Description                                  | Default     | Required |
-|--------------------------------------------------------------|----------------------------------------------|-------------|----------|
-| `spring.python.resolver.spelython.regex`                     | Regular expression to match SpEL expressions | spel\\{.+?} | No       |
-| `spring.python.resolver.spelython.spel.local-variable-index` | Prefix for local variables in SpEL           | #           | No       |
-| `spring.python.resolver.spelython.spel.position-from-start`  | Position from start of match for extraction  | 5           | No       |
-| `spring.python.resolver.spelython.spel.position-from-end`    | Position from end of match for extraction    | 1           | No       |
+| Property                                                     | Description                                  | Default       |
+|--------------------------------------------------------------|----------------------------------------------|---------------|
+| `spring.python.resolver.spelython.regex`                     | Regular expression to match SpEL expressions | `spel\\{.+?}` |
+| `spring.python.resolver.spelython.spel.local-variable-index` | Prefix for local variables in SpEL           | `#`           |
+| `spring.python.resolver.spelython.spel.position-from-start`  | Position from start of match for extraction  | `5`           |
+| `spring.python.resolver.spelython.spel.position-from-end`    | Position from end of match for extraction    | `1`           |
 
 #### Py4J Resolver Properties
 
-| Property                                  | Description                 | Default                                   | Required |
-|-------------------------------------------|-----------------------------|-------------------------------------------|----------|
-| `spring.python.resolver.py4j.import-line` | Import statement for Py4J   | from py4j.java_gateway import JavaGateway | No       |
-| `spring.python.resolver.py4j.gateway`     | Gateway initialization code | gateway = JavaGateway()                   | No       |
+| Property                                         | Description                            | Default                                                                                                                                       |
+|--------------------------------------------------|----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| `spring.python.resolver.py4j.import-line`        | Import statement for Py4J              | `from py4j.java_gateway import JavaGateway, GatewayParameters`                                                                                |
+| `spring.python.resolver.py4j.gateway-object`     | Gateway object initialization template | `gateway = JavaGateway(\n\tgateway_parameters=GatewayParameters(\n\t\t%s\n\t)\n)`                                                             |
+| `spring.python.resolver.py4j.gateway-properties` | Gateway properties for initialization  | `address=\"${spring.python.py4j.host}\", port=${spring.python.py4j.port}, auth_token=\"${spring.python.py4j.auth-token}\", auto_convert=True` |
 
 #### Restricted Python Resolver Properties
 
-| Property                                                          | Description                                   | Default                                                                                         | Required |
-|-------------------------------------------------------------------|-----------------------------------------------|-------------------------------------------------------------------------------------------------|----------|
-| `spring.python.resolver.restricted-python.import-line`            | Import statements for RestrictedPython        | from RestrictedPython import compile_restricted<br>from RestrictedPython import safe_globals    | No       |
-| `spring.python.resolver.restricted-python.code-variable-name`     | Variable name for source code                 | source_code                                                                                     | No       |
-| `spring.python.resolver.restricted-python.local-variables-name`   | Variable name for local variables             | execution_result                                                                                | No       |
-| `spring.python.resolver.restricted-python.safe-result-appearance` | Variable name for safe results                | r4java_restricted                                                                               | No       |
-| `spring.python.resolver.restricted-python.script-imports-regex`   | Regular expression to match import statements | (^import [\\w.]+$)\|(^from [\\w.]+ import [\\w.]+$)\|(^from [\\w.]+ import [\\w.]+ as [\\w.]+$) | No       |
-| `spring.python.resolver.restricted-python.print-enabled`          | Whether to enable print functionality         | true                                                                                            | No       |
+| Property                                                          | Description                            | Default                                                                                      |
+|-------------------------------------------------------------------|----------------------------------------|----------------------------------------------------------------------------------------------|
+| `spring.python.resolver.restricted-python.import-line`            | Import statements for RestrictedPython | `from RestrictedPython import compile_restricted\nfrom RestrictedPython import safe_globals` |
+| `spring.python.resolver.restricted-python.code-variable-name`     | Variable name for source code          | `source_code`                                                                                |
+| `spring.python.resolver.restricted-python.local-variables-name`   | Variable name for local variables      | `execution_result`                                                                           |
+| `spring.python.resolver.restricted-python.safe-result-appearance` | Variable name for safe results         | `r4java_restricted`                                                                          |
+| `spring.python.resolver.restricted-python.print-enabled`          | Whether to enable print functionality  | `true`                                                                                       |
 
 ### Py4J Properties
 
-| Property                             | Description                                       | Default   | Required |
-|--------------------------------------|---------------------------------------------------|-----------|----------|
-| `spring.python.py4j.enabled`         | Whether to enable Py4J                            | false     | No       |
-| `spring.python.py4j.host`            | Py4J server host                                  | 127.0.0.1 | No       |
-| `spring.python.py4j.port`            | Py4J server port                                  | 25333     | No       |
-| `spring.python.py4j.python-port`     | Py4J Python port                                  | 25334     | No       |
-| `spring.python.py4j.connect-timeout` | Connection timeout in milliseconds (0 = infinite) | 0         | No       |
-| `spring.python.py4j.read-timeout`    | Read timeout in milliseconds (0 = infinite)       | 0         | No       |
-| `spring.python.py4j.loggable`        | Whether to log Py4J operations                    | true      | No       |
+| Property                             | Description                                       | Default        |
+|--------------------------------------|---------------------------------------------------|----------------|
+| `spring.python.py4j.enabled`         | Whether to enable Py4J                            | `false`        |
+| `spring.python.py4j.host`            | Py4J server host                                  | `localhost`    |
+| `spring.python.py4j.port`            | Py4J server port                                  | `25333`        |
+| `spring.python.py4j.python-host`     | Py4J Python host                                  | `localhost`    |
+| `spring.python.py4j.python-port`     | Py4J Python port                                  | `25334`        |
+| `spring.python.py4j.auth-token`      | Authentication token for Py4J                     | `-` (required) |
+| `spring.python.py4j.connect-timeout` | Connection timeout in milliseconds (0 = infinite) | `0`            |
+| `spring.python.py4j.read-timeout`    | Read timeout in milliseconds (0 = infinite)       | `0`            |
+| `spring.python.py4j.loggable`        | Whether to log Py4J operations                    | `true`         |
 
 #### Enabling Py4J Gateway Server
 
-The Py4J Gateway Server enables direct communication between Java and Python. You can enable it in two ways:
-
-#### Using the `@EnablePy4J` annotation on a configuration class:
-
-```java
-@EnablePy4J
-@Configuration
-public class MyConfig {
-    // Configuration code
-}
-```
+The Py4J Gateway Server enables direct communication between Java and Python. You can enable it:
 
 #### Setting the `spring.python.py4j.enabled` property to `true` in your application properties:
 
