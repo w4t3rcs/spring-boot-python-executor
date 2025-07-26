@@ -29,8 +29,8 @@
   - [REST Execution](#rest-execution)
   - [gRPC Execution](#grpc-execution)
 - [Usage Examples](#-usage-examples)
-  - [Simple Example: Basic Calculation](#simple-example-basic-calculation)
-  - [Realistic Example: Integration with Business Logic](#realistic-example-integration-with-business-logic)
+  - [Simple Example: Basic Calculation](#basic-examples)
+  - [Realistic Example: Integration with Business Logic](#advanced-examples)
 - [Python Server](#-python-server)
   - [REST Server](#rest-server)
   - [gRPC Server](#grpc-server)
@@ -72,6 +72,49 @@ Spring Boot Python Executor provides a flexible architecture for executing Pytho
   - RestrictedPython for secure execution
   - Result resolution for capturing Python output
 - **PythonProcessor**: Connects resolvers and executors
+
+```mermaid
+---
+title: Basic Python script flow
+---
+
+classDiagram
+  PythonBefore --> PythonProcessor: Annotation @PythonBefore\nforwards the script to the\nPythonProcessor implementation
+  PythonAfter --> PythonProcessor: Annotation @PythonAfter\nforwards the script to the\nPythonProcessor implementation
+  PythonProcessor --> PythonFileHandler: Firstly, the script is checked\nwhether it's a .py file\nor String script
+  PythonProcessor <-- PythonFileHandler: If it's a file, the content\nis read as a String value\nand returned
+  PythonProcessor --> PythonResolver: Secondly, the script may be\n transformed by multiple\nPythonResolver implementations.\nYou can configure declared\nimplementations by using\nspring.python.resolver.declared\nproperty
+  PythonProcessor <-- PythonResolver: Specific PythonResolver\nreturns resolved script
+  PythonProcessor --> PythonExecutor: Finally, the script is executed\nby PythonExecutor implementation.\nYou can choose needed implementation\nby configuring the property named\nspring.python.executor.type
+  PythonProcessor <-- PythonExecutor: The method returns null,\nbecause of annotation usage,\nbut if you would like to get\nspecific result object you\nneed to call process(...)\nfunction manually 
+  
+  class PythonProcessor {
+    <<interface>>
+    +R process(String script, Class<? extends R> resultClass, Map<String, Object> arguments)
+  }
+  
+  class PythonFileHandler {
+    <<interface>>
+    +boolean isPythonFile(String path)
+    +void writeScriptBodyToFile(String path, String script)
+    +void writeScriptBodyToFile(Path path, String script)
+    +String readScriptBodyFromFile(String path)
+    +String readScriptBodyFromFile(Path path)
+    +String readScriptBodyFromFile(String path, UnaryOperator<String> mapper)
+    +String readScriptBodyFromFile(Path path, UnaryOperator<String> mapper)
+    +Path getScriptPath(String path)
+  }
+  
+  class PythonResolver {
+    <<interface>>
+    +String resolve(String script, Map<String, Object> arguments)
+  }
+  
+  class PythonExecutor {
+    <<interface>>
+    +R execute(String script, Class<? extends R> resultClass)
+  }
+```
 
 ### Security
 
@@ -204,6 +247,31 @@ implementation 'io.github.w4t3rcs:spring-boot-python-executor-starter:1.0.0'
 | `spring.python.py4j.read-timeout`    | Read timeout in milliseconds (0 = infinite)       | 0         | No       |
 | `spring.python.py4j.loggable`        | Whether to log Py4J operations                    | true      | No       |
 
+#### Enabling Py4J Gateway Server
+
+The Py4J Gateway Server enables direct communication between Java and Python. You can enable it in two ways:
+
+#### Using the `@EnablePy4J` annotation on a configuration class:
+
+```java
+@EnablePy4J
+@Configuration
+public class MyConfig {
+    // Configuration code
+}
+```
+
+#### Setting the `spring.python.py4j.enabled` property to `true` in your application properties:
+
+```yaml
+spring:
+  python:
+    py4j:
+      enabled: true
+```
+
+When enabled, a Py4J Gateway Server will be started automatically, allowing your Python code to call Java methods directly.
+
 ## 🔄 Execution Modes
 
 ### Local Execution
@@ -217,64 +285,6 @@ Execute Python scripts via REST API in a separate container.
 ### gRPC Execution
 
 Execute Python scripts via gRPC in a separate container for better performance.
-
-## 💻 Usage Examples
-
-### Simple Example: Basic Calculation
-
-```java
-@Service
-@RequiredArgsConstructor
-public class CalculationService {
-    private final PythonProcessor pythonProcessor;
-    
-    public int add(int a, int b) {
-        String script = """
-                # Simple addition in Python
-                result = spel{#a} + spel{#b}
-                o4java{result}  # This value will be returned to Java
-                """;
-        Map<String, Object> arguments = Map.of("a", a, "b", b);
-        return pythonProcessor.process(script, Integer.class, arguments);
-    }
-}
-```
-
-### Realistic Example: Integration with Business Logic
-
-```java
-@Service
-@RequiredArgsConstructor
-public class PricingService {
-    private final PythonProcessor pythonProcessor;
-    
-    public double calculatePrice(Product product, Customer customer) {
-        String script = """
-                # Complex pricing algorithm in Python
-                base_price = spel{#product.basePrice}
-                discount = 0
-                
-                # Apply customer loyalty discount
-                if spel{#customer.loyaltyYears} > 2:
-                    discount += 0.05
-                
-                # Apply volume discount
-                if spel{#product.quantity} > 10:
-                    discount += 0.03
-                
-                final_price = base_price * (1 - discount)
-                o4java{final_price}  # Return the calculated price to Java
-                """;
-        
-        Map<String, Object> arguments = Map.of(
-            "product", product,
-            "customer", customer
-        );
-        
-        return pythonProcessor.process(script, Double.class, arguments);
-    }
-}
-```
 
 ## 🐍 Python Server
 
@@ -339,6 +349,155 @@ grpcurl -plaintext -d '{\"script": \"r4java = 2 + 2\"}' \
 #### PYTHON_ADDITIONAL_IMPORTS
 
 This environment variable allows you to specify additional Python packages to install in the server container. For example, setting `PYTHON_ADDITIONAL_IMPORTS=numpy,pandas,scikit-learn` will install these packages when the container starts, making them available for your Python scripts.
+
+## 💻 Usage Examples
+
+### Basic Examples
+
+#### Using Annotations
+
+Spring Boot Python Executor provides annotations for executing Python code before or after a Java method:
+
+```java
+@Service
+@RequiredArgsConstructor
+public class ExampleService {
+    // Execute Python code before the Java method
+    @PythonBefore("print(spel{#name} + ' ' + spel{#surname})")
+    public void executeBefore(String name, @PythonParam("surname") String lastName) {
+        System.out.println("Hello from Java after Python: " + name + " : " + lastName);
+    }
+    
+    // Execute Python code from a file
+    @PythonBefore("example.py")
+    public void executeFromFile(String name) {
+        System.out.println("Hello from Java after Python file: " + name);
+    }
+    
+    // Execute Python code after the Java method
+    // The method's return value is available as #result
+    @PythonAfter("print(spel{#result} + ' ' + spel{#name} + ' ' + spel{#sur})")
+    public String executeAfter(String name, @PythonParam("sur") String surname) {
+        System.out.println("Hello from Java before Python: " + name + " : " + surname);
+        return "Python app is greeting you:";
+    }
+}
+```
+
+#### Direct Use of PythonProcessor
+
+For more control, you can directly use the `PythonProcessor`:
+
+```java
+@Service
+@RequiredArgsConstructor
+public class CalculationService {
+    private final PythonProcessor pythonProcessor;
+    
+    public Integer add(int a, int b) {
+        String script = """
+                # Simple addition in Python
+                result = spel{#a} + spel{#b}
+                o4java{result}  # This value will be returned to Java
+                """;
+        Map<String, Object> arguments = Map.of("a", a, "b", b);
+        return pythonProcessor.process(script, Integer.class, arguments);
+    }
+}
+```
+
+### Advanced Examples
+
+#### Integration with Business Logic
+
+```java
+@Service
+@RequiredArgsConstructor
+public class PricingService {
+    private final PythonProcessor pythonProcessor;
+    
+    public double calculatePrice(Product product, Customer customer) {
+        String script = """
+                # Complex pricing algorithm in Python
+                base_price = spel{#product.basePrice}
+                discount = 0
+                
+                # Apply customer loyalty discount
+                if spel{#customer.loyaltyYears} > 2:
+                    discount += 0.05
+                
+                # Apply volume discount
+                if spel{#product.quantity} > 10:
+                    discount += 0.03
+                
+                final_price = base_price * (1 - discount)
+                o4java{final_price}  # Return the calculated price to Java
+                """;
+        
+        Map<String, Object> arguments = Map.of(
+            "product", product,
+            "customer", customer
+        );
+        
+        return pythonProcessor.process(script, Double.class, arguments);
+    }
+}
+```
+
+#### Machine Learning Integration
+
+This example demonstrates how to use Python's machine learning libraries from Java.
+Note that if you use `python-rest-server` or `python-grpc-server` you'll need to set the `PYTHON_ADDITIONAL_IMPORTS` environment variable when running the Python server to make these libraries available.
+
+```java
+@Service
+@RequiredArgsConstructor
+public class SentimentAnalysisService {
+    private final PythonProcessor pythonProcessor;
+    
+    public double analyzeSentiment(String text) {
+        String script = """
+                from sklearn.feature_extraction.text import CountVectorizer
+                import numpy as np
+                
+                # Simple sentiment analysis using predefined positive and negative words
+                positive_words = ['good', 'great', 'excellent', 'amazing', 'wonderful', 'best', 'love']
+                negative_words = ['bad', 'terrible', 'awful', 'worst', 'hate', 'poor', 'disappointing']
+                
+                # Get the input text from Java
+                text = spel{#text}.lower()
+                
+                # Count positive and negative words
+                positive_count = sum(1 for word in positive_words if word in text)
+                negative_count = sum(1 for word in negative_words if word in text)
+                
+                # Calculate sentiment score (-1 to 1)
+                total = positive_count + negative_count
+                if total == 0:
+                    sentiment = 0
+                else:
+                    sentiment = (positive_count - negative_count) / total
+                
+                # Return the sentiment score to Java
+                o4java{sentiment}
+                """;
+        
+        Map<String, Object> arguments = Map.of("text", text);
+        
+        return pythonProcessor.process(script, Double.class, arguments);
+    }
+}
+```
+
+To run this example with the Python server, you would need to include the required libraries:
+
+```bash
+docker run -p 8000:8000 \
+  -e PYTHON_SERVER_USERNAME=user \
+  -e PYTHON_SERVER_PASSWORD=pass \
+  -e PYTHON_ADDITIONAL_IMPORTS=scikit-learn,numpy,scipy \
+  w4t3rcs/spring-boot-python-executor-python-rest-server
+```
 
 ## 📋 Requirements
 
