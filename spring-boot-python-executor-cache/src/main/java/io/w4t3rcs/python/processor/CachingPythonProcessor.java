@@ -3,16 +3,20 @@ package io.w4t3rcs.python.processor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.w4t3rcs.python.cache.CacheKeyGenerator;
 import io.w4t3rcs.python.exception.PythonCacheException;
+import io.w4t3rcs.python.properties.PythonCacheProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 @RequiredArgsConstructor
-public class CachingPythonProcessor implements PythonProcessor{
+public class CachingPythonProcessor implements PythonProcessor {
+    private final PythonCacheProperties cacheProperties;
     private final PythonProcessor pythonProcessor;
-    private final Cache cache;
+    private final CacheManager cacheManager;
     private final CacheKeyGenerator keyGenerator;
     private final ObjectMapper objectMapper;
 
@@ -23,7 +27,8 @@ public class CachingPythonProcessor implements PythonProcessor{
             String argumentsJson = objectMapper.writeValueAsString(sortedMap);
             String body = script + argumentsJson;
             String key = keyGenerator.generateKey(null, body, resultClass.getName());
-            R cachedResult = cache.get(key, resultClass);
+            Cache cache = cacheManager.getCache(cacheProperties.name());
+            R cachedResult = Objects.requireNonNull(cache).get(key, resultClass);
             if (cachedResult != null) {
                 return cachedResult;
             } else {

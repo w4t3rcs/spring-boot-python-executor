@@ -14,7 +14,7 @@ import java.util.Map;
  * {@link PythonExecutor} and {@link PythonResolver}
  */
 @RequiredArgsConstructor
-public class PythonProcessorImpl implements PythonProcessor {
+public class BasicPythonProcessor implements PythonProcessor {
     private final PythonFileHandler pythonFileHandler;
     private final PythonExecutor pythonExecutor;
     private final List<PythonResolver> pythonResolvers;

@@ -42,6 +42,11 @@
             <artifactId>spring-boot-python-executor-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.github.w4t3rcs</groupId>
+            <artifactId>spring-boot-python-executor-cache</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

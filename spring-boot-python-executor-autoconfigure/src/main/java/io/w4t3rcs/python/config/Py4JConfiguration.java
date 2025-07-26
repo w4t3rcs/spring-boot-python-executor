@@ -24,7 +24,7 @@ import java.net.UnknownHostException;
  */
 @Configuration
 @ConditionalOnProperty(name = "spring.python.py4j.enabled", havingValue = "true")
-@EnableConfigurationProperties({Py4JProperties.class})
+@EnableConfigurationProperties(Py4JProperties.class)
 public class Py4JConfiguration {
     @Bean
     @ConditionalOnMissingBean(GatewayServer.class)
