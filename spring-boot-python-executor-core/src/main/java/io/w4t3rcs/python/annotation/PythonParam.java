@@ -1,4 +1,4 @@
-package io.w4t3rcs.python.metadata;
+package io.w4t3rcs.python.annotation;
 
 import io.w4t3rcs.python.resolver.impl.SpelythonResolver;
 

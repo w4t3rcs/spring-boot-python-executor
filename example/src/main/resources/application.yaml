@@ -3,9 +3,9 @@ spring:
     name: example
   python:
     executor:
-      type: grpc
-      grpc:
-        username: root
-        password: password
+      type: local
     resolver:
-      declared: spelython, restricted_python, result
+      declared: spelython, py4j, restricted_python, result
+    py4j:
+      enabled: true
+      auth-token: token

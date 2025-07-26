@@ -1,7 +1,7 @@
 package io.w4t3rcs.python.aspect;
 
-import io.w4t3rcs.python.metadata.PythonAfter;
-import io.w4t3rcs.python.metadata.PythonBefore;
+import io.w4t3rcs.python.annotation.PythonAfter;
+import io.w4t3rcs.python.annotation.PythonBefore;
 import io.w4t3rcs.python.processor.PythonProcessor;
 import io.w4t3rcs.python.util.AspectUtil;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class PythonAspect {
      *
      * @param joinPoint The join point representing the intercepted method call
      */
-    @Before("@annotation(io.w4t3rcs.python.metadata.PythonBefore)")
+    @Before("@annotation(io.w4t3rcs.python.annotation.PythonBefore)")
     public void executeBeforeMethod(JoinPoint joinPoint) {
         AspectUtil.handlePythonAnnotation(joinPoint, pythonProcessor, PythonBefore.class, PythonBefore::value,
                 AspectUtil::getMethodParameters);
@@ -43,7 +43,7 @@ public class PythonAspect {
      *
      * @param joinPoint The join point representing the intercepted method call
      */
-    @After("@annotation(io.w4t3rcs.python.metadata.PythonAfter)")
+    @After("@annotation(io.w4t3rcs.python.annotation.PythonAfter)")
     public void executeAfterMethod(JoinPoint joinPoint) {
         AspectUtil.handlePythonAnnotation(joinPoint, pythonProcessor, PythonAfter.class, PythonAfter::value,
                 AspectUtil::getMethodParameters);
@@ -57,7 +57,7 @@ public class PythonAspect {
      * @param joinPoint The join point representing the intercepted method call
      * @param result The value returned by the method
      */
-    @AfterReturning(pointcut = "@annotation(io.w4t3rcs.python.metadata.PythonAfter)", returning = "result")
+    @AfterReturning(pointcut = "@annotation(io.w4t3rcs.python.annotation.PythonAfter)", returning = "result")
     public void executeAfterReturningMethod(JoinPoint joinPoint, Object result) {
         AspectUtil.handlePythonAnnotation(joinPoint, pythonProcessor, PythonAfter.class, PythonAfter::value,
                 point -> {

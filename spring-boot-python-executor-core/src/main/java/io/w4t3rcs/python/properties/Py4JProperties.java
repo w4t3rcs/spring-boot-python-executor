@@ -9,5 +9,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * <p>Properties are bound from the application configuration using the prefix "spring.python.py4j".</p>
  */
 @ConfigurationProperties("spring.python.py4j")
-public record Py4JProperties(boolean enabled, String host, int port, int pythonPort, int connectTimeout, int readTimeout, boolean loggable) {
+public record Py4JProperties(boolean enabled, String host, int port, String pythonHost, int pythonPort, int connectTimeout, int readTimeout, String authToken, boolean loggable) {
 }

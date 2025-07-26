@@ -9,6 +9,6 @@ public class SpelythonResolverCondition extends AbstractResolverCondition {
 
     @Override
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-        return this.matchesByProperty(context, PROPERTY_VALUE);
+        return this.matchesByDeclaredResolver(context, PROPERTY_VALUE);
     }
 }

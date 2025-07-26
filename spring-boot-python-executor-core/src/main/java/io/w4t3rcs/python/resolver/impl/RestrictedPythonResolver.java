@@ -46,7 +46,7 @@ public class RestrictedPythonResolver extends AbstractPythonResolver {
         var resultProperties = resolverProperties.result();
         List<String> importLines = new ArrayList<>();
         List<String> importNames = new ArrayList<>();
-        this.removeScriptLines(resolvedScript, restrictedPythonProperties.scriptImportsRegex(),
+        this.removeScriptLines(resolvedScript, resolverProperties.scriptImportsRegex(),
                 (matcher, fragment) -> {
             importLines.add(fragment);
             List<String> currentImportNames = this.findImportVariables(fragment);

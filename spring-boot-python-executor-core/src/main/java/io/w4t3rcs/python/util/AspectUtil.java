@@ -1,6 +1,6 @@
 package io.w4t3rcs.python.util;
 
-import io.w4t3rcs.python.metadata.PythonParam;
+import io.w4t3rcs.python.annotation.PythonParam;
 import io.w4t3rcs.python.processor.PythonProcessor;
 import lombok.experimental.UtilityClass;
 import org.aspectj.lang.JoinPoint;

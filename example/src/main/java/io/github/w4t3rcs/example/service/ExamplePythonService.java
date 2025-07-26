@@ -1,8 +1,8 @@
 package io.github.w4t3rcs.example.service;
 
-import io.w4t3rcs.python.metadata.PythonAfter;
-import io.w4t3rcs.python.metadata.PythonBefore;
-import io.w4t3rcs.python.metadata.PythonParam;
+import io.w4t3rcs.python.annotation.PythonAfter;
+import io.w4t3rcs.python.annotation.PythonBefore;
+import io.w4t3rcs.python.annotation.PythonParam;
 import io.w4t3rcs.python.processor.PythonProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
