@@ -3,6 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/example/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-boot-python-executor-autoconfigure/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-boot-python-executor-cache/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-boot-python-executor-core/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-boot-python-executor-coree/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-boot-python-executor-starter/src/main/java" charset="UTF-8" />

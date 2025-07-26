@@ -7,9 +7,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="spring-boot-python-executor-autoconfigure" />
         <module name="spring-boot-python-executor-core" />
         <module name="spring-boot-python-executor-starter" />
+        <module name="spring-boot-python-executor-cache" />
+        <module name="spring-boot-python-executor-autoconfigure" />
       </profile>
       <profile name="Annotation profile for example" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -27,6 +28,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="example" options="-parameters" />
       <module name="spring-boot-python-executor-autoconfigure" options="" />
+      <module name="spring-boot-python-executor-cache" options="" />
       <module name="spring-boot-python-executor-core" options="" />
       <module name="spring-boot-python-executor-starter" options="" />
     </option>
