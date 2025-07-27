@@ -6,10 +6,10 @@ import io.w4t3rcs.python.cache.CacheKeyGenerator;
 import io.w4t3rcs.python.executor.PythonExecutor;
 import io.w4t3rcs.python.file.PythonFileHandler;
 import io.w4t3rcs.python.file.impl.BasicPythonFileHandler;
-import io.w4t3rcs.python.file.impl.CachingBasicPythonFileHandler;
-import io.w4t3rcs.python.processor.CachingPythonProcessor;
+import io.w4t3rcs.python.file.impl.CachingPythonFileHandler;
 import io.w4t3rcs.python.processor.PythonProcessor;
 import io.w4t3rcs.python.processor.impl.BasicPythonProcessor;
+import io.w4t3rcs.python.processor.impl.CachingPythonProcessor;
 import io.w4t3rcs.python.properties.PythonCacheProperties;
 import io.w4t3rcs.python.properties.PythonFileProperties;
 import io.w4t3rcs.python.resolver.PythonResolver;
@@ -48,8 +48,16 @@ import java.util.List;
 @PropertySource("classpath:python-default.properties")
 public class PythonAutoConfiguration {
     @Bean
-    public PythonFileHandler pythonFileHandler(PythonFileProperties fileProperties) {
-        return fileProperties.cacheable() ? new CachingBasicPythonFileHandler(fileProperties) : new BasicPythonFileHandler(fileProperties);
+    public PythonFileHandler basicPythonFileHandler(PythonFileProperties fileProperties) {
+        return new BasicPythonFileHandler(fileProperties);
+    }
+
+    @Bean
+    @Primary
+    @ConditionalOnBean(PythonFileHandler.class)
+    @ConditionalOnProperty(name = "spring.python.cache.enabled", havingValue = "true")
+    public PythonFileHandler pythonFileHandler(PythonCacheProperties cacheProperties, PythonFileHandler pythonFileHandler, CacheManager cacheManager) {
+        return new CachingPythonFileHandler(cacheProperties, pythonFileHandler, cacheManager);
     }
 
     @Bean

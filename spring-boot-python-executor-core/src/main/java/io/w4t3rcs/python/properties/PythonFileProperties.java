@@ -9,5 +9,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * <p>Properties are bound from the application configuration using the prefix "spring.python.file".</p>
  */
 @ConfigurationProperties("spring.python.file")
-public record PythonFileProperties(String path, boolean cacheable) {
+public record PythonFileProperties(String path) {
 }

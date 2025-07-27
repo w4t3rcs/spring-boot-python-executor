@@ -38,7 +38,7 @@ public class BasicPythonFileHandler implements PythonFileHandler {
 
     @Override
     public void writeScriptBodyToFile(String path, String script) {
-        writeScriptBodyToFile(Path.of(path), script);
+        this.writeScriptBodyToFile(this.getScriptPath(path), script);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class BasicPythonFileHandler implements PythonFileHandler {
 
     @Override
     public String readScriptBodyFromFile(String path) {
-        return readScriptBodyFromFile(getScriptPath(path));
+        return this.readScriptBodyFromFile(this.getScriptPath(path));
     }
 
     @Override
@@ -66,7 +66,7 @@ public class BasicPythonFileHandler implements PythonFileHandler {
 
     @Override
     public String readScriptBodyFromFile(String path, UnaryOperator<String> mapper) {
-        return readScriptBodyFromFile(getScriptPath(path), mapper);
+        return this.readScriptBodyFromFile(this.getScriptPath(path), mapper);
     }
 
     @Override

@@ -7,6 +7,7 @@
 [![Java: 17+](https://img.shields.io/badge/Java-17%2B-blue.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 [![Spring Boot: 3.5.3+](https://img.shields.io/badge/Spring%20Boot-3.5.3%2B-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Python: 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
+[![Tests Covered: 10%](https://img.shields.io/badge/Tests%20Covered-10%25-green.svg)]
 
 <hr>
 
@@ -23,7 +24,7 @@
   - [Executor Properties](#executor-properties)
   - [Resolver Properties](#resolver-properties)
   - [Py4J Properties](#py4j-properties)
-  - [Py4J Properties](#cache-properties)
+  - [Cache Properties](#cache-properties)
 - [Execution Modes](#-execution-modes)
   - [Local Execution](#local-execution)
   - [REST Execution](#rest-execution)
@@ -156,7 +157,6 @@ implementation 'io.github.w4t3rcs:spring-boot-python-executor-starter:1.0.0'
 | Property                       | Description                          | Default    |
 |--------------------------------|--------------------------------------|------------|
 | `spring.python.file.path`      | Base path for Python script files    | `/python/` |
-| `spring.python.file.cacheable` | Whether to cache Python script files | `true`     |
 
 ### Executor Properties
 
@@ -253,14 +253,16 @@ implementation 'io.github.w4t3rcs:spring-boot-python-executor-starter:1.0.0'
 
 ### Cache Properties
 
-| Property                                 | Description                                                                                                                | Default       |
-|------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|---------------|
-| `spring.python.cache.enabled`            | Whether to enable caching or not (notice that you must have @EnableCaching and CacheManager bean provider in your project) | `false`       |
-| `spring.python.cache.name`               | Default name for Cache object                                                                                              | `pythonCache` |
-| `spring.python.cache.level`              | Show in which Python script flow phase the needed Caching... bean should be created (`processor` or `executor`)            | `processor`   |
-| `spring.python.cache.key.hash-algorithm` | Key body hash algorithm                                                                                                    | `SHA-256`     |
-| `spring.python.cache.key.charset`        | Key body charset                                                                                                           | `UTF-8`       |
-| `spring.python.cache.key.delimiter`      | Key delimiter between key prefix, key body and key suffix                                                                  | `_`           |
+| Property                                 | Description                                                                                                                | Default                 |
+|------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|-------------------------|
+| `spring.python.cache.enabled`            | Whether to enable caching or not (notice that you must have @EnableCaching and CacheManager bean provider in your project) | `false`                 |
+| `spring.python.cache.name`               | Default name for Cache object                                                                                              | `pythonCache`           |
+| `spring.python.cache.level`              | Show in which Python script flow phase the needed Caching... bean should be created (`processor` or `executor`)            | `processor`             |
+| `spring.python.cache.key.hash-algorithm` | Key body hash algorithm                                                                                                    | `SHA-256`               |
+| `spring.python.cache.key.charset`        | Key body charset                                                                                                           | `UTF-8`                 |
+| `spring.python.cache.key.delimiter`      | Key delimiter between key prefix, key body and key suffix                                                                  | `_`                     |
+| `spring.python.cache.file.bodies-name`   | Default name for Cache object that contains script bodies that have been read from file                                    | `fileScriptBodiesCache` |
+| `spring.python.cache.file.paths-name`    | Default name for Cache object that contains script paths that have been read from file                                     | `fileScriptPathsCache`  |
 
 ## 🔄 Execution Modes
 

@@ -1,5 +1,6 @@
-package io.w4t3rcs.python.cache;
+package io.w4t3rcs.python.cache.impl;
 
+import io.w4t3rcs.python.cache.CacheKeyGenerator;
 import io.w4t3rcs.python.exception.CacheKeyGenerationException;
 import io.w4t3rcs.python.properties.PythonCacheProperties;
 import lombok.RequiredArgsConstructor;

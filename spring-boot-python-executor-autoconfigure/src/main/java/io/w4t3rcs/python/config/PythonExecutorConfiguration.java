@@ -2,8 +2,8 @@ package io.w4t3rcs.python.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.w4t3rcs.python.cache.CacheKeyGenerator;
-import io.w4t3rcs.python.executor.CachingPythonExecutor;
 import io.w4t3rcs.python.executor.PythonExecutor;
+import io.w4t3rcs.python.executor.impl.CachingPythonExecutor;
 import io.w4t3rcs.python.executor.impl.GrpcPythonExecutor;
 import io.w4t3rcs.python.executor.impl.LocalPythonExecutor;
 import io.w4t3rcs.python.executor.impl.RestPythonExecutor;

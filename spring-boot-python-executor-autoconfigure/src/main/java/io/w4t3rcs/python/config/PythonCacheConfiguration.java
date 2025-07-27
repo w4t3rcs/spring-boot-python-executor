@@ -1,7 +1,7 @@
 package io.w4t3rcs.python.config;
 
 import io.w4t3rcs.python.cache.CacheKeyGenerator;
-import io.w4t3rcs.python.cache.CacheKeyGeneratorImpl;
+import io.w4t3rcs.python.cache.impl.CacheKeyGeneratorImpl;
 import io.w4t3rcs.python.properties.PythonCacheProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
