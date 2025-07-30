@@ -7,6 +7,10 @@ ENV PYTHON_ADDITIONAL_IMPORTS_DELIMITER=","
 ENV PYTHON_RESULT_APPEARANCE="r4java"
 WORKDIR /app
 COPY main.py install.py entrypoint.sh ./
-RUN chmod +x entrypoint.sh
+RUN pip install fastapi \
+    && pip install uvicorn \
+    && pip install py4j \
+    && pip install RestrictedPython \
+    && chmod +x entrypoint.sh
 EXPOSE 8000
 ENTRYPOINT ["./entrypoint.sh"]

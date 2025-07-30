@@ -1,9 +1,8 @@
 import os
 
-base_imports = ["grpcio", "grpcio-tools", "protobuf", "py4j", "RestrictedPython"]
 imports = os.getenv("PYTHON_SERVER_IMPORTS", "")
 delimiter = os.getenv("PYTHON_SERVER_IMPORTS_DELIMITER", ",")
-split_imports = base_imports + [imp.strip() for imp in imports.split(delimiter) if imp.strip()]
+split_imports = [imp.strip() for imp in imports.split(delimiter) if imp.strip()]
 
 with open("requirements.txt", "w") as f:
     for import_declaration in split_imports:

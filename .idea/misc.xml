@@ -13,6 +13,10 @@
         <option value="$PROJECT_DIR$/spring-boot-python-executor-starter/pom.xml" />
         <option value="$PROJECT_DIR$/example/pom.xml" />
         <option value="$PROJECT_DIR$/spring-boot-python-executor-cache/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-boot-python-executor-testcontainers/pom.xml" />
+        <option value="$PROJECT_DIR$/python-server-tset/pom.xml" />
+        <option value="$PROJECT_DIR$/python-server-testcontainers/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-boot-python-executor-common/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

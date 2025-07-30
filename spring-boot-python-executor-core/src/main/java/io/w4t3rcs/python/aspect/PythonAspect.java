@@ -33,7 +33,7 @@ public class PythonAspect {
     @Before("@annotation(io.w4t3rcs.python.annotation.PythonBefore)")
     public void executeBeforeMethod(JoinPoint joinPoint) {
         AspectUtil.handlePythonAnnotation(joinPoint, pythonProcessor, PythonBefore.class, PythonBefore::value,
-                AspectUtil::getMethodParameters);
+                AspectUtil::getPythonMethodParameters);
     }
 
     /**
@@ -46,7 +46,7 @@ public class PythonAspect {
     @After("@annotation(io.w4t3rcs.python.annotation.PythonAfter)")
     public void executeAfterMethod(JoinPoint joinPoint) {
         AspectUtil.handlePythonAnnotation(joinPoint, pythonProcessor, PythonAfter.class, PythonAfter::value,
-                AspectUtil::getMethodParameters);
+                AspectUtil::getPythonMethodParameters);
     }
 
     /**
@@ -61,7 +61,7 @@ public class PythonAspect {
     public void executeAfterReturningMethod(JoinPoint joinPoint, Object result) {
         AspectUtil.handlePythonAnnotation(joinPoint, pythonProcessor, PythonAfter.class, PythonAfter::value,
                 point -> {
-            Map<String, Object> arguments = AspectUtil.getMethodParameters(point);
+            Map<String, Object> arguments = AspectUtil.getPythonMethodParameters(point);
             arguments.put("result", result);
             return arguments;
         });

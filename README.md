@@ -7,7 +7,7 @@
 [![Java: 17+](https://img.shields.io/badge/Java-17%2B-blue.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 [![Spring Boot: 3.5.3+](https://img.shields.io/badge/Spring%20Boot-3.5.3%2B-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Python: 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
-[![Tests Covered: 10%](https://img.shields.io/badge/Tests%20Covered-10%25-green.svg)]
+[![Tests Passed: 90%](https://img.shields.io/badge/Tests%20Passed-90%25-green.svg)]
 
 <hr>
 

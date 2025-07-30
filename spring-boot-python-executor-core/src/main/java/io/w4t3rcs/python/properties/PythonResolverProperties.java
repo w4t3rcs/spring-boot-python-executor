@@ -11,12 +11,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * <p>Properties are bound from the application configuration using the prefix "spring.python.resolver".</p>
  */
 @ConfigurationProperties("spring.python.resolver")
-public record PythonResolverProperties(DeclaredResolver[] declared, String scriptImportsRegex, ResultProperties result, SpelythonProperties spelython, Py4JProperties py4j, RestrictedPythonProperties restrictedPython) {
+public record PythonResolverProperties(DeclaredResolver[] declared, String scriptImportsRegex, SpelythonProperties spelython, Py4JProperties py4j, RestrictedPythonProperties restrictedPython, ResultProperties result) {
     public enum DeclaredResolver {
         SPELYTHON, PY4J, RESTRICTED_PYTHON, RESULT
-    }
-
-    public record ResultProperties(String regex, String appearance, int positionFromStart, int positionFromEnd) {
     }
 
     public record SpelythonProperties(String regex, SpelProperties spel) {
@@ -28,5 +25,8 @@ public record PythonResolverProperties(DeclaredResolver[] declared, String scrip
     }
 
     public record RestrictedPythonProperties(String importLine, String codeVariableName, String localVariablesName, String safeResultAppearance, boolean printEnabled) {
+    }
+
+    public record ResultProperties(String regex, String appearance, int positionFromStart, int positionFromEnd) {
     }
 }

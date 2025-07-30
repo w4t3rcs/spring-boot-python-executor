@@ -1,27 +1,24 @@
 package io.w4t3rcs.python.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.w4t3rcs.python.cache.CacheKeyGenerator;
+import io.w4t3rcs.python.connection.PythonServerConnectionDetails;
+import io.w4t3rcs.python.executor.GrpcPythonExecutor;
+import io.w4t3rcs.python.executor.LocalPythonExecutor;
 import io.w4t3rcs.python.executor.PythonExecutor;
-import io.w4t3rcs.python.executor.impl.CachingPythonExecutor;
-import io.w4t3rcs.python.executor.impl.GrpcPythonExecutor;
-import io.w4t3rcs.python.executor.impl.LocalPythonExecutor;
-import io.w4t3rcs.python.executor.impl.RestPythonExecutor;
+import io.w4t3rcs.python.executor.RestPythonExecutor;
 import io.w4t3rcs.python.local.ProcessFinisher;
 import io.w4t3rcs.python.local.ProcessHandler;
 import io.w4t3rcs.python.local.ProcessStarter;
-import io.w4t3rcs.python.properties.PythonCacheProperties;
 import io.w4t3rcs.python.properties.PythonExecutorProperties;
 import io.w4t3rcs.python.proto.PythonServiceGrpc;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+
+import java.net.http.HttpClient;
 
 /**
  * Main configuration class for {@link PythonExecutor}.
@@ -44,8 +41,22 @@ public class PythonExecutorConfiguration {
     @Bean
     @ConditionalOnMissingBean(PythonExecutor.class)
     @ConditionalOnProperty(name = "spring.python.executor.type", havingValue = "rest")
-    public PythonExecutor restPythonExecutor(PythonExecutorProperties properties, ObjectMapper objectMapper) {
-        return new RestPythonExecutor(properties, objectMapper);
+    public PythonExecutor restPythonExecutor(PythonServerConnectionDetails connectionDetails, ObjectMapper objectMapper, @Qualifier("restPythonServerHttpClient") HttpClient restPythonServerHttpClient) {
+        return new RestPythonExecutor(connectionDetails, objectMapper, restPythonServerHttpClient);
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "spring.python.executor.type", havingValue = "rest")
+    public HttpClient restPythonServerHttpClient() {
+        return HttpClient.newHttpClient();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(PythonServerConnectionDetails.class)
+    @ConditionalOnProperty(name = "spring.python.executor.type", havingValue = "rest")
+    public PythonServerConnectionDetails restConnectionDetails(PythonExecutorProperties properties) {
+        PythonExecutorProperties.RestProperties restProperties = properties.rest();
+        return PythonServerConnectionDetails.of(restProperties.username(), restProperties.password(), restProperties.uri());
     }
 
     @Bean
@@ -56,13 +67,10 @@ public class PythonExecutorConfiguration {
     }
 
     @Bean
-    @Primary
-    @ConditionalOnBean(PythonExecutor.class)
-    @ConditionalOnProperties({
-            @ConditionalOnProperty(name = "spring.python.cache.enabled", havingValue = "true"),
-            @ConditionalOnProperty(name = "spring.python.cache.level", havingValue = "executor")
-    })
-    public PythonExecutor cachingPythonExecutor(PythonCacheProperties cacheProperties, PythonExecutor pythonExecutor, CacheManager cacheManager, CacheKeyGenerator keyGenerator) {
-        return new CachingPythonExecutor(cacheProperties, pythonExecutor, cacheManager, keyGenerator);
+    @ConditionalOnMissingBean(PythonServerConnectionDetails.class)
+    @ConditionalOnProperty(name = "spring.python.executor.type", havingValue = "grpc")
+    public PythonServerConnectionDetails grpcConnectionDetails(PythonExecutorProperties properties) {
+        PythonExecutorProperties.GrpcProperties grpcProperties = properties.grpc();
+        return PythonServerConnectionDetails.of(grpcProperties.username(), grpcProperties.password(), grpcProperties.uri());
     }
 }

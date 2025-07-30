@@ -9,4 +9,8 @@ public class ProcessStartException extends RuntimeException {
     public ProcessStartException(Throwable cause) {
         super(cause);
     }
+
+    public ProcessStartException(String message) {
+        super(message);
+    }
 }

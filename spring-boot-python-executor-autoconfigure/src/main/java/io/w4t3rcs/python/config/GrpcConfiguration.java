@@ -3,8 +3,9 @@ package io.w4t3rcs.python.config;
 import io.grpc.ManagedChannel;
 import io.grpc.Metadata;
 import io.grpc.stub.MetadataUtils;
-import io.w4t3rcs.python.properties.PythonExecutorProperties;
+import io.w4t3rcs.python.connection.PythonServerConnectionDetails;
 import io.w4t3rcs.python.proto.PythonServiceGrpc;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,15 +24,15 @@ public class GrpcConfiguration {
     private static final String PASSWORD_KEY = "x-password";
 
     @Bean
-    public PythonServiceGrpc.PythonServiceBlockingStub stub(PythonExecutorProperties properties, GrpcChannelFactory channels) {
-        PythonExecutorProperties.GrpcProperties grpcProperties = properties.grpc();
-        ManagedChannel channel = channels.createChannel(grpcProperties.uri());
+    @ConditionalOnMissingBean(PythonServiceGrpc.PythonServiceBlockingStub.class)
+    public PythonServiceGrpc.PythonServiceBlockingStub stub(PythonServerConnectionDetails connectionDetails, GrpcChannelFactory channels) {
+        ManagedChannel channel = channels.createChannel(connectionDetails.getUri());
         Metadata headers = new Metadata();
         var marshaller = Metadata.ASCII_STRING_MARSHALLER;
         Metadata.Key<String> usernameKey = Metadata.Key.of(USERNAME_KEY, marshaller);
         Metadata.Key<String> passwordKey = Metadata.Key.of(PASSWORD_KEY, marshaller);
-        headers.put(usernameKey, grpcProperties.username());
-        headers.put(passwordKey, grpcProperties.password());
+        headers.put(usernameKey, connectionDetails.getUsername());
+        headers.put(passwordKey, connectionDetails.getPassword());
         return PythonServiceGrpc.newBlockingStub(channel).withInterceptors(MetadataUtils.newAttachHeadersInterceptor(headers));
     }
 }

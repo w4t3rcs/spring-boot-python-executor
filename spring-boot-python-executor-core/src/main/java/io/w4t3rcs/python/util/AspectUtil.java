@@ -59,24 +59,24 @@ public class AspectUtil {
      * @param joinPoint The join point representing the intercepted method call
      * @return A map of parameter names to their values
      */
-    public Map<String, Object> getMethodParameters(JoinPoint joinPoint) {
+    public Map<String, Object> getPythonMethodParameters(JoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
-        Parameter[] parameters = method.getParameters();
         Object[] objects = joinPoint.getArgs();
-        Map<String, Object> map = new HashMap<>();
+        Parameter[] parameters = method.getParameters();
+        String[] parameterNames = signature.getParameterNames();
+        Map<String, Object> methodParameters = new HashMap<>();
         for (int i = 0; i < parameters.length; i++) {
             Parameter parameter = parameters[i];
             if (parameter.isAnnotationPresent(PythonParam.class)) {
                 PythonParam annotation = parameter.getAnnotation(PythonParam.class);
                 String value = annotation.value();
-                map.put(value, objects[i]);
+                methodParameters.put(value, objects[i]);
             } else {
-                String parameterName = parameter.getName();
-                map.put(parameterName, objects[i]);
+                String parameterName = parameterNames[i];
+                methodParameters.put(parameterName, objects[i]);
             }
         }
-
-        return map;
+        return methodParameters;
     }
 }

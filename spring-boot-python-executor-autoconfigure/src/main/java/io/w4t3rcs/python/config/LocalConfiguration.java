@@ -1,16 +1,11 @@
 package io.w4t3rcs.python.config;
 
-import io.w4t3rcs.python.executor.impl.LocalPythonExecutor;
+import io.w4t3rcs.python.executor.LocalPythonExecutor;
 import io.w4t3rcs.python.file.PythonFileHandler;
-import io.w4t3rcs.python.local.ProcessFinisher;
-import io.w4t3rcs.python.local.ProcessHandler;
-import io.w4t3rcs.python.local.ProcessStarter;
-import io.w4t3rcs.python.local.impl.ErrorProcessHandler;
-import io.w4t3rcs.python.local.impl.InputProcessHandler;
-import io.w4t3rcs.python.local.impl.ProcessFinisherImpl;
-import io.w4t3rcs.python.local.impl.ProcessStarterImpl;
+import io.w4t3rcs.python.local.*;
 import io.w4t3rcs.python.properties.PythonExecutorProperties;
 import io.w4t3rcs.python.properties.PythonResolverProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,21 +20,25 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(name = "spring.python.executor.type", havingValue = "local")
 public class LocalConfiguration {
     @Bean
+    @ConditionalOnMissingBean(ProcessStarter.class)
     public ProcessStarter processStarter(PythonExecutorProperties executorProperties, PythonFileHandler pythonFileHandler) {
         return new ProcessStarterImpl(executorProperties, pythonFileHandler);
     }
 
     @Bean
+    @ConditionalOnMissingBean(InputProcessHandler.class)
     public ProcessHandler<String> inputProcessHandler(PythonExecutorProperties executorProperties, PythonResolverProperties resolverProperties) {
         return new InputProcessHandler(executorProperties, resolverProperties);
     }
 
     @Bean
+    @ConditionalOnMissingBean(ErrorProcessHandler.class)
     public ProcessHandler<Void> errorProcessHandler() {
         return new ErrorProcessHandler();
     }
 
     @Bean
+    @ConditionalOnMissingBean(ProcessFinisher.class)
     public ProcessFinisher processFinisher() {
         return new ProcessFinisherImpl();
     }

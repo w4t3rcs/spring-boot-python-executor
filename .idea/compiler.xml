@@ -7,20 +7,27 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="spring-boot-python-executor-core" />
-        <module name="spring-boot-python-executor-starter" />
         <module name="spring-boot-python-executor-cache" />
         <module name="spring-boot-python-executor-autoconfigure" />
+        <module name="spring-boot-python-executor-testcontainers" />
+        <module name="python-server-testcontainers" />
+        <module name="spring-boot-python-executor-core" />
+        <module name="spring-boot-python-executor-starter" />
+        <module name="spring-boot-python-executor-common" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="python-server-tset" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="example" options="-parameters" />
       <module name="spring-boot-python-executor-autoconfigure" options="" />
       <module name="spring-boot-python-executor-cache" options="" />
       <module name="spring-boot-python-executor-core" options="" />
       <module name="spring-boot-python-executor-starter" options="" />
+      <module name="spring-boot-python-executor-testcontainers" options="" />
+      <module name="spring-boot-python-executor-common" options="" />
     </option>
   </component>
 </project>

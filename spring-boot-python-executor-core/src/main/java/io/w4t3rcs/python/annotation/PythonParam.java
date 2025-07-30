@@ -1,6 +1,6 @@
 package io.w4t3rcs.python.annotation;
 
-import io.w4t3rcs.python.resolver.impl.SpelythonResolver;
+import io.w4t3rcs.python.resolver.SpelythonResolver;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
