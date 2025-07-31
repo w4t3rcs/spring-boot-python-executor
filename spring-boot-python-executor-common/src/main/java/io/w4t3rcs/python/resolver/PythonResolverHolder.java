@@ -9,7 +9,6 @@ import java.util.stream.Stream;
 
 @SuppressWarnings("NullableProblems")
 public interface PythonResolverHolder extends Iterable<PythonResolver> {
-
     @Override
     default Iterator<PythonResolver> iterator() {
         return this.getResolvers().iterator();

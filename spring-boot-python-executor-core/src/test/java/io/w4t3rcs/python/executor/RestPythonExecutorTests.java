@@ -44,9 +44,9 @@ class RestPythonExecutorTests {
         Mockito.when(connectionDetails.getPassword()).thenReturn("password");
         Mockito.when(client.send(Mockito.any(HttpRequest.class), Mockito.any(HttpResponse.BodyHandler.class))).thenReturn(response);
         Mockito.when(response.body()).thenReturn(OK);
-        Mockito.when((String) objectMapper.readValue(OK, OK_CLASS)).thenReturn(OK);
+        Mockito.when((String) objectMapper.readValue(OK, STRING_CLASS)).thenReturn(OK);
 
-        String executed = restPythonExecutor.execute(script, OK_CLASS);
+        String executed = restPythonExecutor.execute(script, STRING_CLASS);
         Assertions.assertEquals(OK, executed);
     }
 }

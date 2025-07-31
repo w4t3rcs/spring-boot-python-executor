@@ -8,7 +8,6 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.TreeMap;
 
 public class CachingPythonProcessor implements PythonProcessor {
@@ -31,7 +30,7 @@ public class CachingPythonProcessor implements PythonProcessor {
             String argumentsJson = objectMapper.writeValueAsString(sortedMap);
             String body = script + argumentsJson;
             String key = keyGenerator.generateKey(null, body, resultClass.getName());
-            R cachedResult = Objects.requireNonNull(cache).get(key, resultClass);
+            R cachedResult = cache.get(key, resultClass);
             if (cachedResult != null) {
                 return cachedResult;
             } else {

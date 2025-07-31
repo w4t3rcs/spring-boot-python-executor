@@ -37,9 +37,9 @@ class GrpcPythonExecutorTests {
                 .build();
 
         Mockito.when(stub.sendCode(scriptRequest)).thenReturn(scriptResponse);
-        Mockito.when((String) objectMapper.readValue(OK, OK_CLASS)).thenReturn(OK);
+        Mockito.when((String) objectMapper.readValue(OK, STRING_CLASS)).thenReturn(OK);
 
-        String executed = grpcPythonExecutor.execute(script, OK_CLASS);
+        String executed = grpcPythonExecutor.execute(script, STRING_CLASS);
         Assertions.assertEquals(OK, executed);
     }
 }

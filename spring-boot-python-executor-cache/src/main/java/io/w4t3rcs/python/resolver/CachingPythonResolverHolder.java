@@ -9,7 +9,6 @@ import org.springframework.cache.CacheManager;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.TreeMap;
 
 public class CachingPythonResolverHolder implements PythonResolverHolder {
@@ -32,7 +31,7 @@ public class CachingPythonResolverHolder implements PythonResolverHolder {
             String argumentsJson = objectMapper.writeValueAsString(sortedMap);
             String body = script + argumentsJson;
             String key = keyGenerator.generateKey(null, body, null);
-            String cachedResolvedScript = Objects.requireNonNull(cache).get(key, String.class);
+            String cachedResolvedScript = cache.get(key, String.class);
             if (cachedResolvedScript != null) {
                 return cachedResolvedScript;
             } else {

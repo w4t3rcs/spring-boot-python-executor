@@ -40,9 +40,9 @@ class LocalPythonExecutorTests {
         Mockito.when(processStarter.start(script)).thenReturn(process);
         Mockito.when(inputProcessHandler.handle(process)).thenReturn(OK);
         Mockito.doNothing().when(processFinisher).finish(process);
-        Mockito.when((String) objectMapper.readValue(OK, OK_CLASS)).thenReturn(OK);
+        Mockito.when((String) objectMapper.readValue(OK, STRING_CLASS)).thenReturn(OK);
 
-        String executed = localPythonExecutor.execute(script, OK_CLASS);
+        String executed = localPythonExecutor.execute(script, STRING_CLASS);
         Assertions.assertEquals(OK, executed);
     }
 }

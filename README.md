@@ -84,10 +84,18 @@ classDiagram
   PythonAfter --> PythonProcessor: Annotation @PythonAfter\nforwards the script to the\nPythonProcessor implementation
   PythonProcessor --> PythonFileHandler: Firstly, the script is checked\nwhether it's a .py file\nor String script
   PythonProcessor <-- PythonFileHandler: If it's a file, the content\nis read as a String value\nand returned
-  PythonProcessor --> PythonResolver: Secondly, the script may be\n transformed by multiple\nPythonResolver implementations.\nYou can configure declared\nimplementations by using\nspring.python.resolver.declared\nproperty
-  PythonProcessor <-- PythonResolver: Specific PythonResolver\nreturns resolved script
+  PythonProcessor --> PythonResolverHolder: Secondly, the script may be\n transformed by multiple\nPythonResolver implementations.\nYou can configure declared\nimplementations by using\nspring.python.resolver.declared\nproperty
+  PythonProcessor <-- PythonResolverHolder: Returns resolved script from\nmultiple PythonResolvers
   PythonProcessor --> PythonExecutor: Finally, the script is executed\nby PythonExecutor implementation.\nYou can choose needed implementation\nby configuring the property named\nspring.python.executor.type
   PythonProcessor <-- PythonExecutor: The method returns null,\nbecause of annotation usage,\nbut if you would like to get\nspecific result object you\nneed to call process(...)\nfunction manually 
+  
+  class PythonBefore {
+      +String value()
+  }
+  
+  class PythonAfter {
+      +String value()
+  }
   
   class PythonProcessor {
     <<interface>>
@@ -106,9 +114,14 @@ classDiagram
     +Path getScriptPath(String path)
   }
   
-  class PythonResolver {
+  class PythonResolverHolder {
     <<interface>>
-    +String resolve(String script, Map<String, Object> arguments)
+    +Iterator<PythonResolver> iterator()
+    +void forEach(Consumer<? super PythonResolver> action)
+    +Spliterator<PythonResolver> spliterator()
+    +Stream<PythonResolver> stream()
+    +String resolveAll(String script, Map<String, Object> arguments);
+    +List<PythonResolver> getResolvers();
   }
   
   class PythonExecutor {
