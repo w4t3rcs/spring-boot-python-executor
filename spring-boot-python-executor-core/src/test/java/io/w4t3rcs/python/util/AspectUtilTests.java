@@ -34,10 +34,9 @@ class AspectUtilTests {
 
     @Test
     void testHandlePythonAnnotation() {
-        Mockito.when(joinPoint.getSignature()).thenReturn(methodSignature);
-        Mockito.when(methodSignature.getMethod()).thenReturn(method);
         Mockito.when(pythonProcessor.process(TestConstants.SIMPLE_SCRIPT_3, null, null)).thenReturn(null);
-        AspectUtil.handlePythonAnnotation(joinPoint, pythonProcessor, PythonBefore.class, PythonBefore::value, point -> null);
+
+        AspectUtil.handlePythonAnnotation(joinPoint, pythonProcessor, () -> TestConstants.SIMPLE_SCRIPT_3, point -> null);
         Mockito.verify(pythonProcessor, Mockito.times(1)).process(TestConstants.SIMPLE_SCRIPT_3, null, null);
     }
 

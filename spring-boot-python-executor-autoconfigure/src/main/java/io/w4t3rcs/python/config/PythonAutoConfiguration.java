@@ -1,8 +1,9 @@
 package io.w4t3rcs.python.config;
 
-import io.w4t3rcs.python.aspect.PythonAspect;
-import io.w4t3rcs.python.processor.PythonProcessor;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 
 /**
  * Main configuration class for Python integration.
@@ -23,12 +24,9 @@ import org.springframework.context.annotation.*;
         PythonFileHandlerConfiguration.class,
         PythonResolverConfiguration.class,
         PythonExecutorConfiguration.class,
-        PythonProcessorConfiguration.class
+        PythonProcessorConfiguration.class,
+        PythonAspectConfiguration.class
 })
 @PropertySource("classpath:python-default.properties")
 public class PythonAutoConfiguration {
-    @Bean
-    public PythonAspect pythonAspect(PythonProcessor pythonProcessor) {
-        return new PythonAspect(pythonProcessor);
-    }
 }

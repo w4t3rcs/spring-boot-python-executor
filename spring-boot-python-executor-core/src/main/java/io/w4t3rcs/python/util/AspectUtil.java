@@ -6,12 +6,12 @@ import lombok.experimental.UtilityClass;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Utility class providing helper methods for aspect-oriented programming with Python integration.
@@ -25,17 +25,13 @@ public class AspectUtil {
      * This method extracts the annotation from the method, gets the script and arguments,
      * and executes the script using the provided executor and resolvers.
      *
-     * @param <T> The type of annotation
      * @param joinPoint The join point representing the intercepted method call
      * @param pythonProcessor The processor responsible for resolving and running Python scripts
-     * @param annotationClass The class of the annotation to look for
-     * @param scriptGetter A function that extracts the script path or content from the annotation
+     * @param scriptGetter A function that retrieves the script path or content
      * @param argumentsGetter A function that extracts arguments from the join point
      */
-    public <T extends Annotation> void handlePythonAnnotation(JoinPoint joinPoint, PythonProcessor pythonProcessor, Class<? extends T> annotationClass, Function<T, String> scriptGetter, Function<JoinPoint, Map<String, Object>> argumentsGetter) {
-        Method method = getMethod(joinPoint);
-        T annotation = method.getAnnotation(annotationClass);
-        String script = scriptGetter.apply(annotation);
+    public void handlePythonAnnotation(JoinPoint joinPoint, PythonProcessor pythonProcessor, Supplier<String> scriptGetter, Function<JoinPoint, Map<String, Object>> argumentsGetter) {
+        String script = scriptGetter.get();
         Map<String, Object> arguments = argumentsGetter.apply(joinPoint);
         pythonProcessor.process(script, null, arguments);
     }
