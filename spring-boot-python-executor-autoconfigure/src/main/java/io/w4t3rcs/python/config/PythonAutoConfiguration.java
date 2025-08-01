@@ -23,8 +23,7 @@ import org.springframework.context.annotation.*;
         PythonFileHandlerConfiguration.class,
         PythonResolverConfiguration.class,
         PythonExecutorConfiguration.class,
-        PythonProcessorConfiguration.class,
-        PythonCacheConfiguration.class
+        PythonProcessorConfiguration.class
 })
 @PropertySource("classpath:python-default.properties")
 public class PythonAutoConfiguration {

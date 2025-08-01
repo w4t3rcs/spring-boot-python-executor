@@ -18,6 +18,7 @@
 - [Features & Architecture](#-features--architecture)
   - [Core Components](#core-components)
   - [Security](#security)
+  - [Cache](#cache)
 - [Installation and Setup](#-installation-and-setup)
 - [Configuration](#-configuration)
   - [File Properties](#file-properties)
@@ -154,6 +155,16 @@ Add the starter dependency to your `pom.xml`:
 </dependency>
 ```
 
+If you want to have caching abilities, also add this:
+
+```xml
+<dependency>
+    <groupId>io.github.w4t3rcs</groupId>
+    <artifactId>spring-boot-python-executor-cache-starter</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
 ### Gradle
 
 Add the starter dependency to your `build.gradle`:
@@ -162,6 +173,11 @@ Add the starter dependency to your `build.gradle`:
 implementation 'io.github.w4t3rcs:spring-boot-python-executor-starter:1.0.0'
 ```
 
+If you want to have caching abilities, also add this:
+
+```groovy
+implementation 'io.github.w4t3rcs:spring-boot-python-executor-cache-starter:1.0.0'
+```
 
 ## ⚙️ Configuration
 

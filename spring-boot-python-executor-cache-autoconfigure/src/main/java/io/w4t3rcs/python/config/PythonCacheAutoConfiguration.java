@@ -20,11 +20,13 @@ import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @EnableConfigurationProperties(PythonCacheProperties.class)
 @ConditionalOnProperty(name = "spring.python.cache.enabled", havingValue = "true")
-public class PythonCacheConfiguration {
+@PropertySource("classpath:python-default.properties")
+public class PythonCacheAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(CacheKeyGenerator.class)
     public CacheKeyGenerator cacheKeyGenerator(PythonCacheProperties cacheProperties) {

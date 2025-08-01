@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/python-grpc-server/python-grpc-server.iml" filepath="$PROJECT_DIR$/python-grpc-server/python-grpc-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/python-rest-server/python-rest-server.iml" filepath="$PROJECT_DIR$/python-rest-server/python-rest-server.iml" />
-      <module fileurl="file://$PROJECT_DIR$/spring-boot-python-executor.iml" filepath="$PROJECT_DIR$/spring-boot-python-executor.iml" />
     </modules>
   </component>
 </project>

@@ -4,11 +4,15 @@
     <file url="file://$PROJECT_DIR$/python-server-testcontainers/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/python-server-testcontainers/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-boot-python-executor-autoconfigure/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-boot-python-executor-cache-autoconfigure/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-boot-python-executor-cache-starter/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-boot-python-executor-cache/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-boot-python-executor-common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-boot-python-executor-common/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-boot-python-executor-core/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-boot-python-executor-coree/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-boot-python-executor-dependencies/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-boot-python-executor-dependencies/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-boot-python-executor-starter/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-boot-python-executor-testcontainers/src/main/java" charset="UTF-8" />
   </component>

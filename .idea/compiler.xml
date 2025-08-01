@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="spring-boot-python-executor-cache-autoconfigure" />
         <module name="spring-boot-python-executor-cache" />
         <module name="spring-boot-python-executor-autoconfigure" />
         <module name="spring-boot-python-executor-testcontainers" />
@@ -14,6 +15,8 @@
         <module name="spring-boot-python-executor-core" />
         <module name="spring-boot-python-executor-starter" />
         <module name="spring-boot-python-executor-common" />
+        <module name="spring-boot-python-executor-cache-starter" />
+        <module name="spring-boot-python-executor-dependencies" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -24,10 +27,12 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="spring-boot-python-executor-autoconfigure" options="" />
       <module name="spring-boot-python-executor-cache" options="" />
+      <module name="spring-boot-python-executor-cache-autoconfigure" options="" />
+      <module name="spring-boot-python-executor-cache-starter" options="" />
+      <module name="spring-boot-python-executor-common" options="" />
       <module name="spring-boot-python-executor-core" options="" />
       <module name="spring-boot-python-executor-starter" options="" />
       <module name="spring-boot-python-executor-testcontainers" options="" />
-      <module name="spring-boot-python-executor-common" options="" />
     </option>
   </component>
 </project>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>spring-boot-python-executor-dependencies</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    <name>Spring Boot Python Executor BOM</name>
+    <description>
+        Centralized Bill of Materials (BOM) for the Spring Boot Python Executor project.
+        Defines and manages versions for all related modules such as core, starter, autoconfigure, cache, and testcontainers,
+        ensuring consistent and compatible dependency management across different applications and libraries.
+    </description>
+    <parent>
+        <groupId>io.github.w4t3rcs</groupId>
+        <artifactId>spring-boot-python-executor-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.github.w4t3rcs</groupId>
+                <artifactId>spring-boot-python-executor-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.w4t3rcs</groupId>
+                <artifactId>spring-boot-python-executor-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.w4t3rcs</groupId>
+                <artifactId>spring-boot-python-executor-autoconfigure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.w4t3rcs</groupId>
+                <artifactId>spring-boot-python-executor-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.w4t3rcs</groupId>
+                <artifactId>spring-boot-python-executor-cache</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.w4t3rcs</groupId>
+                <artifactId>spring-boot-python-executor-cache-autoconfigure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.w4t3rcs</groupId>
+                <artifactId>spring-boot-python-executor-cache-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.w4t3rcs</groupId>
+                <artifactId>spring-boot-python-executor-testcontainers</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

@@ -2,14 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>spring-boot-python-executor-starter</artifactId>
+    <artifactId>spring-boot-python-executor-cache-starter</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
-    <name>Spring Boot Python Executor Starter</name>
+    <name>Spring Boot Python Executor Cache Starter</name>
     <description>
-        Spring Boot starter for Python Executor integration.
-        Provides all necessary dependencies and autoconfiguration to enable safe Python script execution
-        within a Spring Boot application, including SpEL integration, result processing, and multiple execution strategies.
+        Starter module for enabling caching support in the Spring Boot Python Executor project.
+        Includes all necessary dependencies and auto-configuration to cache Python script results
+        using Spring Cache abstraction out of the box.
     </description>
     <parent>
         <groupId>io.github.w4t3rcs</groupId>
@@ -19,12 +19,12 @@
     <dependencies>
         <dependency>
             <groupId>io.github.w4t3rcs</groupId>
-            <artifactId>spring-boot-python-executor-autoconfigure</artifactId>
+            <artifactId>spring-boot-python-executor-cache-autoconfigure</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.w4t3rcs</groupId>
-            <artifactId>spring-boot-python-executor-core</artifactId>
+            <artifactId>spring-boot-python-executor-cache</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

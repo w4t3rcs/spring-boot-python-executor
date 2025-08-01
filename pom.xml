@@ -3,16 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.w4t3rcs</groupId>
-    <artifactId>spring-boot-python-executor-autoconfigure</artifactId>
+    <artifactId>spring-boot-python-executor-parent</artifactId>
     <version>1.0.0</version>
-    <packaging>jar</packaging>
-    <name>Spring Boot Python Executor Autoconfigure</name>
-    <description>
-        Spring Boot autoconfiguration module for the Python Executor.
-        Automatically configures Python execution, SpEL-based expression resolving,
-        and result handling based on application properties. Designed to work seamlessly
-        with Spring Boot via the starter module.
-    </description>
+    <packaging>pom</packaging>
+    <name>Spring Boot Python Executor Parent</name>
+    <description>Parent module for managing all submodules of Spring Boot Python Executor.</description>
     <url>https://github.com/w4t3rcs/spring-boot-python-executor</url>
     <licenses>
         <license>
@@ -32,17 +27,21 @@
         <connection>scm:git:git://github.com/w4t3rcs/spring-boot-python-executor.git</connection>
         <developerConnection>scm:git:ssh://git@github.com:w4t3rcs/spring-boot-python-executor.git</developerConnection>
     </scm>
+    <modules>
+        <module>python-server-testcontainers</module>
+        <module>spring-boot-python-executor-dependencies</module>
+        <module>spring-boot-python-executor-common</module>
+        <module>spring-boot-python-executor-core</module>
+        <module>spring-boot-python-executor-autoconfigure</module>
+        <module>spring-boot-python-executor-starter</module>
+        <module>spring-boot-python-executor-cache</module>
+        <module>spring-boot-python-executor-cache-autoconfigure</module>
+        <module>spring-boot-python-executor-cache-starter</module>
+        <module>spring-boot-python-executor-testcontainers</module>
+    </modules>
     <properties>
         <java.version>17</java.version>
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>io.github.w4t3rcs</groupId>
-            <artifactId>spring-boot-python-executor-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -108,10 +107,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
