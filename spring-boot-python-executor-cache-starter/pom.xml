@@ -8,7 +8,7 @@
     <name>Spring Boot Python Executor Cache Starter</name>
     <description>
         Starter module for enabling caching support in the Spring Boot Python Executor project.
-        Includes all necessary dependencies and auto-configuration to cache Python script results
+        Includes all necessary dependencies and autoconfiguration to cache Python script results
         using Spring Cache abstraction out of the box.
     </description>
     <parent>

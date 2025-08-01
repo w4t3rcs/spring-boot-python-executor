@@ -81,14 +81,14 @@ title: Basic Python script flow
 ---
 
 classDiagram
-  PythonBefore --> PythonProcessor: Annotation @PythonBefore\nforwards the script to the\nPythonProcessor implementation
-  PythonAfter --> PythonProcessor: Annotation @PythonAfter\nforwards the script to the\nPythonProcessor implementation
-  PythonProcessor --> PythonFileHandler: Firstly, the script is checked\nwhether it's a .py file\nor String script
-  PythonProcessor <-- PythonFileHandler: If it's a file, the content\nis read as a String value\nand returned
-  PythonProcessor --> PythonResolverHolder: Secondly, the script may be\n transformed by multiple\nPythonResolver implementations.\nYou can configure declared\nimplementations by using\nspring.python.resolver.declared\nproperty
-  PythonProcessor <-- PythonResolverHolder: Returns resolved script from\nmultiple PythonResolvers
-  PythonProcessor --> PythonExecutor: Finally, the script is executed\nby PythonExecutor implementation.\nYou can choose needed implementation\nby configuring the property named\nspring.python.executor.type
-  PythonProcessor <-- PythonExecutor: The method returns null,\nbecause of annotation usage,\nbut if you would like to get\nspecific result object you\nneed to call process(...)\nfunction manually 
+  PythonBefore --> PythonProcessor: Annotation @PythonBefore forwards the script to the PythonProcessor implementation
+  PythonAfter --> PythonProcessor: Annotation @PythonAfter forwards the script to the PythonProcessor implementation
+  PythonProcessor --> PythonFileHandler: Firstly, the script is checked whether it's a .py file or String script
+  PythonProcessor <-- PythonFileHandler: If it's a file, the content is read as a String value and returned
+  PythonProcessor --> PythonResolverHolder: Secondly, the script may be  transformed by multiple PythonResolver implementations. You can configure declared implementations by using spring.python.resolver.declared property
+  PythonProcessor <-- PythonResolverHolder: Returns resolved script from multiple PythonResolvers
+  PythonProcessor --> PythonExecutor: Finally, the script is executed by PythonExecutor implementation. You can choose needed implementation by configuring the property named spring.python.executor.type
+  PythonProcessor <-- PythonExecutor: The method returns null, because of annotation usage, but if you would like to get specific result object you need to call process(...) function manually 
   
   class PythonBefore {
       +String value()
