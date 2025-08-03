@@ -3,6 +3,10 @@ package io.w4t3rcs.python.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.w4t3rcs.python.cache.CacheKeyGenerator;
 import io.w4t3rcs.python.cache.impl.CacheKeyGeneratorImpl;
+import io.w4t3rcs.python.condition.ExecutorCacheLevelCondition;
+import io.w4t3rcs.python.condition.FileCacheLevelCondition;
+import io.w4t3rcs.python.condition.ProcessorCacheLevelCondition;
+import io.w4t3rcs.python.condition.ResolverCacheLevelCondition;
 import io.w4t3rcs.python.executor.CachingPythonExecutor;
 import io.w4t3rcs.python.executor.PythonExecutor;
 import io.w4t3rcs.python.file.CachingPythonFileHandler;
@@ -17,10 +21,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 
 @Configuration
 @EnableConfigurationProperties(PythonCacheProperties.class)
@@ -36,7 +37,7 @@ public class PythonCacheAutoConfiguration {
     @Bean
     @Primary
     @ConditionalOnBean(PythonFileHandler.class)
-    @ConditionalOnProperty(name = "spring.python.cache.file.enabled", havingValue = "true")
+    @Conditional(FileCacheLevelCondition.class)
     public PythonFileHandler cachingPythonFileHandler(PythonCacheProperties cacheProperties, PythonFileHandler pythonFileHandler, CacheManager cacheManager) {
         return new CachingPythonFileHandler(cacheProperties, pythonFileHandler, cacheManager);
     }
@@ -44,7 +45,7 @@ public class PythonCacheAutoConfiguration {
     @Bean
     @Primary
     @ConditionalOnBean(PythonResolverHolder.class)
-    @ConditionalOnProperty(name = "spring.python.cache.level", havingValue = "resolver")
+    @Conditional(ResolverCacheLevelCondition.class)
     public PythonResolverHolder cachingPythonResolverHolder(PythonCacheProperties cacheProperties, PythonResolverHolder pythonResolverHolder, CacheManager cacheManager, CacheKeyGenerator keyGenerator, ObjectMapper objectMapper) {
         return new CachingPythonResolverHolder(cacheProperties, pythonResolverHolder, cacheManager, keyGenerator, objectMapper);
     }
@@ -52,7 +53,7 @@ public class PythonCacheAutoConfiguration {
     @Bean
     @Primary
     @ConditionalOnBean(PythonExecutor.class)
-    @ConditionalOnProperty(name = "spring.python.cache.level", havingValue = "executor")
+    @Conditional(ExecutorCacheLevelCondition.class)
     public PythonExecutor cachingPythonExecutor(PythonCacheProperties cacheProperties, PythonExecutor pythonExecutor, CacheManager cacheManager, CacheKeyGenerator keyGenerator) {
         return new CachingPythonExecutor(cacheProperties, pythonExecutor, cacheManager, keyGenerator);
     }
@@ -60,7 +61,7 @@ public class PythonCacheAutoConfiguration {
     @Bean
     @Primary
     @ConditionalOnBean(PythonProcessor.class)
-    @ConditionalOnProperty(name = "spring.python.cache.level", havingValue = "processor")
+    @Conditional(ProcessorCacheLevelCondition.class)
     public PythonProcessor cachingPythonProcessor(PythonCacheProperties cacheProperties, PythonProcessor pythonProcessor, CacheManager cacheManager, CacheKeyGenerator keyGenerator, ObjectMapper objectMapper) {
         return new CachingPythonProcessor(cacheProperties, pythonProcessor, cacheManager, keyGenerator, objectMapper);
     }

@@ -25,15 +25,20 @@ import java.util.List;
 @Configuration
 @EnableConfigurationProperties(PythonResolverProperties.class)
 public class PythonResolverConfiguration {
+    public static final int SPELYTHON_RESOLVER_ORDER = 0;
+    public static final int PY4J_RESOLVER_ORDER = 100;
+    public static final int RESTRICTED_PYTHON_RESOLVER_ORDER = 200;
+    public static final int RESULT_RESOLVER_ORDER = 300;
+
     @Bean
-    @Order(1)
+    @Order(SPELYTHON_RESOLVER_ORDER)
     @Conditional(SpelythonResolverCondition.class)
     public PythonResolver spelythonResolver(PythonResolverProperties resolverProperties, ApplicationContext applicationContext, ObjectMapper objectMapper) {
         return new SpelythonResolver(resolverProperties, applicationContext, objectMapper);
     }
 
     @Bean
-    @Order(2)
+    @Order(PY4J_RESOLVER_ORDER)
     @Conditional(Py4JResolverCondition.class)
     @ConditionalOnProperty(name = "spring.python.py4j.enabled", havingValue = "true")
     public PythonResolver py4JResolver(PythonResolverProperties resolverProperties) {
@@ -41,14 +46,14 @@ public class PythonResolverConfiguration {
     }
 
     @Bean
-    @Order(3)
+    @Order(RESTRICTED_PYTHON_RESOLVER_ORDER)
     @Conditional(RestrictedPythonResolverCondition.class)
     public PythonResolver restrictedPythonResolver(PythonResolverProperties resolverProperties) {
         return new RestrictedPythonResolver(resolverProperties);
     }
 
     @Bean
-    @Order(4)
+    @Order(RESULT_RESOLVER_ORDER)
     @Conditional(ResultResolverCondition.class)
     public PythonResolver resultResolver(PythonResolverProperties resolverProperties) {
         return new ResultResolver(resolverProperties);

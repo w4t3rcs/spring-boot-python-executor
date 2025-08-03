@@ -1,14 +1,10 @@
 package io.w4t3rcs.python.condition;
 
 import io.w4t3rcs.python.properties.PythonResolverProperties;
-import org.springframework.context.annotation.ConditionContext;
-import org.springframework.core.type.AnnotatedTypeMetadata;
+import lombok.AccessLevel;
+import lombok.Getter;
 
+@Getter(AccessLevel.PROTECTED)
 public class ResultResolverCondition extends AbstractResolverCondition {
-    private static final PythonResolverProperties.DeclaredResolver PROPERTY_VALUE = PythonResolverProperties.DeclaredResolver.RESULT;
-
-    @Override
-    public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-        return this.matchesByDeclaredResolver(context, PROPERTY_VALUE);
-    }
+    private final PythonResolverProperties.DeclaredResolver declaredResolver = PythonResolverProperties.DeclaredResolver.RESULT;
 }

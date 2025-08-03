@@ -203,32 +203,32 @@ implementation 'io.github.w4t3rcs:spring-boot-python-executor-cache-starter:1.0.
 
 #### REST Executor Properties
 
-| Property                               | Description               | Default                                                                          | Required |
-|----------------------------------------|---------------------------|----------------------------------------------------------------------------------|----------|
-| `spring.python.executor.rest.host`     | REST server host          | `http://localhost`                                                               | No       |
-| `spring.python.executor.rest.port`     | REST server port          | `8000`                                                                           | No       |
-| `spring.python.executor.rest.username` | Authentication username   | `-` (required)                                                                   | Yes      |
-| `spring.python.executor.rest.password` | Authentication password   | `-` (required)                                                                   | Yes      |
-| `spring.python.executor.rest.uri`      | Full URI to REST endpoint | `${spring.python.executor.rest.host}:${spring.python.executor.rest.port}/script` | No       |
+| Property                               | Description               | Default                                                                          |
+|----------------------------------------|---------------------------|----------------------------------------------------------------------------------|
+| `spring.python.executor.rest.host`     | REST server host          | `http://localhost`                                                               |
+| `spring.python.executor.rest.port`     | REST server port          | `8000`                                                                           |
+| `spring.python.executor.rest.username` | Authentication username   | `-` (required)                                                                   |
+| `spring.python.executor.rest.password` | Authentication password   | `-` (required)                                                                   |
+| `spring.python.executor.rest.uri`      | Full URI to REST endpoint | `${spring.python.executor.rest.host}:${spring.python.executor.rest.port}/script` |
 
 #### gRPC Executor Properties
 
-| Property                               | Description              | Default                                                                   | Required |
-|----------------------------------------|--------------------------|---------------------------------------------------------------------------|----------|
-| `spring.python.executor.grpc.host`     | gRPC server host         | `localhost`                                                               | No       |
-| `spring.python.executor.grpc.port`     | gRPC server port         | `50051`                                                                   | No       |
-| `spring.python.executor.grpc.username` | Authentication username  | `-` (required)                                                            | Yes      |
-| `spring.python.executor.grpc.password` | Authentication password  | `-` (required)                                                            | Yes      |
-| `spring.python.executor.grpc.uri`      | Full URI to gRPC service | `${spring.python.executor.grpc.host}:${spring.python.executor.grpc.port}` | No       |
+| Property                               | Description              | Default                                                                   |
+|----------------------------------------|--------------------------|---------------------------------------------------------------------------|
+| `spring.python.executor.grpc.host`     | gRPC server host         | `localhost`                                                               |
+| `spring.python.executor.grpc.port`     | gRPC server port         | `50051`                                                                   |
+| `spring.python.executor.grpc.username` | Authentication username  | `-` (required)                                                            |
+| `spring.python.executor.grpc.password` | Authentication password  | `-` (required)                                                            |
+| `spring.python.executor.grpc.uri`      | Full URI to gRPC service | `${spring.python.executor.grpc.host}:${spring.python.executor.grpc.port}` |
 
 ### Resolver Properties
 
 #### Core Resolver Properties
 
-| Property                                      | Description                                                   | Default                                                                                | Required |
-|-----------------------------------------------|---------------------------------------------------------------|----------------------------------------------------------------------------------------|----------|
-| `spring.python.resolver.declared`             | Enabled resolvers: result, spelython, py4j, restricted_python | `spelython,result`                                                                     | Yes      |
-| `spring.python.resolver.script-imports-regex` | Regular expression to match import statements                 | `(^import [\\w.]+$)\|(^import [\\w.]+ as [\\w.]+$)\|(^from [\\w.]+ import [\\w., ]+$)` | No       |
+| Property                                      | Description                                                           | Default                                                                                |
+|-----------------------------------------------|-----------------------------------------------------------------------|----------------------------------------------------------------------------------------|
+| `spring.python.resolver.declared`             | Enabled resolvers: `result`, `spelython`, `py4j`, `restricted_python` | `spelython, result`                                                                    |
+| `spring.python.resolver.script-imports-regex` | Regular expression to match import statements                         | `(^import [\\w.]+$)\|(^import [\\w.]+ as [\\w.]+$)\|(^from [\\w.]+ import [\\w., ]+$)` |
 
 #### Result Resolver Properties
 
@@ -282,17 +282,16 @@ implementation 'io.github.w4t3rcs:spring-boot-python-executor-cache-starter:1.0.
 
 ### Cache Properties
 
-| Property                                 | Description                                                                                                                   | Default                 |
-|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|-------------------------|
-| `spring.python.cache.enabled`            | Whether to enable caching or not (notice that you must have @EnableCaching and CacheManager bean provider in your project)    | `false`                 |
-| `spring.python.cache.name`               | Default name for Cache object                                                                                                 | `pythonCache`           |
-| `spring.python.cache.level`              | Show in which Python script flow phase the needed Caching... bean should be created (`processor` or `executor` or `resolver`) | `processor`             |
-| `spring.python.cache.key.hash-algorithm` | Key body hash algorithm                                                                                                       | `SHA-256`               |
-| `spring.python.cache.key.charset`        | Key body charset                                                                                                              | `UTF-8`                 |
-| `spring.python.cache.key.delimiter`      | Key delimiter between key prefix, key body and key suffix                                                                     | `_`                     |
-| `spring.python.cache.file.enabled`       | Whether to enable caching or not for file content and their paths                                                             | `fileScriptBodiesCache` |
-| `spring.python.cache.file.bodies-name`   | Default name for Cache object that contains script bodies that have been read from file                                       | `fileScriptBodiesCache` |
-| `spring.python.cache.file.paths-name`    | Default name for Cache object that contains script paths that have been read from file                                        | `fileScriptPathsCache`  |
+| Property                                 | Description                                                                                                                       | Default                 |
+|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|-------------------------|
+| `spring.python.cache.enabled`            | Whether to enable caching or not (notice that you must have @EnableCaching and CacheManager bean provider in your project)        | `false`                 |
+| `spring.python.cache.name`               | Default name for Cache object                                                                                                     | `pythonCache`           |
+| `spring.python.cache.levels`             | Enabled Python script flow phases where the needed Caching... bean should be created: `file`, `resolver`, `executor`, `processor` | `file, processor`       |
+| `spring.python.cache.key.hash-algorithm` | Key body hash algorithm                                                                                                           | `SHA-256`               |
+| `spring.python.cache.key.charset`        | Key body charset                                                                                                                  | `UTF-8`                 |
+| `spring.python.cache.key.delimiter`      | Key delimiter between key prefix, key body and key suffix                                                                         | `_`                     |
+| `spring.python.cache.file.bodies-name`   | Default name for Cache object that contains script bodies that have been read from file                                           | `fileScriptBodiesCache` |
+| `spring.python.cache.file.paths-name`    | Default name for Cache object that contains script paths that have been read from file                                            | `fileScriptPathsCache`  |
 
 ## 🔄 Execution Modes
 
