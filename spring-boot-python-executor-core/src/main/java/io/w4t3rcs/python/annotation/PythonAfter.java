@@ -25,16 +25,30 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface PythonAfter {
     /**
-     * The Python script to execute after the method.
-     * This can be either the path to a Python file or the actual Python code.
-     * 
+     * The alias for {@code @PythonAfter(script = "...")}.
+     *
      * @return the Python script or file path
      */
     @AliasFor("script")
     String value();
 
+    /**
+     * The Python script to execute after the method.
+     * This can be either the path to a Python file or the actual Python code.
+     *
+     * @return the Python script or file path
+     */
     @AliasFor("value")
     String script();
 
+    /**
+     * Specifies the Spring profiles in which this Python script should be executed.
+     * <p>
+     * If this array is empty, the script will be executed regardless of the active profiles.
+     * If one or more profiles are specified, the script will only be executed if at least one
+     * of them is active in the current Spring {@link org.springframework.core.env.Environment}.
+     *
+     * @return an array of profile names under which the script is active
+     */
     String[] activeProfiles() default {};
 }
