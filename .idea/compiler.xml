@@ -17,6 +17,16 @@
         <module name="spring-boot-python-executor-common" />
         <module name="spring-boot-python-executor-cache-starter" />
       </profile>
+      <profile name="Annotation profile for demo-app" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-configuration-processor/3.5.4/spring-boot-configuration-processor-3.5.4.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+        </processorPath>
+        <module name="demo-app" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="python-server-tset" target="17" />
@@ -24,6 +34,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="demo-app" options="-parameters" />
       <module name="spring-boot-python-executor-autoconfigure" options="" />
       <module name="spring-boot-python-executor-cache" options="" />
       <module name="spring-boot-python-executor-cache-autoconfigure" options="" />

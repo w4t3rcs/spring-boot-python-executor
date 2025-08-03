@@ -3,15 +3,18 @@ package io.w4t3rcs.python.aspect;
 import io.w4t3rcs.python.annotation.PythonAfter;
 import io.w4t3rcs.python.annotation.PythonAfters;
 import io.w4t3rcs.python.processor.PythonProcessor;
-import io.w4t3rcs.python.util.AspectUtil;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.core.env.Environment;
 
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Aspect that handles the execution of Python scripts through annotations.
@@ -20,8 +23,9 @@ import java.util.Map;
  */
 @Aspect
 @RequiredArgsConstructor
-public class PythonAfterAspect {
+public class PythonAfterAspect extends AbstractPythonAspect {
     private final PythonProcessor pythonProcessor;
+    private final Environment environment;
 
     /**
      * Executes Python scripts after methods annotated with {@link PythonAfters}.
@@ -32,12 +36,12 @@ public class PythonAfterAspect {
      */
     @After("@annotation(io.w4t3rcs.python.annotation.PythonAfters)")
     public void executeMultipleAfterMethod(JoinPoint joinPoint) {
-        Method method = AspectUtil.getMethod(joinPoint);
+        Method method = this.getMethod(joinPoint);
         PythonAfter[] pythonAfters = method.getDeclaredAnnotation(PythonAfters.class).value();
         for (PythonAfter pythonAfter : pythonAfters) {
-            AspectUtil.handlePythonAnnotation(joinPoint, pythonProcessor,
-                    pythonAfter::value,
-                    AspectUtil::getPythonMethodParameters);
+            String script = pythonAfter.value().isBlank() ? pythonAfter.script() : pythonAfter.value();
+            this.handleProfiles(List.of(pythonAfter.activeProfiles()), environment,
+                    () -> this.handleScript(joinPoint, pythonProcessor, () -> script, this::getMethodParameters));
         }
     }
 
@@ -49,18 +53,18 @@ public class PythonAfterAspect {
      * @param joinPoint The join point representing the intercepted method call
      * @param result The value returned by the method
      */
-    @AfterReturning(pointcut = "@annotation(io.w4t3rcs.python.annotation.PythonAfter)", returning = "result")
+    @AfterReturning(pointcut = "@annotation(io.w4t3rcs.python.annotation.PythonAfters)", returning = "result")
     public void executeMultipleAfterReturningMethod(JoinPoint joinPoint, Object result) {
-        Method method = AspectUtil.getMethod(joinPoint);
+        Method method = this.getMethod(joinPoint);
         PythonAfter[] pythonAfters = method.getDeclaredAnnotation(PythonAfters.class).value();
         for (PythonAfter pythonAfter : pythonAfters) {
-            AspectUtil.handlePythonAnnotation(joinPoint, pythonProcessor,
-                    pythonAfter::value,
-                    point -> {
-                Map<String, Object> arguments = AspectUtil.getPythonMethodParameters(point);
-                arguments.put("result", result);
-                return arguments;
-            });
+            String script = pythonAfter.value().isBlank() ? pythonAfter.script() : pythonAfter.value();
+            this.handleProfiles(List.of(pythonAfter.activeProfiles()), environment,
+                    () -> this.handleScript(joinPoint, pythonProcessor, () -> script, point -> {
+                        Map<String, Object> arguments = this.getMethodParameters(point);
+                        arguments.put("result", result);
+                        return arguments;
+                    }));
         }
     }
 
@@ -73,10 +77,10 @@ public class PythonAfterAspect {
      */
     @After("@annotation(io.w4t3rcs.python.annotation.PythonAfter)")
     public void executeSingleAfterMethod(JoinPoint joinPoint) {
-        Method method = AspectUtil.getMethod(joinPoint);
-        AspectUtil.handlePythonAnnotation(joinPoint, pythonProcessor,
-                () -> method.getDeclaredAnnotation(PythonAfter.class).value(),
-                AspectUtil::getPythonMethodParameters);
+        Method method = this.getMethod(joinPoint);
+        PythonAfter pythonAfter = Objects.requireNonNull(AnnotatedElementUtils.findMergedAnnotation(method, PythonAfter.class));
+        this.handleProfiles(List.of(pythonAfter.activeProfiles()), environment,
+                () -> this.handleScript(joinPoint, pythonProcessor, pythonAfter::script, this::getMethodParameters));
     }
 
     /**
@@ -89,13 +93,13 @@ public class PythonAfterAspect {
      */
     @AfterReturning(pointcut = "@annotation(io.w4t3rcs.python.annotation.PythonAfter)", returning = "result")
     public void executeSingleAfterReturningMethod(JoinPoint joinPoint, Object result) {
-        Method method = AspectUtil.getMethod(joinPoint);
-        AspectUtil.handlePythonAnnotation(joinPoint, pythonProcessor,
-                () -> method.getDeclaredAnnotation(PythonAfter.class).value(),
-                point -> {
-            Map<String, Object> arguments = AspectUtil.getPythonMethodParameters(point);
-            arguments.put("result", result);
-            return arguments;
-        });
+        Method method = this.getMethod(joinPoint);
+        PythonAfter pythonAfter = Objects.requireNonNull(AnnotatedElementUtils.findMergedAnnotation(method, PythonAfter.class));
+        this.handleProfiles(List.of(pythonAfter.activeProfiles()), environment,
+                () -> this.handleScript(joinPoint, pythonProcessor, pythonAfter::script, point -> {
+                    Map<String, Object> arguments = this.getMethodParameters(point);
+                    arguments.put("result", result);
+                    return arguments;
+                }));
     }
 }

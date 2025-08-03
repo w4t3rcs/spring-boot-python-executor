@@ -1,5 +1,7 @@
 package io.w4t3rcs.python.annotation;
 
+import org.springframework.core.annotation.AliasFor;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -28,5 +30,11 @@ public @interface PythonAfter {
      * 
      * @return the Python script or file path
      */
+    @AliasFor("script")
     String value();
+
+    @AliasFor("value")
+    String script();
+
+    String[] activeProfiles() default {};
 }

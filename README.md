@@ -145,13 +145,28 @@ Any Spring-compatible CacheManager can be used, including in-memory, Redis, Caff
 
 ### Maven
 
+To set up a proper version of the project add this to your `pom.xml`:
+
+```xml
+<dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.github.w4t3rcs</groupId>
+                <artifactId>spring-boot-python-executor-dependencies</artifactId>
+                <version>1.0.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+```
+
 Add the starter dependency to your `pom.xml`:
 
 ```xml
 <dependency>
     <groupId>io.github.w4t3rcs</groupId>
     <artifactId>spring-boot-python-executor-starter</artifactId>
-    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -161,22 +176,26 @@ If you want to have caching abilities, also add this:
 <dependency>
     <groupId>io.github.w4t3rcs</groupId>
     <artifactId>spring-boot-python-executor-cache-starter</artifactId>
-    <version>1.0.0</version>
 </dependency>
 ```
 
 ### Gradle
 
+To set up a proper version of the project add this to your `build.gradle`:
+```groovy
+implementation platform('io.github.w4t3rcs:spring-boot-python-executor-dependencies:1.0.0')
+```
+
 Add the starter dependency to your `build.gradle`:
 
 ```groovy
-implementation 'io.github.w4t3rcs:spring-boot-python-executor-starter:1.0.0'
+implementation 'io.github.w4t3rcs:spring-boot-python-executor-starter'
 ```
 
 If you want to have caching abilities, also add this:
 
 ```groovy
-implementation 'io.github.w4t3rcs:spring-boot-python-executor-cache-starter:1.0.0'
+implementation 'io.github.w4t3rcs:spring-boot-python-executor-cache-starter'
 ```
 
 ## ⚙️ Configuration

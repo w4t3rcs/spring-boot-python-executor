@@ -1,61 +1,52 @@
-package io.w4t3rcs.python.util;
+package io.w4t3rcs.python.aspect;
 
 import io.w4t3rcs.python.annotation.PythonParam;
 import io.w4t3rcs.python.processor.PythonProcessor;
-import lombok.experimental.UtilityClass;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.env.Environment;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * Utility class providing helper methods for aspect-oriented programming with Python integration.
+ * Abstract class providing helper methods for aspect-oriented programming with Python integration.
  * This class contains methods for handling Python annotations on methods, extracting method
  * information from join points, and processing method parameters.
  */
-@UtilityClass
-public class AspectUtil {
-    /**
-     * Handles a Python annotation on a method by executing the associated Python script.
-     * This method extracts the annotation from the method, gets the script and arguments,
-     * and executes the script using the provided executor and resolvers.
-     *
-     * @param joinPoint The join point representing the intercepted method call
-     * @param pythonProcessor The processor responsible for resolving and running Python scripts
-     * @param scriptGetter A function that retrieves the script path or content
-     * @param argumentsGetter A function that extracts arguments from the join point
-     */
-    public void handlePythonAnnotation(JoinPoint joinPoint, PythonProcessor pythonProcessor, Supplier<String> scriptGetter, Function<JoinPoint, Map<String, Object>> argumentsGetter) {
-        String script = scriptGetter.get();
+public abstract class AbstractPythonAspect implements ProfileHandlerAspect, ScriptHandlerAspect, MethodHandlerAspect  {
+    @Override
+    public void handleProfiles(List<String> profiles, Environment environment, Runnable action) {
+        if (profiles == null || profiles.isEmpty()) action.run();
+        else {
+            String[] activeProfiles = environment.getActiveProfiles();
+            for (String activeProfile : activeProfiles) {
+                if (!profiles.contains(activeProfile)) return;
+            }
+            action.run();
+        }
+    }
+
+    @Override
+    public void handleScript(JoinPoint joinPoint, PythonProcessor pythonProcessor, Supplier<String> scriptGetter, Function<JoinPoint, Map<String, Object>> argumentsGetter) {
         Map<String, Object> arguments = argumentsGetter.apply(joinPoint);
+        String script = scriptGetter.get();
         pythonProcessor.process(script, null, arguments);
     }
 
-    /**
-     * Gets the Method object from a JoinPoint.
-     *
-     * @param joinPoint The join point representing the intercepted method call
-     * @return The Method object representing the intercepted method
-     */
+    @Override
     public Method getMethod(JoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         return signature.getMethod();
     }
 
-    /**
-     * Extracts method parameters from a join point and creates a map of parameter names to values.
-     * If a parameter is annotated with the {@link PythonParam}, the name from the annotation is used.
-     * Otherwise, the parameter's actual name is used.
-     *
-     * @param joinPoint The join point representing the intercepted method call
-     * @return A map of parameter names to their values
-     */
-    public Map<String, Object> getPythonMethodParameters(JoinPoint joinPoint) {
+    @Override
+    public Map<String, Object> getMethodParameters(JoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         Object[] objects = joinPoint.getArgs();
