@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJson;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest
@@ -16,10 +15,10 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration(classes = {PythonAutoConfiguration.class})
 class PythonFileHandlerConfigurationTests {
     @Autowired
-    private ApplicationContext applicationContext;
+    private PythonFileHandler pythonFileHandler;
 
     @Test
     void testMandatoryBeansLoad() {
-        Assertions.assertInstanceOf(BasicPythonFileHandler.class, applicationContext.getBean(PythonFileHandler.class));
+        Assertions.assertInstanceOf(BasicPythonFileHandler.class, pythonFileHandler);
     }
 }

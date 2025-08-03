@@ -282,16 +282,16 @@ implementation 'io.github.w4t3rcs:spring-boot-python-executor-cache-starter:1.0.
 
 ### Cache Properties
 
-| Property                                 | Description                                                                                                                       | Default                 |
-|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|-------------------------|
-| `spring.python.cache.enabled`            | Whether to enable caching or not (notice that you must have @EnableCaching and CacheManager bean provider in your project)        | `false`                 |
-| `spring.python.cache.name`               | Default name for Cache object                                                                                                     | `pythonCache`           |
-| `spring.python.cache.levels`             | Enabled Python script flow phases where the needed Caching... bean should be created: `file`, `resolver`, `executor`, `processor` | `file, processor`       |
-| `spring.python.cache.key.hash-algorithm` | Key body hash algorithm                                                                                                           | `SHA-256`               |
-| `spring.python.cache.key.charset`        | Key body charset                                                                                                                  | `UTF-8`                 |
-| `spring.python.cache.key.delimiter`      | Key delimiter between key prefix, key body and key suffix                                                                         | `_`                     |
-| `spring.python.cache.file.bodies-name`   | Default name for Cache object that contains script bodies that have been read from file                                           | `fileScriptBodiesCache` |
-| `spring.python.cache.file.paths-name`    | Default name for Cache object that contains script paths that have been read from file                                            | `fileScriptPathsCache`  |
+| Property                                 | Description                                                                                                                                      | Default                 |
+|------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------|
+| `spring.python.cache.enabled`            | Whether to enable autoconfiguration for caching or not (notice that you must have @EnableCaching and CacheManager bean provider in your project) | `true`                  |
+| `spring.python.cache.name`               | Default name for Cache object                                                                                                                    | `pythonCache`           |
+| `spring.python.cache.levels`             | Enabled Python script flow phases where the needed Caching... bean should be created: `file`, `resolver`, `executor`, `processor`                | `file, processor`       |
+| `spring.python.cache.key.hash-algorithm` | Key body hash algorithm                                                                                                                          | `SHA-256`               |
+| `spring.python.cache.key.charset`        | Key body charset                                                                                                                                 | `UTF-8`                 |
+| `spring.python.cache.key.delimiter`      | Key delimiter between key prefix, key body and key suffix                                                                                        | `_`                     |
+| `spring.python.cache.file.bodies-name`   | Default name for Cache object that contains script bodies that have been read from file                                                          | `fileScriptBodiesCache` |
+| `spring.python.cache.file.paths-name`    | Default name for Cache object that contains script paths that have been read from file                                                           | `fileScriptPathsCache`  |
 
 ## 🔄 Execution Modes
 

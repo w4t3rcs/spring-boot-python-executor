@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJson;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import py4j.GatewayServer;
@@ -17,10 +16,10 @@ import py4j.GatewayServer;
 @TestPropertySource(properties = "spring.python.py4j.enabled=true")
 class Py4JConfigurationTests {
     @Autowired
-    private ApplicationContext applicationContext;
+    private GatewayServer gatewayServer;
 
     @Test
     void testMandatoryBeansLoad() {
-        Assertions.assertInstanceOf(GatewayServer.class, applicationContext.getBean(GatewayServer.class));
+        Assertions.assertInstanceOf(GatewayServer.class, gatewayServer);
     }
 }

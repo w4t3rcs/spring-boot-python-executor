@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJson;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest
@@ -16,11 +15,13 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration(classes = {PythonAutoConfiguration.class})
 class PythonAspectConfigurationTests {
     @Autowired
-    private ApplicationContext applicationContext;
+    private PythonBeforeAspect pythonBeforeAspect;
+    @Autowired
+    private PythonAfterAspect pythonAfterAspect;
 
     @Test
     void testMandatoryBeansLoad() {
-        Assertions.assertInstanceOf(PythonBeforeAspect.class, applicationContext.getBean(PythonBeforeAspect.class));
-        Assertions.assertInstanceOf(PythonAfterAspect.class, applicationContext.getBean(PythonAfterAspect.class));
+        Assertions.assertNotNull(pythonBeforeAspect);
+        Assertions.assertNotNull(pythonAfterAspect);
     }
 }

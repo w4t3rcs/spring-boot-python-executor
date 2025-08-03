@@ -36,16 +36,15 @@ class PythonResolverConfigurationTests {
     @TestPropertySource(properties = "spring.python.resolver.declared=spelython")
     class SingleTests {
         @Autowired
-        private ApplicationContext applicationContext;
+        private PythonResolverHolder pythonResolverHolder;
+        @Autowired
+        private PythonResolver pythonResolver;
 
         @Test
         void testMandatoryBeansLoad() {
-            Assertions.assertInstanceOf(BasicPythonResolverHolder.class, applicationContext.getBean(PythonResolverHolder.class));
-            Assertions.assertDoesNotThrow(() -> applicationContext.getBeanProvider(PythonResolver.class).getIfUnique());
-            Assertions.assertEquals(applicationContext.getBean(PythonResolverHolder.class)
-                    .getResolvers(), applicationContext.getBeanProvider(PythonResolver.class)
-                    .stream()
-                    .toList());
+            Assertions.assertInstanceOf(BasicPythonResolverHolder.class, pythonResolverHolder);
+            Assertions.assertInstanceOf(SpelythonResolver.class, pythonResolver);
+            Assertions.assertEquals(pythonResolverHolder.getResolvers(), List.of(pythonResolver));
         }
     }
 
@@ -53,17 +52,17 @@ class PythonResolverConfigurationTests {
     @TestPropertySource(properties = "spring.python.resolver.declared=spelython, restricted_python, result")
     class MultipleTests {
         @Autowired
-        private ApplicationContext applicationContext;
+        private PythonResolverHolder pythonResolverHolder;
         @Autowired
         private List<PythonResolver> pythonResolvers;
 
         @Test
         void testMandatoryBeansLoad() {
+            Assertions.assertInstanceOf(BasicPythonResolverHolder.class, pythonResolverHolder);
             Assertions.assertInstanceOf(SpelythonResolver.class, pythonResolvers.get(0));
             Assertions.assertInstanceOf(RestrictedPythonResolver.class, pythonResolvers.get(1));
             Assertions.assertInstanceOf(ResultResolver.class, pythonResolvers.get(2));
-            Assertions.assertEquals(applicationContext.getBean(PythonResolverHolder.class)
-                    .getResolvers(), pythonResolvers);
+            Assertions.assertEquals(pythonResolverHolder.getResolvers(), pythonResolvers);
         }
     }
 }
