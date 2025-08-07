@@ -80,5 +80,7 @@ public final class TestConstants {
             @PythonBefore(script = SIMPLE_SCRIPT_1),
             @PythonBefore(script = SIMPLE_SCRIPT_2)
     })
-    private static void doDummy(String a, @PythonParam(CUSTOM_PYTHON_PARAM) String custom) {}
+    private static void doDummy(String a, @PythonParam(CUSTOM_PYTHON_PARAM) String custom) {
+        //Just a stub method for mocking in JoinPoint object during tests
+    }
 }
