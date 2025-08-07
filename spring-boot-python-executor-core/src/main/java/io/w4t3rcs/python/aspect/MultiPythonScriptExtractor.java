@@ -12,7 +12,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 public class MultiPythonScriptExtractor implements PythonAnnotationValueExtractor {
-    private final MethodExtractor methodExtractor;
+    private final PythonMethodExtractor methodExtractor;
 
     @Override
     public <A extends Annotation> Map<String, String[]> getValue(JoinPoint joinPoint, Class<? extends A> annotationClass) {

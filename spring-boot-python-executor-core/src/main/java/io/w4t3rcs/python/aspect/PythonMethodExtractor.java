@@ -2,39 +2,33 @@ package io.w4t3rcs.python.aspect;
 
 import io.w4t3rcs.python.annotation.PythonParam;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.reflect.MethodSignature;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.util.HashMap;
 import java.util.Map;
 
-public class PythonMethodExtractor implements MethodExtractor {
-    @Override
-    public Method getMethod(JoinPoint joinPoint) {
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        return signature.getMethod();
-    }
+/**
+ * Interface that provides functions for extracting method metadata
+ * and parameters in AOP join points.
+ * <p>
+ * This interface is commonly used in aspects that execute Python scripts
+ * and need access to method reflection and parameter mapping.
+ */
+public interface PythonMethodExtractor {
+    /**
+     * Gets the Method object from a JoinPoint.
+     *
+     * @param joinPoint The join point representing the intercepted method call
+     * @return The Method object representing the intercepted method
+     */
+    Method getMethod(JoinPoint joinPoint);
 
-    @Override
-    public Map<String, Object> getMethodParameters(JoinPoint joinPoint) {
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        Method method = signature.getMethod();
-        Object[] objects = joinPoint.getArgs();
-        Parameter[] parameters = method.getParameters();
-        String[] parameterNames = signature.getParameterNames();
-        Map<String, Object> methodParameters = new HashMap<>();
-        for (int i = 0; i < parameters.length; i++) {
-            Parameter parameter = parameters[i];
-            if (parameter.isAnnotationPresent(PythonParam.class)) {
-                PythonParam annotation = parameter.getAnnotation(PythonParam.class);
-                String value = annotation.value();
-                methodParameters.put(value, objects[i]);
-            } else {
-                String parameterName = parameterNames[i];
-                methodParameters.put(parameterName, objects[i]);
-            }
-        }
-        return methodParameters;
-    }
+    /**
+     * Extracts method parameters from a join point and creates a map of parameter names to values.
+     * If a parameter is annotated with the {@link PythonParam}, the name from the annotation is used.
+     * Otherwise, the parameter's actual name is used.
+     *
+     * @param joinPoint The join point representing the intercepted method call
+     * @return A map of parameter names to their values
+     */
+    Map<String, Object> getMethodParameters(JoinPoint joinPoint);
 }

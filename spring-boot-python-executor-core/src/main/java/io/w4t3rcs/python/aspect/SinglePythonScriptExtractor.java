@@ -13,7 +13,7 @@ import java.util.Objects;
 
 @RequiredArgsConstructor
 public class SinglePythonScriptExtractor implements PythonAnnotationValueExtractor {
-    private final MethodExtractor methodExtractor;
+    private final PythonMethodExtractor methodExtractor;
 
     @Override
     public <A extends Annotation> Map<String, String[]> getValue(JoinPoint joinPoint, Class<? extends A> annotationClass) {

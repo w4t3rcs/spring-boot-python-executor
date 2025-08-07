@@ -1,5 +1,8 @@
 package io.w4t3rcs.python.constant;
 
+import io.w4t3rcs.python.annotation.PythonBefore;
+import io.w4t3rcs.python.annotation.PythonBefores;
+import io.w4t3rcs.python.annotation.PythonParam;
 import io.w4t3rcs.python.file.BasicPythonFileHandler;
 import io.w4t3rcs.python.file.PythonFileHandler;
 import io.w4t3rcs.python.properties.PythonFileProperties;
@@ -8,7 +11,9 @@ import io.w4t3rcs.python.resolver.Py4JResolver;
 import io.w4t3rcs.python.resolver.PythonResolver;
 import io.w4t3rcs.python.resolver.RestrictedPythonResolver;
 import io.w4t3rcs.python.resolver.ResultResolver;
+import org.springframework.core.env.Profiles;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 
 import static io.w4t3rcs.python.properties.PythonResolverProperties.*;
@@ -51,4 +56,29 @@ public final class TestConstants {
     //File constants
     public static final PythonFileProperties FILE_PROPERTIES = new PythonFileProperties("/");
     public static final PythonFileHandler FILE_HANDLER = new BasicPythonFileHandler(FILE_PROPERTIES);
+
+    //Aspect constants
+    public static final String TEST_PROFILE = "test";
+    public static final String[] TEST_PROFILES = new String[]{TEST_PROFILE};
+    public static final Profiles PROFILES_OBJECT = Profiles.of(TEST_PROFILES);
+    public static final String[] EMPTY_PROFILES = {};
+    public static final String A_PYTHON_PARAM = "a";
+    public static final String CUSTOM_PYTHON_PARAM = "custom";
+    public static Method DUMMY_METHOD;
+
+    static {
+        try {
+            DUMMY_METHOD = TestConstants.class.getDeclaredMethod("doDummy", String.class, String.class);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PythonBefore(script = SIMPLE_SCRIPT_0, activeProfiles = {TEST_PROFILE})
+    @PythonBefores(value = {
+            @PythonBefore(script = SIMPLE_SCRIPT_0, activeProfiles = {TEST_PROFILE}),
+            @PythonBefore(script = SIMPLE_SCRIPT_1),
+            @PythonBefore(script = SIMPLE_SCRIPT_2)
+    })
+    private static void doDummy(String a, @PythonParam(CUSTOM_PYTHON_PARAM) String custom) {}
 }

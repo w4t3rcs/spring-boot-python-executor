@@ -8,12 +8,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.env.Environment;
-import org.springframework.core.env.Profiles;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static io.w4t3rcs.python.constant.TestConstants.*;
+
 @ExtendWith(MockitoExtension.class)
-public class BasicProfileCheckerTests {
+class BasicProfileCheckerTests {
     @InjectMocks
     private BasicProfileChecker basicProfileChecker;
     @Mock
@@ -21,19 +22,17 @@ public class BasicProfileCheckerTests {
 
     @Test
     void testDoOnProfiles() {
-        String[] testProfiles = {"test"};
-        Profiles profiles = Profiles.of(testProfiles);
-        Mockito.when(environment.acceptsProfiles(profiles)).thenReturn(true);
+        Mockito.when(environment.acceptsProfiles(PROFILES_OBJECT)).thenReturn(true);
+
         AtomicInteger result = new AtomicInteger();
-        basicProfileChecker.doOnProfiles(testProfiles, result::getAndIncrement);
+        basicProfileChecker.doOnProfiles(TEST_PROFILES, result::getAndIncrement);
         Assertions.assertEquals(1, result.get());
     }
 
     @Test
     void testDoOnProfilesEmpty() {
-        String[] testProfiles = {};
         AtomicInteger result = new AtomicInteger();
-        basicProfileChecker.doOnProfiles(testProfiles, result::getAndIncrement);
+        basicProfileChecker.doOnProfiles(EMPTY_PROFILES, result::getAndIncrement);
         Assertions.assertEquals(1, result.get());
     }
 }

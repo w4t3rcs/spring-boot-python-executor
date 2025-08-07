@@ -24,23 +24,23 @@ public class PythonAspectConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(MethodExtractor.class)
-    public MethodExtractor methodExtractor() {
-        return new PythonMethodExtractor();
+    @ConditionalOnMissingBean(PythonMethodExtractor.class)
+    public PythonMethodExtractor methodExtractor() {
+        return new BasicPythonMethodExtractor();
     }
 
     @Bean
-    public PythonArgumentsExtractor pythonArgumentsExtractor(MethodExtractor methodExtractor) {
+    public PythonArgumentsExtractor pythonArgumentsExtractor(PythonMethodExtractor methodExtractor) {
         return new BasicPythonArgumentsExtractor(methodExtractor);
     }
 
     @Bean
-    public PythonAnnotationValueExtractor singlePythonAnnotationValueExtractor(MethodExtractor methodExtractor) {
+    public PythonAnnotationValueExtractor singlePythonAnnotationValueExtractor(PythonMethodExtractor methodExtractor) {
         return new SinglePythonScriptExtractor(methodExtractor);
     }
 
     @Bean
-    public PythonAnnotationValueExtractor multiPythonAnnotationValueExtractor(MethodExtractor methodExtractor) {
+    public PythonAnnotationValueExtractor multiPythonAnnotationValueExtractor(PythonMethodExtractor methodExtractor) {
         return new MultiPythonScriptExtractor(methodExtractor);
     }
 
