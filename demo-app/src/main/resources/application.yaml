@@ -6,7 +6,6 @@ spring:
   python:
     cache:
       enabled: true
-      levels: file, processor
     executor:
       type: grpc
       grpc:

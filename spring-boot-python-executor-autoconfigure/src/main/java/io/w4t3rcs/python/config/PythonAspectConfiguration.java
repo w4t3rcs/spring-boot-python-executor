@@ -70,22 +70,15 @@ public class PythonAspectConfiguration {
     public PythonBeforeAspect pythonBeforeAspect(PythonAspectProperties aspectProperties,
                                                  @Qualifier("basicPythonAnnotationEvaluator") PythonAnnotationEvaluator basicPythonAnnotationEvaluator,
                                                  @Qualifier("asyncPythonAnnotationEvaluator") PythonAnnotationEvaluator asyncPythonAnnotationEvaluator) {
-        if (this.isAsync(aspectProperties, PythonAspectProperties.AsyncScope.BEFORE)) {
-            return new PythonBeforeAspect(asyncPythonAnnotationEvaluator);
-        } else {
-            return new PythonBeforeAspect(basicPythonAnnotationEvaluator);
-        }
+
+        return new PythonBeforeAspect(this.isAsync(aspectProperties, PythonAspectProperties.AsyncScope.BEFORE) ? asyncPythonAnnotationEvaluator : basicPythonAnnotationEvaluator);
     }
 
     @Bean
     public PythonAfterAspect pythonAfterAspect(PythonAspectProperties aspectProperties,
                                                @Qualifier("basicPythonAnnotationEvaluator") PythonAnnotationEvaluator basicPythonAnnotationEvaluator,
                                                @Qualifier("asyncPythonAnnotationEvaluator") PythonAnnotationEvaluator asyncPythonAnnotationEvaluator) {
-        if (this.isAsync(aspectProperties, PythonAspectProperties.AsyncScope.AFTER)) {
-            return new PythonAfterAspect(asyncPythonAnnotationEvaluator);
-        } else {
-            return new PythonAfterAspect(basicPythonAnnotationEvaluator);
-        }
+        return new PythonAfterAspect(this.isAsync(aspectProperties, PythonAspectProperties.AsyncScope.AFTER) ? asyncPythonAnnotationEvaluator : basicPythonAnnotationEvaluator);
     }
 
     private boolean isAsync(PythonAspectProperties aspectProperties, PythonAspectProperties.AsyncScope scope) {

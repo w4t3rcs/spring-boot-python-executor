@@ -4,11 +4,11 @@ import io.w4t3rcs.python.annotation.PythonAfter;
 import io.w4t3rcs.python.annotation.PythonAfters;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 
-import java.util.Map;
+import java.lang.annotation.Annotation;
+import java.util.HashMap;
 
 /**
  * Aspect that handles the execution of Python scripts through annotations.
@@ -21,18 +21,6 @@ public class PythonAfterAspect {
     private final PythonAnnotationEvaluator annotationEvaluator;
 
     /**
-     * Executes Python scripts after methods annotated with {@link PythonAfters}.
-     * This advice intercepts method calls and executes the Python scripts specified
-     * in the annotation after the method execution.
-     *
-     * @param joinPoint The join point representing the intercepted method call
-     */
-    @After("@annotation(io.w4t3rcs.python.annotation.PythonAfters)")
-    public void executeMultipleAfterMethod(JoinPoint joinPoint) {
-        annotationEvaluator.evaluate(joinPoint, PythonAfters.class);
-    }
-
-    /**
      * Executes Python scripts after methods annotated with {@link PythonAfters} return a result.
      * This advice intercepts method calls and executes the Python scripts specified
      * in the annotation after the method returns.
@@ -41,20 +29,8 @@ public class PythonAfterAspect {
      * @param result The value returned by the method
      */
     @AfterReturning(pointcut = "@annotation(io.w4t3rcs.python.annotation.PythonAfters)", returning = "result")
-    public void executeMultipleAfterReturningMethod(JoinPoint joinPoint, Object result) {
-        annotationEvaluator.evaluate(joinPoint, PythonAfters.class, Map.of("result", result));
-    }
-
-    /**
-     * Executes Python scripts after methods annotated with {@link PythonAfter}.
-     * This advice intercepts method calls and executes the Python script specified
-     * in the annotation after the method execution.
-     *
-     * @param joinPoint The join point representing the intercepted method call
-     */
-    @After("@annotation(io.w4t3rcs.python.annotation.PythonAfter)")
-    public void executeSingleAfterMethod(JoinPoint joinPoint) {
-        annotationEvaluator.evaluate(joinPoint, PythonAfter.class);
+    public void executeMultipleAfterMethod(JoinPoint joinPoint, Object result) {
+        this.evaluateWithResult(joinPoint, result, PythonAfters.class);
     }
 
     /**
@@ -66,7 +42,20 @@ public class PythonAfterAspect {
      * @param result The value returned by the method
      */
     @AfterReturning(pointcut = "@annotation(io.w4t3rcs.python.annotation.PythonAfter)", returning = "result")
-    public void executeSingleAfterReturningMethod(JoinPoint joinPoint, Object result) {
-        annotationEvaluator.evaluate(joinPoint, PythonAfter.class, Map.of("result", result));
+    public void executeSingleAfterMethod(JoinPoint joinPoint, Object result) {
+        this.evaluateWithResult(joinPoint, result, PythonAfter.class);
+    }
+
+    /**
+     * Executes Python scripts after methods annotated with return a result.
+     *
+     * @param joinPoint The join point representing the intercepted method call
+     * @param result The value returned by the method
+     * @param annotation The annotation class
+     */
+    private void evaluateWithResult(JoinPoint joinPoint, Object result, Class<? extends Annotation> annotation) {
+        HashMap<String, Object> additionalArguments = new HashMap<>();
+        if (result != null) additionalArguments.put("result", result);
+        annotationEvaluator.evaluate(joinPoint, annotation, additionalArguments);
     }
 }
