@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: demo-app
+  profiles:
+    active: ml
+  python:
+    cache:
+      enabled: true
+      levels: file, processor
+    executor:
+      type: grpc
+      grpc:
+        username: root
+        password: pass
+  docker:
+    compose:
+      file: ./demo-app/docker-compose.yaml

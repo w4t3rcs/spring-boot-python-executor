@@ -16,7 +16,7 @@ import org.springframework.cache.CacheManager;
 import java.nio.file.Path;
 
 import static io.w4t3rcs.python.constant.TestConstants.*;
-import static io.w4t3rcs.python.properties.PythonCacheProperties.FileProperties;
+import static io.w4t3rcs.python.properties.PythonCacheProperties.NameProperties;
 
 @ExtendWith(MockitoExtension.class)
 class CachingPythonFileHandlerTests {
@@ -32,13 +32,13 @@ class CachingPythonFileHandlerTests {
     @Mock
     private CacheManager cacheManager;
     @Mock
-    private FileProperties fileProperties;
+    private NameProperties nameProperties;
 
     @BeforeEach
     void init() {
-        Mockito.when(cacheProperties.file()).thenReturn(fileProperties);
-        Mockito.when(fileProperties.bodiesName()).thenReturn(CACHE_MANAGER_KEY + "0");
-        Mockito.when(fileProperties.pathsName()).thenReturn(CACHE_MANAGER_KEY + "1");
+        Mockito.when(cacheProperties.name()).thenReturn(nameProperties);
+        Mockito.when(nameProperties.fileBodies()).thenReturn(CACHE_MANAGER_KEY + "0");
+        Mockito.when(nameProperties.filePaths()).thenReturn(CACHE_MANAGER_KEY + "1");
         Mockito.when(cacheManager.getCache(CACHE_MANAGER_KEY + "0")).thenReturn(scriptBodyCache);
         Mockito.when(cacheManager.getCache(CACHE_MANAGER_KEY + "1")).thenReturn(pathCache);
         cachingPythonFileHandler = new CachingPythonFileHandler(cacheProperties, pythonFileHandler, cacheManager);

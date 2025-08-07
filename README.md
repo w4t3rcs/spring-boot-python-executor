@@ -7,7 +7,7 @@
 [![Java: 17+](https://img.shields.io/badge/Java-17%2B-blue.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 [![Spring Boot: 3.5.3+](https://img.shields.io/badge/Spring%20Boot-3.5.3%2B-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Python: 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
-![Tests Passed: 60%](https://img.shields.io/badge/Tests%20Passed-60%25-green.svg)
+![Tests Passed: 80%](https://img.shields.io/badge/Tests%20Passed-80%25-green.svg)
 
 <hr>
 
@@ -26,6 +26,7 @@
   - [Resolver Properties](#resolver-properties)
   - [Py4J Properties](#py4j-properties)
   - [Cache Properties](#cache-properties)
+  - [Aspect Properties](#aspect-properties)
 - [Execution Modes](#-execution-modes)
   - [Local Execution](#local-execution)
   - [REST Execution](#rest-execution)
@@ -92,10 +93,14 @@ classDiagram
   
   class PythonBefore {
       +String value()
+      +String script()
+      +String[] activeProfiles()
   }
   
   class PythonAfter {
       +String value()
+      +String script()
+      +String[] activeProfiles()
   }
   
   class PythonProcessor {
@@ -244,10 +249,10 @@ implementation 'io.github.w4t3rcs:spring-boot-python-executor-cache-starter'
 
 #### Core Resolver Properties
 
-| Property                                      | Description                                                           | Default                                                                                |
-|-----------------------------------------------|-----------------------------------------------------------------------|----------------------------------------------------------------------------------------|
-| `spring.python.resolver.declared`             | Enabled resolvers: `result`, `spelython`, `py4j`, `restricted_python` | `spelython, result`                                                                    |
-| `spring.python.resolver.script-imports-regex` | Regular expression to match import statements                         | `(^import [\\w.]+$)\|(^import [\\w.]+ as [\\w.]+$)\|(^from [\\w.]+ import [\\w., ]+$)` |
+| Property                                      | Description                                                                             | Default                                                                                |
+|-----------------------------------------------|-----------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
+| `spring.python.resolver.declared`             | Enabled resolvers: `result`, `spelython`, `py4j`, `restricted_python`, `printed_result` | `spelython, result, printed_result`                                                    |
+| `spring.python.resolver.script-imports-regex` | Regular expression to match import statements                                           | `(^import [\\w.]+$)\|(^import [\\w.]+ as [\\w.]+$)\|(^from [\\w.]+ import [\\w., ]+$)` |
 
 #### Result Resolver Properties
 
@@ -301,22 +306,37 @@ implementation 'io.github.w4t3rcs:spring-boot-python-executor-cache-starter'
 
 ### Cache Properties
 
-| Property                                 | Description                                                                                                                                      | Default                 |
-|------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------|
-| `spring.python.cache.enabled`            | Whether to enable autoconfiguration for caching or not (notice that you must have @EnableCaching and CacheManager bean provider in your project) | `true`                  |
-| `spring.python.cache.name`               | Default name for Cache object                                                                                                                    | `pythonCache`           |
-| `spring.python.cache.levels`             | Enabled Python script flow phases where the needed Caching... bean should be created: `file`, `resolver`, `executor`, `processor`                | `file, processor`       |
-| `spring.python.cache.key.hash-algorithm` | Key body hash algorithm                                                                                                                          | `SHA-256`               |
-| `spring.python.cache.key.charset`        | Key body charset                                                                                                                                 | `UTF-8`                 |
-| `spring.python.cache.key.delimiter`      | Key delimiter between key prefix, key body and key suffix                                                                                        | `_`                     |
-| `spring.python.cache.file.bodies-name`   | Default name for Cache object that contains script bodies that have been read from file                                                          | `fileScriptBodiesCache` |
-| `spring.python.cache.file.paths-name`    | Default name for Cache object that contains script paths that have been read from file                                                           | `fileScriptPathsCache`  |
+| Property                                 | Description                                                                                                                                      | Default                |
+|------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|------------------------|
+| `spring.python.cache.enabled`            | Whether to enable autoconfiguration for caching or not (notice that you must have @EnableCaching and CacheManager bean provider in your project) | `true`                 |
+| `spring.python.cache.levels`             | Enabled Python script flow phases where the needed Caching... bean should be created: `file`, `resolver`, `executor`, `processor`                | `file, processor`      |
+| `spring.python.cache.name.file-bodies`   | Default name for Cache object that contains script bodies that have been read from file                                                          | `fileBodiesCache`      |
+| `spring.python.cache.name.file-paths`    | Default name for Cache object that contains script paths that have been read from file                                                           | `filePathsCache`       |
+| `spring.python.cache.name.resolver`      | Default name for Cache object that contains resolved scripts                                                                                     | `pythonResolverCache`  |
+| `spring.python.cache.name.executor`      | Default name for Cache object that contains executed results                                                                                     | `pythonExecutorCache`  |
+| `spring.python.cache.name.processor`     | Default name for Cache object that contains processed scripts (executed resolved scripts)                                                        | `pythonProcessorCache` |
+| `spring.python.cache.key.hash-algorithm` | Key body hash algorithm                                                                                                                          | `SHA-256`              |
+| `spring.python.cache.key.charset`        | Key body charset                                                                                                                                 | `UTF-8`                |
+| `spring.python.cache.key.delimiter`      | Key delimiter between key prefix, key body and key suffix                                                                                        | `_`                    |
+
+### Aspect Properties
+
+| Property                            | Description                                            | Default         |
+|-------------------------------------|--------------------------------------------------------|-----------------|
+| `spring.python.aspect.async-scopes` | What annotations should process scripts asynchronously | `before, after` |
 
 ## 🔄 Execution Modes
 
 ### Local Execution
 
-Execute Python scripts in a local process on the same machine as your Java application.
+Execute Python scripts in a local process on the same machine as your Java application. 
+This implementation has a bunch of limitations, so it's a lot more suggestible to use REST/gRPC implementations.
+To get the result from a script, you must have declared `ResultResolver` and `PrintedResultResolver`
+(REST/gRPC only needs `ResultResolver`) in your application.properties:
+
+```properties
+spring.python.resolver.declared=result, printed_result
+```
 
 ### REST Execution
 

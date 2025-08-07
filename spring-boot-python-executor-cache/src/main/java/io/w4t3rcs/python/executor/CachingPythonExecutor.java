@@ -13,14 +13,14 @@ public class CachingPythonExecutor implements PythonExecutor {
 
     public CachingPythonExecutor(PythonCacheProperties cacheProperties, PythonExecutor pythonExecutor, CacheManager cacheManager, CacheKeyGenerator keyGenerator) {
         this.pythonExecutor = pythonExecutor;
-        this.cache = cacheManager.getCache(cacheProperties.name());
+        this.cache = cacheManager.getCache(cacheProperties.name().executor());
         this.keyGenerator = keyGenerator;
     }
 
     @Override
     public <R> R execute(String script, Class<? extends R> resultClass) {
         try {
-            String key = keyGenerator.generateKey(null, script, resultClass.getName());
+            String key = keyGenerator.generateKey(script, resultClass);
             R cachedResult = cache.get(key, resultClass);
             if (cachedResult != null) {
                 return cachedResult;

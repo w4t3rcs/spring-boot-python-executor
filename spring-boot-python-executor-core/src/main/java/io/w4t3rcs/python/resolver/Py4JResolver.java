@@ -12,8 +12,6 @@ import java.util.Map;
  * This resolver adds the necessary import statement to Python scripts to enable
  * communication between Java and Python using the Py4J bridge.
  * 
- * <p>The resolver can process both inline scripts and scripts loaded from files.</p>
- * 
  * <p>This resolver is conditionally enabled based on the {@code Py4JCondition}.</p>
  */
 @RequiredArgsConstructor

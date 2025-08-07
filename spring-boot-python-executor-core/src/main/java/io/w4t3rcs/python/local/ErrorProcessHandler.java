@@ -20,6 +20,7 @@ public class ErrorProcessHandler implements ProcessHandler<Void> {
             String errorMessage = bufferedReader.lines().collect(Collectors.joining());
             if (!errorMessage.isBlank()) {
                 log.error(errorMessage);
+                throw new PythonReadingException(errorMessage);
             }
         } catch (IOException e) {
             throw new PythonReadingException(e);

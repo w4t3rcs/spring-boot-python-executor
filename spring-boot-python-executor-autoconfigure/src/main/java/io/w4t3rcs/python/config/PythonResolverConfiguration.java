@@ -1,10 +1,7 @@
 package io.w4t3rcs.python.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.w4t3rcs.python.condition.Py4JResolverCondition;
-import io.w4t3rcs.python.condition.RestrictedPythonResolverCondition;
-import io.w4t3rcs.python.condition.ResultResolverCondition;
-import io.w4t3rcs.python.condition.SpelythonResolverCondition;
+import io.w4t3rcs.python.condition.*;
 import io.w4t3rcs.python.properties.PythonResolverProperties;
 import io.w4t3rcs.python.resolver.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -26,9 +23,10 @@ import java.util.List;
 @EnableConfigurationProperties(PythonResolverProperties.class)
 public class PythonResolverConfiguration {
     public static final int SPELYTHON_RESOLVER_ORDER = 0;
-    public static final int PY4J_RESOLVER_ORDER = 100;
-    public static final int RESTRICTED_PYTHON_RESOLVER_ORDER = 200;
-    public static final int RESULT_RESOLVER_ORDER = 300;
+    public static final int PY4J_RESOLVER_ORDER = 50;
+    public static final int RESTRICTED_PYTHON_RESOLVER_ORDER = 100;
+    public static final int RESULT_RESOLVER_ORDER = 150;
+    public static final int PRINTED_RESULT_RESOLVER_ORDER = 200;
 
     @Bean
     @Order(SPELYTHON_RESOLVER_ORDER)
@@ -57,6 +55,14 @@ public class PythonResolverConfiguration {
     @Conditional(ResultResolverCondition.class)
     public PythonResolver resultResolver(PythonResolverProperties resolverProperties) {
         return new ResultResolver(resolverProperties);
+    }
+
+    @Bean
+    @Order(PRINTED_RESULT_RESOLVER_ORDER)
+    @Conditional(PrintedResultResolverCondition.class)
+    @ConditionalOnProperty(name = "spring.python.executor.type", havingValue = "local")
+    public PythonResolver printedResultResolver(PythonResolverProperties resolverProperties) {
+        return new PrintedResultResolver(resolverProperties);
     }
 
     @Bean

@@ -13,7 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("spring.python.resolver")
 public record PythonResolverProperties(DeclaredResolver[] declared, String scriptImportsRegex, SpelythonProperties spelython, Py4JProperties py4j, RestrictedPythonProperties restrictedPython, ResultProperties result) {
     public enum DeclaredResolver {
-        SPELYTHON, PY4J, RESTRICTED_PYTHON, RESULT
+        SPELYTHON, PY4J, RESTRICTED_PYTHON, RESULT, PRINTED_RESULT
     }
 
     public record SpelythonProperties(String regex, SpelProperties spel) {

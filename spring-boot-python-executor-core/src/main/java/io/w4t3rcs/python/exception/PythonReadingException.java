@@ -9,4 +9,8 @@ public class PythonReadingException extends RuntimeException {
     public PythonReadingException(Throwable cause) {
         super(cause);
     }
+
+    public PythonReadingException(String message) {
+        super(message);
+    }
 }

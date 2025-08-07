@@ -14,6 +14,7 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 
 import static io.w4t3rcs.python.constant.TestConstants.*;
+import static io.w4t3rcs.python.properties.PythonCacheProperties.NameProperties;
 
 @ExtendWith(MockitoExtension.class)
 class CachingPythonExecutorTests {
@@ -28,10 +29,13 @@ class CachingPythonExecutorTests {
     private PythonCacheProperties cacheProperties;
     @Mock
     private CacheManager cacheManager;
+    @Mock
+    private NameProperties nameProperties;
 
     @BeforeEach
     void init() {
-        Mockito.when(cacheProperties.name()).thenReturn(CACHE_MANAGER_KEY);
+        Mockito.when(cacheProperties.name()).thenReturn(nameProperties);
+        Mockito.when(nameProperties.executor()).thenReturn(CACHE_MANAGER_KEY);
         Mockito.when(cacheManager.getCache(CACHE_MANAGER_KEY)).thenReturn(cache);
         cachingPythonExecutor = new CachingPythonExecutor(cacheProperties, pythonExecutor, cacheManager, keyGenerator);
     }
@@ -44,7 +48,7 @@ class CachingPythonExecutorTests {
             COMPOUND_SCRIPT_0, COMPOUND_SCRIPT_1,
     })
     void testExistentKeyExecute(String script) {
-        Mockito.when(keyGenerator.generateKey(null, script, STRING_CLASS.getName())).thenReturn(CACHE_KEY);
+        Mockito.when(keyGenerator.generateKey(script, STRING_CLASS)).thenReturn(CACHE_KEY);
         Mockito.when((String) cache.get(CACHE_KEY, STRING_CLASS)).thenReturn(OK);
 
         String executed = cachingPythonExecutor.execute(script, STRING_CLASS);
@@ -59,7 +63,7 @@ class CachingPythonExecutorTests {
             COMPOUND_SCRIPT_0, COMPOUND_SCRIPT_1,
     })
     void testNonexistentKeyExecute(String script) {
-        Mockito.when(keyGenerator.generateKey(null, script, STRING_CLASS.getName())).thenReturn(CACHE_KEY);
+        Mockito.when(keyGenerator.generateKey(script, STRING_CLASS)).thenReturn(CACHE_KEY);
         Mockito.when((String) cache.get(CACHE_KEY, STRING_CLASS)).thenReturn(null);
         Mockito.when((String) pythonExecutor.execute(script, STRING_CLASS)).thenReturn(OK);
         Mockito.doNothing().when(cache).put(CACHE_KEY, OK);

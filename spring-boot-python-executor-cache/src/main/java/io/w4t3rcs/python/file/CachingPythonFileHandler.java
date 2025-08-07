@@ -16,9 +16,9 @@ public class CachingPythonFileHandler implements PythonFileHandler {
 
     public CachingPythonFileHandler(PythonCacheProperties cacheProperties, PythonFileHandler pythonFileHandler, CacheManager cacheManager) {
         this.pythonFileHandler = pythonFileHandler;
-        var fileProperties = cacheProperties.file();
-        this.pathCache = cacheManager.getCache(fileProperties.pathsName());
-        this.scriptBodyCache = cacheManager.getCache(fileProperties.bodiesName());
+        var nameProperties = cacheProperties.name();
+        this.pathCache = cacheManager.getCache(nameProperties.filePaths());
+        this.scriptBodyCache = cacheManager.getCache(nameProperties.fileBodies());
     }
 
     @Override

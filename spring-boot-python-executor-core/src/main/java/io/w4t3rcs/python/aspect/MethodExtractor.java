@@ -6,7 +6,14 @@ import org.aspectj.lang.JoinPoint;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-public interface MethodHandlerAspect {
+/**
+ * Interface that provides functions for extracting method metadata
+ * and parameters in AOP join points.
+ * <p>
+ * This interface is commonly used in aspects that execute Python scripts
+ * and need access to method reflection and parameter mapping.
+ */
+public interface MethodExtractor {
     /**
      * Gets the Method object from a JoinPoint.
      *

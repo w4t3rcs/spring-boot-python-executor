@@ -19,7 +19,7 @@ public class CachingPythonResolverHolder implements PythonResolverHolder {
 
     public CachingPythonResolverHolder(PythonCacheProperties cacheProperties, PythonResolverHolder pythonResolverHolder, CacheManager cacheManager, CacheKeyGenerator keyGenerator, ObjectMapper objectMapper) {
         this.pythonResolverHolder = pythonResolverHolder;
-        this.cache = cacheManager.getCache(cacheProperties.name());
+        this.cache = cacheManager.getCache(cacheProperties.name().resolver());
         this.keyGenerator = keyGenerator;
         this.objectMapper = objectMapper;
     }
@@ -30,7 +30,7 @@ public class CachingPythonResolverHolder implements PythonResolverHolder {
             Map<String, Object> sortedMap = new TreeMap<>(arguments);
             String argumentsJson = objectMapper.writeValueAsString(sortedMap);
             String body = script + argumentsJson;
-            String key = keyGenerator.generateKey(null, body, null);
+            String key = keyGenerator.generateKey(body);
             String cachedResolvedScript = cache.get(key, String.class);
             if (cachedResolvedScript != null) {
                 return cachedResolvedScript;

@@ -18,8 +18,6 @@ import java.util.Map;
  * Resolver implementation that processes Spring Expression Language (SpEL) expressions
  * within Python scripts. This resolver allows embedding SpEL expressions in Python code
  * which are evaluated at runtime and replaced with their JSON representation.
- * 
- * <p>The resolver can process both inline scripts and scripts loaded from files.</p>
  */
 @RequiredArgsConstructor
 public class SpelythonResolver extends AbstractPythonResolver {

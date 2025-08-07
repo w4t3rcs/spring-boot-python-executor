@@ -30,7 +30,7 @@ public @interface PythonAfter {
      * @return the Python script or file path
      */
     @AliasFor("script")
-    String value();
+    String value() default "";
 
     /**
      * The Python script to execute after the method.
@@ -39,7 +39,7 @@ public @interface PythonAfter {
      * @return the Python script or file path
      */
     @AliasFor("value")
-    String script();
+    String script() default "";
 
     /**
      * Specifies the Spring profiles in which this Python script should be executed.

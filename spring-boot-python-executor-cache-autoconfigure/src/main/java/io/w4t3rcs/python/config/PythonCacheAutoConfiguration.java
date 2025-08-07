@@ -2,7 +2,7 @@ package io.w4t3rcs.python.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.w4t3rcs.python.cache.CacheKeyGenerator;
-import io.w4t3rcs.python.cache.impl.CacheKeyGeneratorImpl;
+import io.w4t3rcs.python.cache.impl.HashCacheKeyGenerator;
 import io.w4t3rcs.python.condition.ExecutorCacheLevelCondition;
 import io.w4t3rcs.python.condition.FileCacheLevelCondition;
 import io.w4t3rcs.python.condition.ProcessorCacheLevelCondition;
@@ -31,7 +31,7 @@ public class PythonCacheAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(CacheKeyGenerator.class)
     public CacheKeyGenerator cacheKeyGenerator(PythonCacheProperties cacheProperties) {
-        return new CacheKeyGeneratorImpl(cacheProperties);
+        return new HashCacheKeyGenerator(cacheProperties);
     }
 
     @Bean

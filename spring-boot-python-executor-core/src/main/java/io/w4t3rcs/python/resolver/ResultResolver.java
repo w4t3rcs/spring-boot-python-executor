@@ -7,21 +7,14 @@ import java.util.Map;
 
 /**
  * Resolver implementation that processes result expressions in Python scripts.
- * This resolver adds print statements to the script to capture and format the results
- * of expressions, making them available for retrieval after script execution.
- * 
- * <p>The resolver can process both inline scripts and scripts loaded from files.</p>
  */
 @RequiredArgsConstructor
 public class ResultResolver extends AbstractPythonResolver {
     private final PythonResolverProperties resolverProperties;
 
     /**
-     * Processes a script to find result expressions and wraps them in print statements.
-     * 
-     * <p>This method uses the configured regex pattern to find result expressions in the script
-     * and wraps them in print statements with a specific appearance prefix to make them
-     * identifiable in the output.</p>
+     * Processes a script to find result expressions
+     * This method uses the configured regex pattern to find result expressions in the script
      *
      * @param script The Python script content to process
      * @param arguments A map of variables that may be used during resolution, however, they are not used here.
@@ -36,14 +29,9 @@ public class ResultResolver extends AbstractPythonResolver {
                 resultProperties.positionFromStart(), resultProperties.positionFromEnd(),
                 (matcher, fragment, result) -> {
             this.appendNextLine(result, builder -> builder.append(resultProperties.appearance())
-                    .append(" = json.dumps(")
+                    .append(" = json.loads(json.dumps(")
                     .append(fragment)
-                    .append(")"));
-            this.appendNextLine(result, builder -> builder.append("print('")
-                    .append(resultProperties.appearance())
-                    .append("' + ")
-                    .append(resultProperties.appearance())
-                    .append(")"));
+                    .append("))"));
             return result;
         });
         return resolvedScript.toString();

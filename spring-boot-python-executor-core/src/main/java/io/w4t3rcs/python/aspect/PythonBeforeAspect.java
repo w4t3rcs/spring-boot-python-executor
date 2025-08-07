@@ -3,17 +3,10 @@ package io.w4t3rcs.python.aspect;
 import io.w4t3rcs.python.annotation.PythonAfter;
 import io.w4t3rcs.python.annotation.PythonBefore;
 import io.w4t3rcs.python.annotation.PythonBefores;
-import io.w4t3rcs.python.processor.PythonProcessor;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.springframework.core.annotation.AnnotatedElementUtils;
-import org.springframework.core.env.Environment;
-
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Aspect that handles the execution of Python scripts through annotations.
@@ -22,9 +15,8 @@ import java.util.Objects;
  */
 @Aspect
 @RequiredArgsConstructor
-public class PythonBeforeAspect extends AbstractPythonAspect {
-    private final PythonProcessor pythonProcessor;
-    private final Environment environment;
+public class PythonBeforeAspect {
+    private final PythonAnnotationEvaluator annotationEvaluator;
 
     /**
      * Executes Python scripts before methods annotated with {@link PythonBefores}.
@@ -35,13 +27,7 @@ public class PythonBeforeAspect extends AbstractPythonAspect {
      */
     @Before("@annotation(io.w4t3rcs.python.annotation.PythonBefores)")
     public void executeMultipleBeforeMethod(JoinPoint joinPoint) {
-        Method method = this.getMethod(joinPoint);
-        PythonBefore[] pythonBefores = method.getDeclaredAnnotation(PythonBefores.class).value();
-        for (PythonBefore pythonBefore : pythonBefores) {
-            String script = pythonBefore.value().isBlank() ? pythonBefore.script() : pythonBefore.value();
-            this.handleProfiles(List.of(pythonBefore.activeProfiles()), environment,
-                    () -> this.handleScript(joinPoint, pythonProcessor, () -> script, this::getMethodParameters));
-        }
+        annotationEvaluator.evaluate(joinPoint, PythonBefores.class);
     }
 
     /**
@@ -53,9 +39,6 @@ public class PythonBeforeAspect extends AbstractPythonAspect {
      */
     @Before("@annotation(io.w4t3rcs.python.annotation.PythonBefore)")
     public void executeSingleBeforeMethod(JoinPoint joinPoint) {
-        Method method = this.getMethod(joinPoint);
-        PythonBefore pythonBefore = Objects.requireNonNull(AnnotatedElementUtils.findMergedAnnotation(method, PythonBefore.class));
-        this.handleProfiles(List.of(pythonBefore.activeProfiles()), environment,
-                () -> this.handleScript(joinPoint, pythonProcessor, pythonBefore::script, this::getMethodParameters));
+        annotationEvaluator.evaluate(joinPoint, PythonBefore.class);
     }
 }

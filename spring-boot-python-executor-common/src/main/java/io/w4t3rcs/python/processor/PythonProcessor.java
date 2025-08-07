@@ -12,6 +12,37 @@ import java.util.Map;
  */
 public interface PythonProcessor {
     /**
+     * Overloaded method for executing a Python script after processing it through a series of resolvers.
+     *
+     * @param script The Python script to execute
+     */
+    default void process(String script) {
+        this.process(script, Map.of());
+    }
+
+    /**
+     * Overloaded method for executing a Python script after processing it through a series of resolvers.
+     *
+     * @param script The Python script to execute
+     * @param arguments A map of arguments to be used by resolvers
+     */
+    default void process(String script, Map<String, Object> arguments) {
+        this.process(script, null, arguments);
+    }
+
+    /**
+     * Overloaded method for executing a Python script after processing it through a series of resolvers.
+     *
+     * @param <R> The type of result expected from the script execution
+     * @param script The Python script to execute
+     * @param resultClass The class representing the expected result type
+     * @return The result of the script execution, cast to the specified result class
+     */
+    default <R> R process(String script, Class<? extends R> resultClass) {
+        return this.process(script, resultClass, Map.of());
+    }
+
+    /**
      * Executes a Python script after processing it through a series of resolvers.
      *
      * @param <R> The type of result expected from the script execution

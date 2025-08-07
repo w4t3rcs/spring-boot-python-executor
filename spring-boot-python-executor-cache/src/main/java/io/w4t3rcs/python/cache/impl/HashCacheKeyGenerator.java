@@ -9,11 +9,11 @@ import java.security.MessageDigest;
 import java.util.Base64;
 
 @RequiredArgsConstructor
-public class CacheKeyGeneratorImpl implements CacheKeyGenerator {
+public class HashCacheKeyGenerator implements CacheKeyGenerator {
     private final PythonCacheProperties cacheProperties;
 
     @Override
-    public String generateKey(String prefix, String body, String suffix) {
+    public String generateKey(Object prefix, String body, Object suffix) {
         try {
             var keyProperties = cacheProperties.key();
             MessageDigest digest = MessageDigest.getInstance(keyProperties.hashAlgorithm());

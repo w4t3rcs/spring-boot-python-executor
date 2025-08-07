@@ -97,7 +97,7 @@ public abstract class AbstractPythonResolver implements PythonResolver {
      * @return The processed script with replaced fragments
      */
     protected StringBuilder insertUniqueLineToStart(StringBuilder script, String insertable) {
-        if (script.indexOf(insertable) == STRING_BUILDER_NO_VALUE_INDEX) script.insert(STRING_BUILDER_START_INDEX, insertable + "\n");
+        if (!this.containsString(script, insertable)) script.insert(STRING_BUILDER_START_INDEX, insertable + "\n");
         return script;
     }
 
@@ -150,5 +150,9 @@ public abstract class AbstractPythonResolver implements PythonResolver {
             }
         }
         return result;
+    }
+
+    protected boolean containsString(StringBuilder resolvedScript, String string) {
+        return resolvedScript.indexOf(string) != STRING_BUILDER_NO_VALUE_INDEX;
     }
 }

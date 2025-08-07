@@ -18,7 +18,7 @@ public class CachingPythonProcessor implements PythonProcessor {
 
     public CachingPythonProcessor(PythonCacheProperties cacheProperties, PythonProcessor pythonProcessor, CacheManager cacheManager, CacheKeyGenerator keyGenerator, ObjectMapper objectMapper) {
         this.pythonProcessor = pythonProcessor;
-        this.cache = cacheManager.getCache(cacheProperties.name());
+        this.cache = cacheManager.getCache(cacheProperties.name().processor());
         this.keyGenerator = keyGenerator;
         this.objectMapper = objectMapper;
     }
@@ -29,7 +29,7 @@ public class CachingPythonProcessor implements PythonProcessor {
             Map<String, Object> sortedMap = new TreeMap<>(arguments);
             String argumentsJson = objectMapper.writeValueAsString(sortedMap);
             String body = script + argumentsJson;
-            String key = keyGenerator.generateKey(null, body, resultClass.getName());
+            String key = keyGenerator.generateKey(body, resultClass);
             R cachedResult = cache.get(key, resultClass);
             if (cachedResult != null) {
                 return cachedResult;

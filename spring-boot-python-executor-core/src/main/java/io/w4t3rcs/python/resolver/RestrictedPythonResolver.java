@@ -11,8 +11,6 @@ import java.util.Set;
 /**
  * Resolver implementation that behaves like proxy using {@code RestrictedPython} Python lib in Python scripts.
  * This resolver adds necessary statements to the script to run code more safely using {@code RestrictedPython}
- *
- * <p>The resolver can process both inline scripts and scripts loaded from files.</p>
  */
 @RequiredArgsConstructor
 public class RestrictedPythonResolver extends AbstractPythonResolver {
@@ -64,9 +62,9 @@ public class RestrictedPythonResolver extends AbstractPythonResolver {
                     resultProperties.positionFromStart(), resultProperties.positionFromEnd(),
                     (matcher, fragment, result) -> {
                 result.append(restrictedPythonProperties.safeResultAppearance())
-                        .append(" = json.dumps(")
+                        .append(" = json.loads(json.dumps(")
                         .append(fragment)
-                        .append(")\n");
+                        .append("))\n");
                 return result;
             });
             this.appendNextLine(resolvedScript, builder -> builder.append(resultProperties.appearance())
@@ -75,11 +73,6 @@ public class RestrictedPythonResolver extends AbstractPythonResolver {
                     .append(".get('")
                     .append(restrictedPythonProperties.safeResultAppearance())
                     .append("', '')"));
-            this.appendNextLine(resolvedScript, builder -> builder.append("print('")
-                    .append(resultProperties.appearance())
-                    .append("' + ")
-                    .append(resultProperties.appearance())
-                    .append(")"));
         }
         for (int i = importNames.size() - 1; i >= 0; i--) {
             String importName = importNames.get(i);

@@ -1,6 +1,6 @@
 package io.w4t3rcs.python.cache;
 
-import io.w4t3rcs.python.cache.impl.CacheKeyGeneratorImpl;
+import io.w4t3rcs.python.cache.impl.HashCacheKeyGenerator;
 import io.w4t3rcs.python.properties.PythonCacheProperties;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,9 +14,9 @@ import static io.w4t3rcs.python.constant.TestConstants.OK;
 import static io.w4t3rcs.python.properties.PythonCacheProperties.KeyProperties;
 
 @ExtendWith(MockitoExtension.class)
-class CacheKeyGeneratorTests {
+class HashCacheKeyGeneratorTests {
     @InjectMocks
-    private CacheKeyGeneratorImpl keyGenerator;
+    private HashCacheKeyGenerator keyGenerator;
     @Mock
     private PythonCacheProperties cacheProperties;
     @Mock

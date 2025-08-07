@@ -18,6 +18,7 @@ import org.springframework.cache.CacheManager;
 import java.util.TreeMap;
 
 import static io.w4t3rcs.python.constant.TestConstants.*;
+import static io.w4t3rcs.python.properties.PythonCacheProperties.NameProperties;
 
 @ExtendWith(MockitoExtension.class)
 class CachingPythonProcessorTests {
@@ -34,10 +35,13 @@ class CachingPythonProcessorTests {
     private PythonCacheProperties cacheProperties;
     @Mock
     private CacheManager cacheManager;
+    @Mock
+    private NameProperties nameProperties;
 
     @BeforeEach
     void init() {
-        Mockito.when(cacheProperties.name()).thenReturn(CACHE_MANAGER_KEY);
+        Mockito.when(cacheProperties.name()).thenReturn(nameProperties);
+        Mockito.when(nameProperties.processor()).thenReturn(CACHE_MANAGER_KEY);
         Mockito.when(cacheManager.getCache(CACHE_MANAGER_KEY)).thenReturn(cache);
         cachingPythonProcessor = new CachingPythonProcessor(cacheProperties, pythonProcessor, cacheManager, keyGenerator, objectMapper);
     }
@@ -54,7 +58,7 @@ class CachingPythonProcessorTests {
         TreeMap<String, Object> sortedMap = new TreeMap<>(EMPTY_ARGUMENTS);
 
         Mockito.when(objectMapper.writeValueAsString(sortedMap)).thenReturn(EMPTY);
-        Mockito.when(keyGenerator.generateKey(null, script, STRING_CLASS.getName())).thenReturn(CACHE_KEY);
+        Mockito.when(keyGenerator.generateKey(script, STRING_CLASS)).thenReturn(CACHE_KEY);
         Mockito.when((String) cache.get(CACHE_KEY, STRING_CLASS)).thenReturn(OK);
 
         String executed = cachingPythonProcessor.process(script, STRING_CLASS, EMPTY_ARGUMENTS);
@@ -73,7 +77,7 @@ class CachingPythonProcessorTests {
         TreeMap<String, Object> sortedMap = new TreeMap<>(EMPTY_ARGUMENTS);
 
         Mockito.when(objectMapper.writeValueAsString(sortedMap)).thenReturn(EMPTY);
-        Mockito.when(keyGenerator.generateKey(null, script, STRING_CLASS.getName())).thenReturn(CACHE_KEY);
+        Mockito.when(keyGenerator.generateKey(script, STRING_CLASS)).thenReturn(CACHE_KEY);
         Mockito.when((String) cache.get(CACHE_KEY, STRING_CLASS)).thenReturn(null);
         Mockito.when((String) pythonProcessor.process(script, STRING_CLASS, EMPTY_ARGUMENTS)).thenReturn(OK);
         Mockito.doNothing().when(cache).put(CACHE_KEY, OK);
