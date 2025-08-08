@@ -2,54 +2,72 @@ package io.w4t3rcs.python.processor;
 
 import io.w4t3rcs.python.executor.PythonExecutor;
 import io.w4t3rcs.python.resolver.PythonResolver;
+import io.w4t3rcs.python.resolver.PythonResolverHolder;
 
 import java.util.Map;
 
 /**
- * Interface for Python connecting {@link PythonExecutor} and {@link PythonResolver}.
- * Implementations of this interface process Python scripts before execution,
- * applying transformations or resolving expressions within the script and, also, script execution itself.
+ * Defines the contract for processing and executing Python scripts, acting as a bridge between
+ * {@link PythonExecutor} and {@link PythonResolverHolder}.
+ *
+ * <p>Implementations of this interface are responsible for:</p>
+ * <ul>
+ *     <li>Pre-processing Python scripts before execution</li>
+ *     <li>Applying transformations and expression resolution using registered resolvers using {@link PythonResolver} instances</li>
+ *     <li>Delegating the execution to a {@link PythonExecutor}</li>
+ * </ul>
+ *
+ * <p><strong>Example usage:</strong></p>
+ * <pre>{@code
+ * PythonProcessor processor = ...;
+ * String script = "print('Hello World ')";
+ * processor.process(script);
+ * }</pre>
+ * @see PythonExecutor
+ * @see PythonResolverHolder
+ * @author w4t3rcs
+ * @since 1.0.0
  */
 public interface PythonProcessor {
     /**
-     * Overloaded method for executing a Python script after processing it through a series of resolvers.
+     * Processes and executes a Python script without additional arguments or result mapping.
      *
-     * @param script The Python script to execute
+     * @param script non-{@code null} Python script to execute
      */
     default void process(String script) {
         this.process(script, Map.of());
     }
 
     /**
-     * Overloaded method for executing a Python script after processing it through a series of resolvers.
+     * Processes and executes a Python script with the given argument map.
      *
-     * @param script The Python script to execute
-     * @param arguments A map of arguments to be used by resolvers
+     * @param script non-{@code null} Python script to execute
+     * @param arguments a map of arguments accessible to resolvers during preprocessing
      */
     default void process(String script, Map<String, Object> arguments) {
         this.process(script, null, arguments);
     }
 
     /**
-     * Overloaded method for executing a Python script after processing it through a series of resolvers.
+     * Processes and executes a Python script, mapping the result to the specified type.
      *
-     * @param <R> The type of result expected from the script execution
-     * @param script The Python script to execute
-     * @param resultClass The class representing the expected result type
-     * @return The result of the script execution, cast to the specified result class
+     * @param <R> the type of result expected from script execution
+     * @param script non-{@code null} Python script to execute
+     * @param resultClass the class representing the expected result type (nullable)
+     * @return the result of execution cast to {@code R}, or {@code null} if the script returns nothing
      */
     default <R> R process(String script, Class<? extends R> resultClass) {
         return this.process(script, resultClass, Map.of());
     }
 
     /**
-     * Executes a Python script after processing it through a series of resolvers.
+     * Processes and executes a Python script with arguments and optional result mapping.
      *
-     * @param <R> The type of result expected from the script execution
-     * @param script The Python script to execute
-     * @param resultClass The class representing the expected result type
-     * @param arguments A map of arguments to be used by resolvers
-     * @return The result of the script execution, cast to the specified result class
+     * @param <R> the type of result expected from script execution
+     * @param script non-{@code null} Python script to execute
+     * @param resultClass the class representing the expected result type (nullable)
+     * @param arguments a map of arguments accessible to resolvers during preprocessing
+     * @return the result of execution cast to {@code R}, or {@code null} if the script returns nothing
      */
     <R> R process(String script, Class<? extends R> resultClass, Map<String, Object> arguments);
 }

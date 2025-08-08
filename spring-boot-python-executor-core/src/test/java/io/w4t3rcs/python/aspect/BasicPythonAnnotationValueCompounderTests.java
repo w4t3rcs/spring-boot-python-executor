@@ -20,9 +20,9 @@ import static io.w4t3rcs.python.constant.TestConstants.SIMPLE_SCRIPT_0;
 import static io.w4t3rcs.python.constant.TestConstants.TEST_PROFILES;
 
 @ExtendWith(MockitoExtension.class)
-class BasicPythonAnnotationValueExtractorChainTests {
+class BasicPythonAnnotationValueCompounderTests {
     @InjectMocks
-    private BasicPythonAnnotationValueExtractorChain basicPythonAnnotationValueExtractorChain;
+    private BasicPythonAnnotationValueCompounder basicPythonAnnotationValueExtractorChain;
     @Mock
     private PythonAnnotationValueExtractor annotationValueExtractor;
     @Mock
@@ -34,16 +34,16 @@ class BasicPythonAnnotationValueExtractorChainTests {
     }
 
     @Test
-    void testGetValue() {
+    void testCompound() {
         Map<String, String[]> annotationValue = Map.of(SIMPLE_SCRIPT_0, TEST_PROFILES);
 
         Mockito.when(annotationValueExtractor.getValue(joinPoint, PythonBefore.class)).thenReturn(annotationValue);
 
-        Assertions.assertEquals(annotationValue, basicPythonAnnotationValueExtractorChain.getValue(joinPoint, PythonBefore.class));
+        Assertions.assertEquals(annotationValue, basicPythonAnnotationValueExtractorChain.compound(joinPoint, PythonBefore.class));
     }
 
     @Test
-    void testGetValueWithException() {
-        Assertions.assertThrows(AnnotationValueExtractingException.class, () -> basicPythonAnnotationValueExtractorChain.getValue(joinPoint, PythonBefore.class));
+    void testCompoundWithException() {
+        Assertions.assertThrows(AnnotationValueExtractingException.class, () -> basicPythonAnnotationValueExtractorChain.compound(joinPoint, PythonBefore.class));
     }
 }

@@ -13,9 +13,32 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 /**
- * Implementation of the {@link PythonExecutor} interface that executes Python scripts using REST endpoint.
- * This class coordinates the process of starting a Python process, handling its input
- * and error streams, and converting the result to the specified Java type.
+ * Implementation of the {@link PythonExecutor} interface that executes Python scripts via a REST endpoint.
+ * <p>
+ * This class sends the Python script to a remote REST service using HTTP POST with JSON payload,
+ * then processes the response and converts it to the specified Java type.
+ * <p>
+ * The execution flow includes:
+ * <ul>
+ *   <li>Serializing the Python script wrapped in a {@link ScriptRequest} to JSON.</li>
+ *   <li>Sending an HTTP POST request to the configured REST endpoint with authentication headers.</li>
+ *   <li>Receiving the JSON response and deserializing it into the expected result type.</li>
+ * </ul>
+ * <p>
+ * Usage example:
+ * <pre>{@code
+ * PythonExecutor executor = new RestPythonExecutor(connectionDetails, objectMapper, httpClient);
+ * String script = "print('Hello from Python via REST')";
+ * String result = executor.execute(script, String.class);
+ * }</pre>
+ *
+ * @see PythonExecutor
+ * @see ScriptRequest
+ * @see PythonServerConnectionDetails
+ * @see GrpcPythonExecutor
+ * @see LocalPythonExecutor
+ * @author w4t3rcs
+ * @since 1.0.0
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -29,6 +52,18 @@ public class RestPythonExecutor implements PythonExecutor {
     private final ObjectMapper objectMapper;
     private final HttpClient httpClient;
 
+    /**
+     * Executes the given Python {@code script} remotely by sending it to a REST endpoint.
+     * <p>
+     * The method serializes the script into a JSON body, sends it as an HTTP POST request,
+     * and deserializes the JSON response into the specified {@code resultClass}.
+     *
+     * @param <R> the expected result type
+     * @param script the Python script to execute (non-null, non-empty recommended)
+     * @param resultClass the {@link Class} representing the expected return type, may be null if no result expected
+     * @return an instance of {@code R} parsed from the REST response body, or {@code null} if {@code resultClass} is null, or the response body is empty or blank
+     * @throws PythonScriptExecutionException if an error occurs during HTTP communication, JSON serialization/deserialization, or other execution errors
+     */
     @Override
     public <R> R execute(String script, Class<? extends R> resultClass) {
         try {

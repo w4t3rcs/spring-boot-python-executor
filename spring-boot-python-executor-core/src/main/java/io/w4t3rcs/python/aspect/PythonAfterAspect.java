@@ -11,9 +11,25 @@ import java.lang.annotation.Annotation;
 import java.util.HashMap;
 
 /**
- * Aspect that handles the execution of Python scripts through annotations.
- * This aspect intercepts methods annotated with {@link PythonAfters} and {@link PythonAfter}
- * annotations and executes the specified Python scripts after the method execution.
+ * Aspect that intercepts method executions annotated with {@link PythonAfter}
+ * or {@link PythonAfters} to evaluate associated Python scripts after successful method completion.
+ * <p>
+ * This aspect captures the returned value from the method and passes it as an additional argument
+ * named {@code "result"} to the {@link PythonAnnotationEvaluator}.
+ * <p>
+ * The aspect listens to two pointcuts:
+ * <ul>
+ *   <li>Methods annotated with {@code @PythonAfter} — triggers a single script evaluation.</li>
+ *   <li>Methods annotated with {@code @PythonAfters} — triggers multiple script evaluations.</li>
+ * </ul>
+ * <p>
+ *
+ * @see PythonAnnotationEvaluator
+ * @see PythonAfter
+ * @see PythonAfters
+ * @see PythonBeforeAspect
+ * @author w4t3rcs
+ * @since 1.0.0
  */
 @Aspect
 @RequiredArgsConstructor
@@ -21,12 +37,11 @@ public class PythonAfterAspect {
     private final PythonAnnotationEvaluator annotationEvaluator;
 
     /**
-     * Executes Python scripts after methods annotated with {@link PythonAfters} return a result.
-     * This advice intercepts method calls and executes the Python scripts specified
-     * in the annotation after the method returns.
+     * Advice that executes after successful return of methods annotated with {@link PythonAfters}.
+     * Passes the method return value as an additional argument named {@code "result"}.
      *
-     * @param joinPoint The join point representing the intercepted method call
-     * @param result The value returned by the method
+     * @param joinPoint non-null join point representing the intercepted method call
+     * @param result the returned object from the intercepted method, may be null
      */
     @AfterReturning(pointcut = "@annotation(io.w4t3rcs.python.annotation.PythonAfters)", returning = "result")
     public void executeMultipleAfterMethod(JoinPoint joinPoint, Object result) {
@@ -34,12 +49,11 @@ public class PythonAfterAspect {
     }
 
     /**
-     * Executes Python scripts after methods annotated with {@link PythonAfter} return a result.
-     * This advice intercepts method calls and executes the Python script specified
-     * in the annotation after the method returns.
+     * Advice that executes after successful return of methods annotated with {@link PythonAfter}.
+     * Passes the method return value as an additional argument named {@code "result"}.
      *
-     * @param joinPoint The join point representing the intercepted method call
-     * @param result The value returned by the method
+     * @param joinPoint non-null join point representing the intercepted method call
+     * @param result the returned object from the intercepted method; may be null
      */
     @AfterReturning(pointcut = "@annotation(io.w4t3rcs.python.annotation.PythonAfter)", returning = "result")
     public void executeSingleAfterMethod(JoinPoint joinPoint, Object result) {
@@ -47,11 +61,12 @@ public class PythonAfterAspect {
     }
 
     /**
-     * Executes Python scripts after methods annotated with return a result.
+     * Helper method to invoke the {@link PythonAnnotationEvaluator} with the given join point,
+     * annotation class, and additional arguments containing the method's return value under the key {@code "result"}.
      *
-     * @param joinPoint The join point representing the intercepted method call
-     * @param result The value returned by the method
-     * @param annotation The annotation class
+     * @param joinPoint non-null join point representing the intercepted method call
+     * @param result the returned object from the intercepted method, may be null
+     * @param annotation non-null class of the annotation to evaluate
      */
     private void evaluateWithResult(JoinPoint joinPoint, Object result, Class<? extends Annotation> annotation) {
         HashMap<String, Object> additionalArguments = new HashMap<>();

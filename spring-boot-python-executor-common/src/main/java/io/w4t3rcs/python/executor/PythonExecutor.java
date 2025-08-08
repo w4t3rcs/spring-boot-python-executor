@@ -1,18 +1,36 @@
 package io.w4t3rcs.python.executor;
 
 /**
- * Interface defining the contract for executing Python scripts.
- * Implementations of this interface handle the actual execution of Python code
- * and conversion of the results to Java objects.
+ * Defines the contract for executing Python scripts and mapping the execution result
+ * to a Java object of the specified type.
+ *
+ * <p>Implementations of this interface are responsible for executing Python code
+ * in a controlled environment (such as a sandbox, container, or embedded interpreter)
+ * and converting the execution result to the requested Java type.
+ * This interface is typically used by higher-level components
+ * to integrate Python execution into Java applications.</p>
+ *
+ * <p><strong>Example usage:</strong></p>
+ * <pre>{@code
+ * PythonExecutor executor = ...;
+ * String output = executor.execute("print('Hello')", String.class);
+ * }</pre>
+ *
+ * @author w4t3rcs
+ * @since 1.0.0
  */
 public interface PythonExecutor {
     /**
-     * Executes a Python script and converts the result to the specified Java type.
+     * Executes the given Python script and converts the result to the specified Java type.
      *
-     * @param <R> The type of result expected from the script execution
-     * @param script The Python script to execute
-     * @param resultClass The class representing the expected result type
-     * @return The result of the script execution, cast to the specified result class
+     * <p>Implementations must execute the script in a safe and isolated context and perform type conversion to the given {@code resultClass}.
+     * The execution order and environment are defined by the specific implementation.</p>
+     *
+     * @param <R> the expected result type
+     * @param script non-{@code null} Python script to execute
+     * @param resultClass the Java class representing the expected result type, may be {@code null} if the script produces no output
+     * @return the result of the script execution mapped to {@code resultClass}, may be {@code null} if the script produces no output
      */
     <R> R execute(String script, Class<? extends R> resultClass);
 }
+

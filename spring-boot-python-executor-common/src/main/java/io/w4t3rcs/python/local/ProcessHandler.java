@@ -1,18 +1,41 @@
 package io.w4t3rcs.python.local;
 
 /**
- * Interface defining the contract for handling processes.
- * Implementations of this interface process a Java Process object
- * and return a result of the specified type.
+ * Defines the contract for processing and handling {@link Process} instances.
  *
- * @param <R> The type of result returned by the handler
+ * <p>Implementations of this interface encapsulate the logic for interacting
+ * with a running or completed Java {@link Process}, extracting data from it,
+ * performing analysis, or transforming its output into a result of the
+ * specified generic type {@code R}.</p>
+ *
+ * <p>Common use cases include:</p>
+ * <ul>
+ *     <li>Reading and parsing the process's standard output or error streams</li>
+ *     <li>Checking the exit code and mapping it to a domain-specific result</li>
+ *     <li>Collecting logs, metrics, or diagnostic information from the process</li>
+ * </ul>
+ *
+ * <p><strong>Example usage:</strong></p>
+ * <pre>{@code
+ * Process process = new ProcessBuilder("python", "script.py").start();
+ * ProcessHandler<String> handler = ...;
+ * String output = handler.handle(process);
+ * }</pre>
+ *
+ * @param <R> the type of result returned by the handler
+ * @author w4t3rcs
+ * @since 1.0.0
  */
 public interface ProcessHandler<R> {
     /**
-     * Handles a process and returns a result.
+     * Processes the given {@link Process} and may produce a result.
      *
-     * @param process The Java Process object to handle
-     * @return The result of handling the process, of type R
+     * <p>Implementations should define the specific logic for interacting
+     * with the process, which may involve reading its streams, checking
+     * exit codes, or applying transformations.</p>
+     *
+     * @param process non-{@code null} {@link Process} instance to handle
+     * @return the result of handling the process, of type {@code R}
      */
     R handle(Process process);
 }

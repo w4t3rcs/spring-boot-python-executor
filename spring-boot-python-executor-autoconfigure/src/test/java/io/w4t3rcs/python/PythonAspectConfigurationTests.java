@@ -27,7 +27,7 @@ class PythonAspectConfigurationTests {
     @Qualifier("multiPythonAnnotationValueExtractor")
     private PythonAnnotationValueExtractor multiPythonAnnotationValueExtractor;
     @Autowired
-    private PythonAnnotationValueExtractorChain pythonAnnotationValueExtractorChain;
+    private PythonAnnotationValueCompounder pythonAnnotationValueCompounder;
     @Autowired
     @Qualifier("basicPythonAnnotationEvaluator")
     private PythonAnnotationEvaluator basicPythonAnnotationEvaluator;
@@ -46,7 +46,7 @@ class PythonAspectConfigurationTests {
         Assertions.assertInstanceOf(BasicPythonArgumentsExtractor.class, pythonArgumentsExtractor);
         Assertions.assertInstanceOf(SinglePythonScriptExtractor.class, singlePythonAnnotationValueExtractor);
         Assertions.assertInstanceOf(MultiPythonScriptExtractor.class, multiPythonAnnotationValueExtractor);
-        Assertions.assertInstanceOf(BasicPythonAnnotationValueExtractorChain.class, pythonAnnotationValueExtractorChain);
+        Assertions.assertInstanceOf(BasicPythonAnnotationValueCompounder.class, pythonAnnotationValueCompounder);
         Assertions.assertInstanceOf(BasicPythonAnnotationEvaluator.class, basicPythonAnnotationEvaluator);
         Assertions.assertInstanceOf(AsyncPythonAnnotationEvaluator.class, asyncPythonAnnotationEvaluator);
         Assertions.assertNotNull(pythonBeforeAspect);

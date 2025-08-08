@@ -4,9 +4,33 @@ import java.nio.file.Path;
 import java.util.function.UnaryOperator;
 
 /**
- * Interface defining operations for handling Python script files.
- * This interface provides methods for reading from and writing to Python script files,
- * as well as utilities for working with Python file paths.
+ * Defines operations for working with Python script files, including validation, I/O,
+ * and content transformation.
+ *
+ * <p>This interface provides methods for:</p>
+ * <ul>
+ *     <li>Verifying Python file extensions</li>
+ *     <li>Reading and writing Python script files</li>
+ *     <li>Applying transformations to script content</li>
+ *     <li>Resolving file paths</li>
+ * </ul>
+ *
+ * <p>File format is assumed to use the {@link #PYTHON_FILE_FORMAT} extension ({@code ".py"}).
+ * Implementations must handle file system I/O in a defined, consistent manner and
+ * should ensure proper resource management (e.g., closing streams, handling encoding).
+ * Unless explicitly documented, all methods are expected to be thread-safe.</p>
+ *
+ * <p><strong>Example usage:</strong></p>
+ * <pre>{@code
+ * PythonFileHandler handler = ...;
+ * if (handler.isPythonFile("script.py")) {
+ *     handler.writeScriptBodyToFile("script.py", "print('Hello')");
+ *     String content = handler.readScriptBodyFromFile("script.py");
+ * }
+ * }</pre>
+ *
+ * @author w4t3rcs
+ * @since 1.0.0
  */
 public interface PythonFileHandler {
     /**
@@ -15,68 +39,68 @@ public interface PythonFileHandler {
     String PYTHON_FILE_FORMAT = ".py";
 
     /**
-     * Checks if the given path points to a Python file.
+     * Checks whether the given path points to a valid Python file.
      *
-     * @param path The path to check
-     * @return true if the path points to a Python file, false otherwise
+     * @param path non-{@code null} path string
+     * @return {@code true} if the path ends with {@link #PYTHON_FILE_FORMAT}, {@code false} otherwise
      */
     boolean isPythonFile(String path);
 
     /**
-     * Writes a Python script to a file at the specified path.
+     * Writes Python script content to a file at the specified path.
      *
-     * @param path The path where the script should be written
-     * @param script The Python script content to write
+     * @param path non-{@code null} file system path
+     * @param script non-{@code null} Python script content
      */
     void writeScriptBodyToFile(String path, String script);
 
     /**
-     * Writes a Python script to a file at the specified path.
+     * Writes Python script content to a file at the specified path.
      *
-     * @param path The Path object where the script should be written
-     * @param script The Python script content to write
+     * @param path non-{@code null} {@link Path} object
+     * @param script non-{@code null} Python script content
      */
     void writeScriptBodyToFile(Path path, String script);
 
     /**
-     * Reads a Python script from a file at the specified path.
+     * Reads the full content of a Python script from a file.
      *
-     * @param path The path from which to read the script
-     * @return The content of the Python script file
+     * @param path non-{@code null} file system path
+     * @return non-{@code null} script content
      */
     String readScriptBodyFromFile(String path);
 
     /**
-     * Reads a Python script from a file at the specified path.
+     * Reads the full content of a Python script from a file.
      *
-     * @param path The Path object from which to read the script
-     * @return The content of the Python script file
+     * @param path non-{@code null} {@link Path} object
+     * @return non-{@code null} script content
      */
     String readScriptBodyFromFile(Path path);
 
     /**
-     * Reads a Python script from a file and applies a transformation function to it.
+     * Reads the full content of a Python script from a file and applies a transformation function.
      *
-     * @param path The path from which to read the script
-     * @param mapper A function to transform the script content
-     * @return The transformed content of the Python script file
+     * @param path non-{@code null} file system path
+     * @param mapper non-{@code null} transformation function
+     * @return non-{@code null} transformed script content
      */
     String readScriptBodyFromFile(String path, UnaryOperator<String> mapper);
 
     /**
-     * Reads a Python script from a file and applies a transformation function to it.
+     * Reads the full content of a Python script from a file and applies a transformation function.
      *
-     * @param path The Path object from which to read the script
-     * @param mapper A function to transform the script content
-     * @return The transformed content of the Python script file
+     * @param path non-{@code null} {@link Path} object
+     * @param mapper non-{@code null} transformation function
+     * @return non-{@code null} transformed script content
      */
     String readScriptBodyFromFile(Path path, UnaryOperator<String> mapper);
 
     /**
-     * Gets the Path object for a script at the specified path.
+     * Returns a {@link Path} object representing the location of the given script.
      *
-     * @param path The path to the script
-     * @return A Path object representing the script's location
+     * @param path non-{@code null} file system path
+     * @return non-{@code null} {@link Path} instance pointing to the script
      */
     Path getScriptPath(String path);
 }

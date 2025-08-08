@@ -46,15 +46,15 @@ public class PythonAspectConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(PythonAnnotationValueExtractorChain.class)
-    public PythonAnnotationValueExtractorChain pythonAnnotationValueExtractorChain(List<PythonAnnotationValueExtractor> annotationValueExtractors) {
-        return new BasicPythonAnnotationValueExtractorChain(annotationValueExtractors);
+    @ConditionalOnMissingBean(PythonAnnotationValueCompounder.class)
+    public PythonAnnotationValueCompounder pythonAnnotationValueCompounder(List<PythonAnnotationValueExtractor> annotationValueExtractors) {
+        return new BasicPythonAnnotationValueCompounder(annotationValueExtractors);
     }
 
     @Bean
     @ConditionalOnMissingBean(PythonAnnotationEvaluator.class)
     public PythonAnnotationEvaluator basicPythonAnnotationEvaluator(ProfileChecker profileChecker,
-                                                                    PythonAnnotationValueExtractorChain annotationValueExtractorChain,
+                                                                    PythonAnnotationValueCompounder annotationValueExtractorChain,
                                                                     PythonArgumentsExtractor argumentsExtractor,
                                                                     PythonProcessor pythonProcessor) {
         return new BasicPythonAnnotationEvaluator(profileChecker, annotationValueExtractorChain, argumentsExtractor, pythonProcessor);

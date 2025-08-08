@@ -1,44 +1,51 @@
 package io.w4t3rcs.python.annotation;
 
-import io.w4t3rcs.python.resolver.SpelythonResolver;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation to specify a name for a method parameter to be used in Python scripts.
- * 
- * <p>When a parameter is annotated with {@code PythonParam}, the specified name can be used
- * to reference the parameter's value, for example, in SpEL expressions within Python scripts executed by
- * {@link PythonBefore} or {@link PythonAfter} annotations using {@link SpelythonResolver}.</p>
- * 
- * <p>Example usage:</p>
- * <pre>
- * &#64;PythonAfter("my_script.py")
- * public void myMethod(@SpelythonParam("userId") Long id, @SpelythonParam("userName") String name) {
- *     // Method implementation
+ * Annotation to assign a custom name to a method parameter for use in Python scripts.
+ * <p>
+ * When a method parameter is annotated with {@code @PythonParam}, the specified name
+ * can be referenced within Python scripts executed by {@link PythonBefore} or {@link PythonAfter}
+ * annotations.
+ * </p>
+ * <p>
+ * If the annotation is absent, the actual parameter name (if available via reflection) will be used.
+ * </p>
+ * <p><b>Example usage:</b></p>
+ * <pre>{@code
+ * @PythonAfter("my_script.py")
+ * public void myMethod(@PythonParam("userId") Long id, String name) {
+ *     // method implementation
  * }
- * </pre>
- * 
- * <p>In the Python script, the parameters can be accessed using SpEL expressions:</p>
- * <pre>
+ * }</pre>
+ * <p>
+ * <b>Example Python script snippet using SpEL expressions:</b>
+ * <pre>{@code
  * # Access the userId parameter
  * user_id = spel{#userId}
- * 
- * # Access the userName parameter
- * user_name = spel{#userName}
- * </pre>
+ *
+ * # Access the name parameter
+ * user_name = spel{#name}
+ * }</pre>
+ * </p>
+ *
+ * @author w4t3rcs
+ * @since 1.0.0
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
 public @interface PythonParam {
     /**
-     * The name to use for the parameter.
-     * If not specified, the parameter's actual name will be used.
-     * 
-     * @return the name for the parameter
+     * Specifies the custom name to be used for the annotated parameter in Python scripts.
+     * <p>
+     * Must not be {@code null} or empty.
+     * </p>
+     *
+     * @return the name used to reference the parameter in Python scripts (non-{@code null}, non-empty)
      */
     String value();
 }

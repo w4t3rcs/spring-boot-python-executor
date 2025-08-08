@@ -22,7 +22,7 @@ class BasicPythonAnnotationEvaluatorTests {
     @Mock
     private ProfileChecker profileChecker;
     @Mock
-    private PythonAnnotationValueExtractorChain annotationValueExtractorChain;
+    private PythonAnnotationValueCompounder annotationValueExtractorChain;
     @Mock
     private PythonArgumentsExtractor argumentsExtractor;
     @Mock
@@ -34,7 +34,7 @@ class BasicPythonAnnotationEvaluatorTests {
     void testEvaluate() {
         Map<String, String[]> annotationValue = Map.of(SIMPLE_SCRIPT_0, TEST_PROFILES);
 
-        Mockito.when(annotationValueExtractorChain.getValue(joinPoint, null)).thenReturn(annotationValue);
+        Mockito.when(annotationValueExtractorChain.compound(joinPoint, null)).thenReturn(annotationValue);
 
         Assertions.assertDoesNotThrow(() -> basicPythonAnnotationEvaluator.evaluate(joinPoint, null));
     }
