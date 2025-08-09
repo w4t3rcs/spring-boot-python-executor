@@ -6,19 +6,31 @@ import lombok.RequiredArgsConstructor;
 import java.util.Map;
 
 /**
- * Resolver implementation that processes result expressions in Python scripts.
+ * {@link PythonResolver} implementation that processes result expressions in Python scripts.
+ *
+ * <p>This resolver searches for result expressions in the script using a configured regex pattern
+ * and wraps each found expression with JSON serialization logic, assigning it to a configured
+ * result variable.</p>
+ *
+ * <p>The processed script can then expose evaluated result data in a JSON-compatible form.</p>
+ *
+ * @see PythonResolver
+ * @see AbstractPythonResolver
+ * @see PythonResolverHolder
+ * @see PythonResolverProperties.ResultProperties
+ * @author w4t3rcs
+ * @since 1.0.0
  */
 @RequiredArgsConstructor
 public class ResultResolver extends AbstractPythonResolver {
     private final PythonResolverProperties resolverProperties;
 
     /**
-     * Processes a script to find result expressions
-     * This method uses the configured regex pattern to find result expressions in the script
+     * Resolves the script by finding and wrapping result expressions.
      *
-     * @param script The Python script content to process
-     * @param arguments A map of variables that may be used during resolution, however, they are not used here.
-     * @return The processed script with result expressions wrapped in print statements
+     * @param script the original Python script content (non-null)
+     * @param arguments unused map of variables, may be null
+     * @return the processed script with result expressions replaced by JSON serialization assignments
      */
     @Override
     public String resolve(String script, Map<String, Object> arguments) {

@@ -18,11 +18,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  *       enabled: true
  *       host: localhost
  *       port: 25333
- *       pythonHost: localhost
- *       pythonPort: 25334
- *       connectTimeout: 5000
- *       readTimeout: 10000
- *       authToken: secret-token
+ *       python-host: localhost
+ *       python-port: 25334
+ *       connect-timeout: 0
+ *       read-timeout: 0
+ *       auth-token: secret-token
  *       loggable: true
  * }</pre>
  *

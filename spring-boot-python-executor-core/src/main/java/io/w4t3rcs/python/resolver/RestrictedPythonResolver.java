@@ -9,30 +9,40 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Resolver implementation that behaves like proxy using {@code RestrictedPython} Python lib in Python scripts.
- * This resolver adds necessary statements to the script to run code more safely using {@code RestrictedPython}
+ * {@link PythonResolver} implementation that processes Python scripts for secure execution
+ * using the {@code RestrictedPython} library.
+ *
+ * <p>This resolver acts as a proxy, injecting necessary setup code to enable safe execution of Python code with RestrictedPython.
+ * It performs the following operations:
+ * <ul>
+ *   <li>Removes existing import lines matching a configured regex and collects import names.</li>
+ *   <li>Wraps the original script code in a string variable for compilation.</li>
+ *   <li>Initializes local variables container for execution results.</li>
+ *   <li>Compiles the wrapped script with RestrictedPython's compile_restricted method.</li>
+ *   <li>Executes the compiled code in a safe globals context augmented with collected imports.</li>
+ *   <li>Replaces configured result fragments with JSON serialization code if enabled.</li>
+ *   <li>Inserts necessary import statements and setup for safe globals and optional print support.</li>
+ * </ul>
+ *
+ * @see PythonResolver
+ * @see AbstractPythonResolver
+ * @see PythonResolverHolder
+ * @see PythonResolverProperties.RestrictedPythonProperties
+ * @see <a href="https://github.com/zopefoundation/RestrictedPython">RestrictedPython</a>
+ * @author w4t3rcs
+ * @since 1.0.0
  */
 @RequiredArgsConstructor
 public class RestrictedPythonResolver extends AbstractPythonResolver {
     private final PythonResolverProperties resolverProperties;
 
     /**
-     * Resolves a Python script by injecting necessary setup code for execution with RestrictedPython.
+     * Resolves the given Python script by injecting RestrictedPython setup code to
+     * enable secure execution.
      *
-     * <p>This method performs the following steps:
-     * <ul>
-     *   <li>Removes import lines matching a configured regex from the script and collects them along with import variable names.</li>
-     *   <li>Wraps the main script content into a string variable for compilation.</li>
-     *   <li>Initializes local variables container for execution results.</li>
-     *   <li>Compiles the script with RestrictedPython and prepares an execution context.</li>
-     *   <li>Replaces configured script fragments (e.g., results) with JSON serialization code if required.</li>
-     *   <li>Inserts import statements and sets up safe_globals_with_imports dictionary for execution.</li>
-     *   <li>Adds necessary imports and objects for print functionality if enabled.</li>
-     * </ul></p>
-     *
-     * @param script The original Python script as a String
-     * @param arguments Map of variables intended for the script execution context (currently unused in this method)
-     * @return The resolved and transformed Python script ready for RestrictedPython execution
+     * @param script the original Python script content (non-null)
+     * @param arguments unused map of variables for script execution context, may be null
+     * @return the transformed Python script ready for execution with RestrictedPython
      */
     @Override
     public String resolve(String script, Map<String, Object> arguments) {

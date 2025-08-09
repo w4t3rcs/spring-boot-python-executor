@@ -17,14 +17,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * spring:
  *   python:
  *     resolver:
- *       declared: spelython, result
+ *       declared: spelython, result, py4j, restricted_python, printed_result
  *       script-imports-regex: (^import [\\w.]+$)|(^import [\\w.]+ as [\\w.]+$)|(^from [\\w.]+ import [\\w., ]+$)
  *       spelython:
  *         regex: spel\\{.+?}
  *         spel:
- *           localVariableIndex: "#"
- *           positionFromStart: 5
- *           positionFromEnd: 1
+ *           local-variable-index: #
+ *           position-from-start: 5
+ *           position-from-end: 1
  *       py4j:
  *         import-line: "from py4j.java_gateway import JavaGateway, GatewayParameters"
  *         gateway-object: gateway = JavaGateway(\n\tgateway_parameters=GatewayParameters(\n\t\t%s\n\t)\n)
@@ -32,7 +32,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  *         gateway-properties[1]: port=${spring.python.py4j.port}
  *         gateway-properties[2]: auth_token=\"${spring.python.py4j.auth-token}\"
  *         gateway-properties[3]: auto_convert=True
- *       restrictedPython:
+ *       restricted-python:
  *         import-line: from RestrictedPython import compile_restricted
  *         code-variable-name: source_code
  *         local-variables-name: execution_result
@@ -46,12 +46,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * }</pre>
  * </p>
  *
- * @param declared the list of declared resolvers to be used; non-null, may be empty
- * @param scriptImportsRegex regular expression for matching import statements in scripts; non-null
- * @param spelython configuration properties specific to Spelython resolver; non-null
- * @param py4j configuration properties specific to Py4J resolver; non-null
- * @param restrictedPython configuration properties specific to Restricted Python resolver; non-null
- * @param result configuration properties for result parsing; non-null
+ * @param declared the list of declared resolvers to be used, non-null, may be empty
+ * @param scriptImportsRegex regular expression for matching import statements in scripts, non-null
+ * @param spelython configuration properties specific to Spelython resolver, non-null
+ * @param py4j configuration properties specific to Py4J resolver, non-null
+ * @param restrictedPython configuration properties specific to Restricted Python resolver, non-null
+ * @param result configuration properties for result parsing, non-null
  * @see PythonResolver
  * @see PythonResolverHolder
  * @author w4t3rcs

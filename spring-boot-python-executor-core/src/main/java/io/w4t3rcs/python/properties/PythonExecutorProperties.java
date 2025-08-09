@@ -28,22 +28,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * spring:
  *   python:
  *     executor:
- *       type: LOCAL
+ *       type: local
  *       local:
- *         startCommand: python3
+ *         start-command: python
  *         loggable: true
- *       rest:
- *         host: localhost
- *         port: 8080
- *         username: user
- *         password: pass
- *         uri: http://localhost:8080/execute
- *       grpc:
- *         host: localhost
- *         port: 9090
- *         username: user
- *         password: pass
- *         uri: localhost:9090
  * }</pre>
  * </p>
  *

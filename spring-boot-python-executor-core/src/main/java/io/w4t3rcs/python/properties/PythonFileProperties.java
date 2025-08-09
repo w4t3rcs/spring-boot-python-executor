@@ -17,7 +17,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * spring:
  *   python:
  *     file:
- *       path: /scripts/
+ *       path: /python/
  * }</pre>
  * </p>
  *
