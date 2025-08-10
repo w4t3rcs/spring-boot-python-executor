@@ -15,10 +15,10 @@ import static io.w4t3rcs.python.constant.TestConstants.*;
 import static io.w4t3rcs.python.properties.PythonExecutorProperties.LocalProperties;
 
 @ExtendWith(MockitoExtension.class)
-class ProcessStarterTests {
+class BasicPythonProcessStarterTests {
     private static final LocalProperties LOCAL_PROPERTIES = new LocalProperties("python", false);
     @InjectMocks
-    private ProcessStarterImpl processStarter;
+    private BasicPythonProcessStarter processStarter;
     @Mock
     private PythonExecutorProperties executorProperties;
     @Mock

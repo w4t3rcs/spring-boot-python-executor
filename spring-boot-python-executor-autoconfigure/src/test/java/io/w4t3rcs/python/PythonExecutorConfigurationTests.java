@@ -38,10 +38,10 @@ class PythonExecutorConfigurationTests {
             Assertions.assertInstanceOf(LocalPythonExecutor.class, pythonExecutor);
             Assertions.assertFalse(applicationContext.containsBean("restPythonExecutor"));
             Assertions.assertFalse(applicationContext.containsBean("grpcPythonExecutor"));
-            Assertions.assertInstanceOf(ProcessStarterImpl.class, applicationContext.getBean(ProcessStarter.class));
-            Assertions.assertInstanceOf(InputProcessHandler.class, applicationContext.getBean("inputProcessHandler"));
-            Assertions.assertInstanceOf(ErrorProcessHandler.class, applicationContext.getBean("errorProcessHandler"));
-            Assertions.assertInstanceOf(ProcessFinisherImpl.class, applicationContext.getBean(ProcessFinisher.class));
+            Assertions.assertInstanceOf(BasicPythonProcessStarter.class, applicationContext.getBean(ProcessStarter.class));
+            Assertions.assertInstanceOf(BasicPythonInputProcessHandler.class, applicationContext.getBean("inputProcessHandler"));
+            Assertions.assertInstanceOf(BasicPythonErrorProcessHandler.class, applicationContext.getBean("errorProcessHandler"));
+            Assertions.assertInstanceOf(BasicPythonProcessFinisher.class, applicationContext.getBean(ProcessFinisher.class));
         }
     }
 

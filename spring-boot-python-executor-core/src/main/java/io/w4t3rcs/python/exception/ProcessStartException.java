@@ -1,6 +1,6 @@
 package io.w4t3rcs.python.exception;
 
-import io.w4t3rcs.python.local.ProcessStarterImpl;
+import io.w4t3rcs.python.local.BasicPythonProcessStarter;
 
 /**
  * Exception thrown when an error occurs while starting a process.
@@ -12,7 +12,7 @@ import io.w4t3rcs.python.local.ProcessStarterImpl;
  * It extends {@link RuntimeException} and signals a failure that
  * usually requires corrective action in configuration or environment.
  *
- * @see ProcessStarterImpl
+ * @see BasicPythonProcessStarter
  * @since 1.0.0
  * @author w4t3rcs
  */

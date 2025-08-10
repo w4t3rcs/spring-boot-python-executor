@@ -34,13 +34,13 @@ import java.util.stream.Collectors;
  * }</pre>
  *
  * @see ProcessHandler
- * @see InputProcessHandler
+ * @see BasicPythonInputProcessHandler
  * @see LocalPythonExecutor
  * @author w4t3rcs
  * @since 1.0.0
  */
 @Slf4j
-public class ErrorProcessHandler implements ProcessHandler<Void> {
+public class BasicPythonErrorProcessHandler implements ProcessHandler<Void> {
     /**
      * Reads and processes the standard error stream of the specified {@link Process}.
      *

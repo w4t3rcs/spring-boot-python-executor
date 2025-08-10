@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * }</pre>
  *
  * @see ProcessHandler
- * @see ErrorProcessHandler
+ * @see BasicPythonErrorProcessHandler
  * @see PythonExecutorProperties
  * @see PythonResolverProperties
  * @see LocalPythonExecutor
@@ -41,7 +41,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class InputProcessHandler implements ProcessHandler<String> {
+public class BasicPythonInputProcessHandler implements ProcessHandler<String> {
     private final PythonExecutorProperties executorProperties;
     private final PythonResolverProperties resolverProperties;
 

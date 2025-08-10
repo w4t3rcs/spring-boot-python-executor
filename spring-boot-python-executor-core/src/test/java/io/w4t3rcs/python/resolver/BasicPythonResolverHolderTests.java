@@ -38,7 +38,7 @@ class BasicPythonResolverHolderTests {
     void testResolveAll(String script) {
         Mockito.when(pythonResolver.resolve(script, EMPTY_ARGUMENTS)).thenReturn(OK);
 
-        Assertions.assertEquals(OK, basicPythonResolverHolder.resolveAll(script, EMPTY_ARGUMENTS));
+        Assertions.assertEquals(OK, basicPythonResolverHolder.resolveAll(script));
     }
 
     @Test

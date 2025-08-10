@@ -76,6 +76,21 @@ public interface PythonResolverHolder extends Iterable<PythonResolver> {
 
     /**
      * Applies all registered resolvers to the given Python script,
+     * resolving variables, placeholders, or expressions with an empty arguments map.
+     * <p>
+     * The exact order and manner in which resolvers are applied is implementation-dependent.
+     * The {@code arguments} map provides values for resolution and must not be {@code null}.
+     * </p>
+     *
+     * @param script the Python script containing placeholders or expressions (non-{@code null})
+     * @return the fully resolved Python script (never {@code null})
+     */
+    default String resolveAll(String script) {
+        return this.resolveAll(script, Map.of());
+    }
+
+    /**
+     * Applies all registered resolvers to the given Python script,
      * resolving variables, placeholders, or expressions using the provided arguments.
      * <p>
      * The exact order and manner in which resolvers are applied is implementation-dependent.

@@ -45,7 +45,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class ProcessStarterImpl implements ProcessStarter {
+public class BasicPythonProcessStarter implements ProcessStarter {
     private static final String COMMAND_HEADER = "-c";
     private final PythonExecutorProperties executorProperties;
     private final PythonFileHandler pythonFileHandler;

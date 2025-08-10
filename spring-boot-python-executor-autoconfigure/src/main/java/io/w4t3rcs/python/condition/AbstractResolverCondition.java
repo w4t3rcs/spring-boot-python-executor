@@ -15,7 +15,7 @@ import java.util.Objects;
  * declared Python resolver in the Spring environment configuration.
  * <p>
  * This condition verifies whether the {@code spring.python.resolver.declared} property
- * contains a given resolver identifier (case-insensitive).
+ * contains a given resolver identifier.
  * </p>
  * <p>
  * Implementations must specify the resolver to check by overriding {@link #getDeclaredResolver()}.
@@ -25,9 +25,13 @@ import java.util.Objects;
  * If the property is missing or empty, the condition will not match.
  * </p>
  *
- * @see Condition
  * @see PythonResolverProperties.DeclaredResolver
  * @see PythonResolverConfiguration
+ * @see SpelythonResolverCondition
+ * @see Py4JResolverCondition
+ * @see RestrictedPythonResolverCondition
+ * @see ResultResolverCondition
+ * @see PrintedResultResolverCondition
  * @author w4t3rcs
  * @since 1.0.0
  */
@@ -66,6 +70,7 @@ public abstract class AbstractResolverCondition implements Condition {
         Environment environment = context.getEnvironment();
         String[] property = environment.getProperty(SPRING_PYTHON_RESOLVER_DECLARED_PROPERTY, String[].class);
         return Arrays.stream(Objects.requireNonNull(property))
+                .map(String::toLowerCase)
                 .anyMatch(declared -> declared.equals(propertyValue.toString().toLowerCase()));
     }
 

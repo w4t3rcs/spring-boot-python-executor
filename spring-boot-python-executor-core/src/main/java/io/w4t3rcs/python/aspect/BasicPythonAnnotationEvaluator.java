@@ -38,7 +38,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BasicPythonAnnotationEvaluator implements PythonAnnotationEvaluator {
     private final ProfileChecker profileChecker;
-    private final PythonAnnotationValueCompounder annotationValueExtractorChain;
+    private final PythonAnnotationValueCompounder annotationValueCompounder;
     private final PythonArgumentsExtractor argumentsExtractor;
     private final PythonProcessor pythonProcessor;
 
@@ -64,11 +64,10 @@ public class BasicPythonAnnotationEvaluator implements PythonAnnotationEvaluator
      */
     @Override
     public <A extends Annotation> void evaluate(JoinPoint joinPoint, Class<? extends A> annotationClass, Map<String, Object> additionalArguments) {
-        Map<String, String[]> annotationValue = annotationValueExtractorChain.compound(joinPoint, annotationClass);
+        Map<String, String[]> annotationValue = annotationValueCompounder.compound(joinPoint, annotationClass);
         annotationValue.forEach((script, activeProfiles) -> {
             profileChecker.doOnProfiles(activeProfiles, () -> {
                 Map<String, Object> arguments = argumentsExtractor.getArguments(joinPoint, additionalArguments);
-
                 pythonProcessor.process(script, arguments);
             });
         });

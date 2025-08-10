@@ -7,8 +7,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static io.w4t3rcs.python.constant.TestConstants.*;
 
-class ErrorProcessHandlerTests {
-    private static final ProcessHandler<Void> ERROR_PROCESS_HANDLER = new ErrorProcessHandler();
+class BasicPythonErrorProcessHandlerTests {
+    private static final ProcessHandler<Void> ERROR_PROCESS_HANDLER = new BasicPythonErrorProcessHandler();
 
     @SneakyThrows
     @ParameterizedTest

@@ -7,7 +7,7 @@
 [![Java: 17+](https://img.shields.io/badge/Java-17%2B-blue.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 [![Spring Boot: 3.5.3+](https://img.shields.io/badge/Spring%20Boot-3.5.3%2B-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Python: 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
-![Tests Passed: 80%](https://img.shields.io/badge/Tests%20Passed-80%25-green.svg)
+![Tests Passed: 90%](https://img.shields.io/badge/Tests%20Passed-80%25-green.svg)
 
 <hr>
 
@@ -17,6 +17,7 @@
 - [Introduction](#-introduction)
 - [Features & Architecture](#-features--architecture)
   - [Core Components](#core-components)
+  - [Architecture Diagram](#architecture-diagram)
   - [Security](#security)
   - [Cache](#cache)
 - [Installation and Setup](#-installation-and-setup)
@@ -76,64 +77,86 @@ Spring Boot Python Executor provides a flexible architecture for executing Pytho
   - Result resolution for capturing Python output
 - **PythonProcessor**: Connects resolvers and executors
 
+### Architecture Diagram
+
+If you are willing to use AOP based script processing, 
+your Python code will move from Python annotation to a configured PythonProcessor implementation object
+
 ```mermaid
 ---
-title: Basic Python script flow
+title: Python annotations flow
 ---
 
 classDiagram
-  PythonBefore --> PythonProcessor: Annotation @PythonBefore forwards the script to the PythonProcessor implementation
-  PythonAfter --> PythonProcessor: Annotation @PythonAfter forwards the script to the PythonProcessor implementation
-  PythonProcessor --> PythonFileHandler: Firstly, the script is checked whether it's a .py file or String script
-  PythonProcessor <-- PythonFileHandler: If it's a file, the content is read as a String value and returned
-  PythonProcessor --> PythonResolverHolder: Secondly, the script may be  transformed by multiple PythonResolver implementations. You can configure declared implementations by using spring.python.resolver.declared property
-  PythonProcessor <-- PythonResolverHolder: Returns resolved script from multiple PythonResolvers
-  PythonProcessor --> PythonExecutor: Finally, the script is executed by PythonExecutor implementation. You can choose needed implementation by configuring the property named spring.python.executor.type
-  PythonProcessor <-- PythonExecutor: The method returns null, because of annotation usage, but if you would like to get specific result object you need to call process(...) function manually 
-  
-  class PythonBefore {
-      +String value()
-      +String script()
-      +String[] activeProfiles()
-  }
-  
-  class PythonAfter {
-      +String value()
-      +String script()
-      +String[] activeProfiles()
-  }
-  
-  class PythonProcessor {
-    <<interface>>
-    +R process(String script, Class<? extends R> resultClass, Map<String, Object> arguments)
-  }
-  
-  class PythonFileHandler {
-    <<interface>>
-    +boolean isPythonFile(String path)
-    +void writeScriptBodyToFile(String path, String script)
-    +void writeScriptBodyToFile(Path path, String script)
-    +String readScriptBodyFromFile(String path)
-    +String readScriptBodyFromFile(Path path)
-    +String readScriptBodyFromFile(String path, UnaryOperator<String> mapper)
-    +String readScriptBodyFromFile(Path path, UnaryOperator<String> mapper)
-    +Path getScriptPath(String path)
-  }
-  
-  class PythonResolverHolder {
-    <<interface>>
-    +Iterator<PythonResolver> iterator()
-    +void forEach(Consumer<? super PythonResolver> action)
-    +Spliterator<PythonResolver> spliterator()
-    +Stream<PythonResolver> stream()
-    +String resolveAll(String script, Map<String, Object> arguments);
-    +List<PythonResolver> getResolvers();
-  }
-  
-  class PythonExecutor {
-    <<interface>>
-    +R execute(String script, Class<? extends R> resultClass)
-  }
+    PythonBefores --> PythonAnnotationEvaluator
+    PythonBefore --> PythonAnnotationEvaluator
+    PythonAfters --> PythonAnnotationEvaluator
+    PythonAfter --> PythonAnnotationEvaluator
+    PythonAnnotationEvaluator --> PythonAnnotationValueCompounder
+    PythonAnnotationEvaluator <-- PythonAnnotationValueCompounder
+    PythonAnnotationEvaluator --> ProfileChecker
+    PythonAnnotationEvaluator <-- ProfileChecker
+    PythonAnnotationEvaluator --> PythonArgumentsExtractor
+    PythonAnnotationEvaluator <-- PythonArgumentsExtractor
+    PythonAnnotationEvaluator --> PythonProcessor
+    PythonAnnotationValueCompounder --> PythonAnnotationValueExtractor
+    PythonAnnotationValueCompounder <-- PythonAnnotationValueExtractor
+    PythonAnnotationValueExtractor --> PythonMethodExtractor
+    PythonAnnotationValueExtractor <-- PythonMethodExtractor
+    PythonArgumentsExtractor --> PythonMethodExtractor
+    PythonArgumentsExtractor <-- PythonMethodExtractor
+    
+    
+```
+
+Also, you can use only PythonProcessor object to execute Python code:
+```mermaid
+---
+title: PythonProcessor flow
+---
+
+classDiagram
+    PythonProcessor --> PythonFileHandler: Firstly, the script is checked whether it's a .py file or String script
+    PythonProcessor <-- PythonFileHandler: If it's a file, the content is read as a String value and returned
+    PythonProcessor --> PythonResolverHolder: Secondly, the script may be  transformed by multiple PythonResolver implementations. You can configure declared implementations by using spring.python.resolver.declared property
+    PythonProcessor <-- PythonResolverHolder: Returns resolved script from multiple PythonResolvers
+    PythonProcessor --> PythonExecutor: Finally, the script is executed by PythonExecutor implementation. You can choose needed implementation by configuring the property named spring.python.executor.type
+    PythonProcessor <-- PythonExecutor: The method returns null, because of annotation usage, but if you would like to get specific result object you need to call process(...) function manually
+    
+    class PythonProcessor {
+        <<interface>>
+        +void process(String script)
+        +void process(String script, Map<String, Object> arguments)
+        +R process(String script, Class<? extends R> resultClass)
+        +R process(String script, Class<? extends R> resultClass, Map<String, Object> arguments)
+    }
+    
+    class PythonFileHandler {
+        <<interface>>
+        +boolean isPythonFile(String path)
+        +void writeScriptBodyToFile(String path, String script)
+        +void writeScriptBodyToFile(Path path, String script)
+        +String readScriptBodyFromFile(String path)
+        +String readScriptBodyFromFile(Path path)
+        +String readScriptBodyFromFile(String path, UnaryOperator<String> mapper)
+        +String readScriptBodyFromFile(Path path, UnaryOperator<String> mapper)
+        +Path getScriptPath(String path)
+    }
+    
+    class PythonResolverHolder {
+        <<interface>>
+        +Iterator<PythonResolver> iterator()
+        +void forEach(Consumer<? super PythonResolver> action)
+        +Spliterator<PythonResolver> spliterator()
+        +Stream<PythonResolver> stream()
+        +String resolveAll(String script, Map<String, Object> arguments);
+        +List<PythonResolver> getResolvers();
+    }
+    
+    class PythonExecutor {
+        <<interface>>
+        +R execute(String script, Class<? extends R> resultClass)
+    }
 ```
 
 ### Security

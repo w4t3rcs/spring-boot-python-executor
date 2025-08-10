@@ -17,11 +17,11 @@ import static io.w4t3rcs.python.properties.PythonExecutorProperties.LocalPropert
 import static io.w4t3rcs.python.properties.PythonResolverProperties.ResultProperties;
 
 @ExtendWith(MockitoExtension.class)
-class InputProcessHandlerTests {
+class BasicPythonInputProcessHandlerTests {
     private static final LocalProperties LOCAL_PROPERTIES = new LocalProperties(null, true);
     private static final ResultProperties RESULT_PROPERTIES = new ResultProperties(null, "r4java", 0, 0);
     @InjectMocks
-    private InputProcessHandler inputProcessHandler;
+    private BasicPythonInputProcessHandler inputProcessHandler;
     @Mock
     private PythonExecutorProperties executorProperties;
     @Mock

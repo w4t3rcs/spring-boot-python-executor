@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
  * @since 1.0.0
  */
 @Slf4j
-public class ProcessFinisherImpl implements ProcessFinisher {
+public class BasicPythonProcessFinisher implements ProcessFinisher {
     /**
      * Finalizes the given {@link Process} by logging its exit status and releasing resources.
      *

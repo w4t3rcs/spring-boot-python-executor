@@ -43,7 +43,7 @@ import java.util.List;
  * @Autowired
  * private PythonResolverHolder resolverHolder;
  *
- * public String executeScript(String script) {
+ * public String resolveScript(String script) {
  *     return resolverHolder.resolveAll(script, Map.of());
  * }
  * }</pre>

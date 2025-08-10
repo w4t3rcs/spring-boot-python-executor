@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static io.w4t3rcs.python.constant.TestConstants.*;
 
 class ProcessFinisherTests {
-    private static final ProcessFinisher PROCESS_FINISHER = new ProcessFinisherImpl();
+    private static final ProcessFinisher PROCESS_FINISHER = new BasicPythonProcessFinisher();
 
     @SneakyThrows
     @ParameterizedTest

@@ -34,7 +34,7 @@ class BasicPythonProcessorTests {
     })
     void testProcess(String script) {
         Mockito.when(pythonFileHandler.isPythonFile(script)).thenReturn(false);
-        Mockito.when(pythonResolverHolder.resolveAll(script, EMPTY_ARGUMENTS)).thenReturn(script);
+        Mockito.when(pythonResolverHolder.resolveAll(script)).thenReturn(script);
         Mockito.when((String) pythonExecutor.execute(script, STRING_CLASS)).thenReturn(OK);
 
         String processed = pythonProcessor.process(script, STRING_CLASS, EMPTY_ARGUMENTS);

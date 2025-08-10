@@ -25,6 +25,10 @@
             <groupId>io.github.w4t3rcs</groupId>
             <artifactId>spring-boot-python-executor-cache-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.github.w4t3rcs</groupId>
+            <artifactId>spring-boot-python-executor-testcontainers</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

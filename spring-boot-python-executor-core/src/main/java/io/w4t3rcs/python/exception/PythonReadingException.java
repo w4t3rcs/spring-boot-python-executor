@@ -1,7 +1,7 @@
 package io.w4t3rcs.python.exception;
 
-import io.w4t3rcs.python.local.ErrorProcessHandler;
-import io.w4t3rcs.python.local.InputProcessHandler;
+import io.w4t3rcs.python.local.BasicPythonErrorProcessHandler;
+import io.w4t3rcs.python.local.BasicPythonInputProcessHandler;
 
 /**
  * Exception thrown when an error occurs while reading output from a Python process.
@@ -12,8 +12,8 @@ import io.w4t3rcs.python.local.InputProcessHandler;
  * It extends {@link RuntimeException} and signals a failure in
  * communication or data retrieval from the Python execution environment.
  *
- * @see InputProcessHandler
- * @see ErrorProcessHandler
+ * @see BasicPythonInputProcessHandler
+ * @see BasicPythonErrorProcessHandler
  * @since 1.0.0
  * @author w4t3rcs
  */
