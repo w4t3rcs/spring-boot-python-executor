@@ -39,7 +39,7 @@ public interface PythonAnnotationEvaluator {
      * @param annotationClass the {@link Class} object of the annotation to evaluate, must not be {@code null}
      */
     default <A extends Annotation> void evaluate(JoinPoint joinPoint, Class<? extends A> annotationClass) {
-        evaluate(joinPoint, annotationClass, Map.of());
+        this.evaluate(joinPoint, annotationClass, Map.of());
     }
 
     /**

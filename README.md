@@ -88,25 +88,84 @@ title: Python annotations flow
 ---
 
 classDiagram
-    PythonBefores --> PythonAnnotationEvaluator
-    PythonBefore --> PythonAnnotationEvaluator
-    PythonAfters --> PythonAnnotationEvaluator
-    PythonAfter --> PythonAnnotationEvaluator
-    PythonAnnotationEvaluator --> PythonAnnotationValueCompounder
-    PythonAnnotationEvaluator <-- PythonAnnotationValueCompounder
-    PythonAnnotationEvaluator --> ProfileChecker
-    PythonAnnotationEvaluator <-- ProfileChecker
-    PythonAnnotationEvaluator --> PythonArgumentsExtractor
-    PythonAnnotationEvaluator <-- PythonArgumentsExtractor
-    PythonAnnotationEvaluator --> PythonProcessor
-    PythonAnnotationValueCompounder --> PythonAnnotationValueExtractor
-    PythonAnnotationValueCompounder <-- PythonAnnotationValueExtractor
-    PythonAnnotationValueExtractor --> PythonMethodExtractor
-    PythonAnnotationValueExtractor <-- PythonMethodExtractor
-    PythonArgumentsExtractor --> PythonMethodExtractor
-    PythonArgumentsExtractor <-- PythonMethodExtractor
+    PythonBefores --> PythonAnnotationEvaluator: An annotation container that holds multiple @PythonBefore annotations is passed to the evaluator
+    PythonBefore --> PythonAnnotationEvaluator: A single @PythonBefore annotation is passed to the evaluator with script and profiles info
+    PythonAfters --> PythonAnnotationEvaluator: An annotation container that holds multiple @PythonAfter annotations is passed to the evaluator
+    PythonAfter --> PythonAnnotationEvaluator: A single @PythonAfter annotation is passed to the evaluator with script and profiles info
+    PythonAnnotationEvaluator --> PythonAnnotationValueCompounder: The evaluator requests the compounder to merge annotation values into a unified structure
+    PythonAnnotationEvaluator <-- PythonAnnotationValueCompounder: Returns a merged map of Python code and active profiles
+    PythonAnnotationEvaluator --> ProfileChecker: The evaluator checks if the annotation’s activeProfiles match the current application profiles
+    PythonAnnotationEvaluator <-- ProfileChecker: Executes a callback if profiles match
+    PythonAnnotationEvaluator --> PythonArgumentsExtractor: Extracts method arguments from the JoinPoint
+    PythonAnnotationEvaluator <-- PythonArgumentsExtractor: Returns a map of argument names to their values
+    PythonAnnotationEvaluator --> PythonProcessor: Finally, executes the Python script using the provided arguments
+    PythonAnnotationValueCompounder --> PythonAnnotationValueExtractor: The compounder delegates to the several extractors to get raw values from annotations
+    PythonAnnotationValueCompounder <-- PythonAnnotationValueExtractor: Returns the raw annotation values
+    PythonAnnotationValueExtractor --> PythonMethodExtractor: The extractor gets method metadata from the JoinPoint
+    PythonAnnotationValueExtractor <-- PythonMethodExtractor: Returns the method object
+    PythonArgumentsExtractor --> PythonMethodExtractor: The arguments extractor retrieves method parameters from the JoinPoint
+    PythonArgumentsExtractor <-- PythonMethodExtractor: Returns a map of parameter names to their values
     
+    class PythonBefores {
+        +PythonBefore[] value()
+    }
     
+    class PythonBefore {
+        +String value()
+        +String script()
+        +String[] activeProfiles()
+    }
+    
+    class PythonAfters {
+        +PythonAfter[] value()
+    }
+    
+    class PythonAfter {
+        +String value()
+        +String script()
+        +String[] activeProfiles()
+    }
+    
+    class PythonAnnotationEvaluator {
+        <<interface>> 
+        +<A extends Annotation> void evaluate(JoinPoint joinPoint, Class<? extends A> annotationClass);
+        +<A extends Annotation> void evaluate(JoinPoint joinPoint, Class<? extends A> annotationClass, Map<String, Object> additionalArguments);
+    }
+    
+    class PythonAnnotationValueCompounder {
+        <<interface>>
+        +<A extends Annotation> Map<String, String[]> compound(JoinPoint joinPoint, Class<? extends A> annotationClass);
+    }
+    
+    class ProfileChecker { 
+        <<interface>>
+        +void doOnProfiles(String[] profiles, Runnable action);
+    }
+    
+    class PythonArgumentsExtractor {
+        <<interface>>
+        +Map<String, Object> getArguments(JoinPoint joinPoint)
+        +Map<String, Object> getArguments(JoinPoint joinPoint, Map<String, Object> additionalArguments)
+    }
+    
+    class PythonProcessor {
+        <<interface>>
+        +void process(String script)
+        +void process(String script, Map<String, Object> arguments)
+        +R process(String script, Class<? extends R> resultClass)
+        +R process(String script, Class<? extends R> resultClass, Map<String, Object> arguments)
+    }
+    
+    class PythonAnnotationValueExtractor {
+        <<interface>>
+        +<A extends Annotation> Map<String, String[]> getValue(JoinPoint joinPoint, Class<? extends A> annotationClass);
+    }
+    
+    class PythonMethodExtractor {
+        <<interface>>
+        +Method getMethod(JoinPoint joinPoint);
+        +Map<String, Object> getMethodParameters(JoinPoint joinPoint);
+    }
 ```
 
 Also, you can use only PythonProcessor object to execute Python code:
