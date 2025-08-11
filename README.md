@@ -20,6 +20,7 @@
   - [Architecture Diagram](#architecture-diagram)
   - [Security](#security)
   - [Cache](#cache)
+  - [Testing](#testing)
 - [Installation and Setup](#-installation-and-setup)
 - [Configuration](#-configuration)
   - [File Properties](#file-properties)
@@ -228,6 +229,10 @@ The library supports transparent result caching via the Spring Cache abstraction
 It allows storing the results of Python script executions to avoid repeated computation.
 Any Spring-compatible CacheManager can be used, including in-memory, Redis, Caffeine, etc.
 
+### Testing
+
+The library allows testing Python servers using its own Testcontainers GenericContainer implementation.
+
 ## 📦 Installation and Setup
 
 ### Maven
@@ -266,6 +271,15 @@ If you want to have caching abilities, also add this:
 </dependency>
 ```
 
+If you want to test the work of PythonProcessor instance, add this:
+
+```xml
+<dependency>
+    <groupId>io.github.w4t3rcs</groupId>
+    <artifactId>spring-boot-python-executor-testcontainers</artifactId>
+</dependency>
+```
+
 ### Gradle
 
 To set up a proper version of the project add this to your `build.gradle`:
@@ -283,6 +297,12 @@ If you want to have caching abilities, also add this:
 
 ```groovy
 implementation 'io.github.w4t3rcs:spring-boot-python-executor-cache-starter'
+```
+
+If you want to test the work of PythonProcessor instance, add this:
+
+```groovy
+implementation 'io.github.w4t3rcs:spring-boot-python-executor-testcontainers'
 ```
 
 ## ⚙️ Configuration
@@ -493,6 +513,8 @@ grpcurl -plaintext -d '{\"script": \"r4java = 2 + 2\"}' \
 This environment variable allows you to specify additional Python packages to install in the server container. For example, setting `PYTHON_ADDITIONAL_IMPORTS=numpy,pandas,scikit-learn` will install these packages when the container starts, making them available for your Python scripts.
 
 ## 💻 Usage Examples
+
+If you want to check out how the library works, you can check `demo-app` module or examples below
 
 ### Basic Examples
 
