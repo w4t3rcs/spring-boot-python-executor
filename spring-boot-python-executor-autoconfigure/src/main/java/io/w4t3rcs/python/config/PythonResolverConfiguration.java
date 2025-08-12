@@ -33,7 +33,7 @@ import java.util.List;
  *
  * <pre>{@code
  * // Example of enabling the Spelython and Result resolvers via application.properties:
- * spring.python.resolver.declared=spelython, result
+ * spring.python.resolver.declared=spelython, body
  *
  * // Example of enabling the Py4J resolver:
  * spring.python.resolver.declared=py4j
@@ -146,7 +146,7 @@ public class PythonResolverConfiguration {
      * Creates a {@link ResultResolver} bean.
      * <p>
      * This bean is created only if {@link ResultResolverCondition} matches,
-     * which requires {@code spring.python.resolver.declared} to contain "result".
+     * which requires {@code spring.python.resolver.declared} to contain "body".
      * </p>
      *
      * @param resolverProperties {@link PythonResolverProperties} bean, must not be null

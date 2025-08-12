@@ -20,7 +20,7 @@ import java.util.Set;
  *   <li>Initializes local variables container for execution results.</li>
  *   <li>Compiles the wrapped script with RestrictedPython's compile_restricted method.</li>
  *   <li>Executes the compiled code in a safe globals context augmented with collected imports.</li>
- *   <li>Replaces configured result fragments with JSON serialization code if enabled.</li>
+ *   <li>Replaces configured body fragments with JSON serialization code if enabled.</li>
  *   <li>Inserts necessary import statements and setup for safe globals and optional print support.</li>
  * </ul>
  *

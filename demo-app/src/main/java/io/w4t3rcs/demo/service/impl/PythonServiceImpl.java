@@ -8,6 +8,7 @@ import io.w4t3rcs.python.annotation.PythonAfter;
 import io.w4t3rcs.python.annotation.PythonAfters;
 import io.w4t3rcs.python.annotation.PythonBefore;
 import io.w4t3rcs.python.annotation.PythonBefores;
+import io.w4t3rcs.python.dto.PythonExecutionResponse;
 import io.w4t3rcs.python.processor.PythonProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,9 +28,9 @@ public class PythonServiceImpl implements PythonService {
 
     @Override
     @PythonBefores({
-            @PythonBefore(SIMPLE_SCRIPT),
-            @PythonBefore(NUMERIC_SCRIPT),
-            @PythonBefore(DICT_SCRIPT),
+//            @PythonBefore(SIMPLE_SCRIPT),
+//            @PythonBefore(NUMERIC_SCRIPT),
+//            @PythonBefore(DICT_SCRIPT),
             @PythonBefore(script = ML_SCRIPT, activeProfiles = "ml")
     })
     public void doSomethingWithPythonBefore(MLScriptRequest request) {
@@ -43,9 +44,9 @@ public class PythonServiceImpl implements PythonService {
         log.info("1 --> {}", pythonProcessor.process(SIMPLE_SCRIPT, String.class));
         log.info("2 --> {}", pythonProcessor.process(NUMERIC_SCRIPT, Float.class));
         log.info("3 --> {}", pythonProcessor.process(DICT_SCRIPT, DictScriptResponse.class));
-        MLScriptResponse response = pythonProcessor.process(ML_SCRIPT, MLScriptResponse.class, pythonArguments);
+        PythonExecutionResponse<MLScriptResponse> response = pythonProcessor.process(ML_SCRIPT, MLScriptResponse.class, pythonArguments);
         log.info("4 --> {}", response);
-        return response;
+        return response.body();
     }
 
     @Override

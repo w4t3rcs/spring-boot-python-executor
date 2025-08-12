@@ -21,6 +21,15 @@ import io.w4t3rcs.python.executor.RestPythonExecutor;
  */
 public class PythonScriptExecutionException extends RuntimeException {
     /**
+     * Constructs a new {@code PythonScriptExecutionException} with the specified message.
+     *
+     * @param message the message (non-null)
+     */
+    public PythonScriptExecutionException(String message) {
+        super(message);
+    }
+
+    /**
      * Constructs a new {@code PythonScriptExecutionException} with the specified cause.
      *
      * @param cause the underlying cause of the interruption (non-null)

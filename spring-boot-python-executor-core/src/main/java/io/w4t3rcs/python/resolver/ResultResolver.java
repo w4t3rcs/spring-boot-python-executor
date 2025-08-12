@@ -6,13 +6,13 @@ import lombok.RequiredArgsConstructor;
 import java.util.Map;
 
 /**
- * {@link PythonResolver} implementation that processes result expressions in Python scripts.
+ * {@link PythonResolver} implementation that processes body expressions in Python scripts.
  *
- * <p>This resolver searches for result expressions in the script using a configured regex pattern
+ * <p>This resolver searches for body expressions in the script using a configured regex pattern
  * and wraps each found expression with JSON serialization logic, assigning it to a configured
- * result variable.</p>
+ * body variable.</p>
  *
- * <p>The processed script can then expose evaluated result data in a JSON-compatible form.</p>
+ * <p>The processed script can then expose evaluated body data in a JSON-compatible form.</p>
  *
  * @see PythonResolver
  * @see AbstractPythonResolver
@@ -26,11 +26,11 @@ public class ResultResolver extends AbstractPythonResolver {
     private final PythonResolverProperties resolverProperties;
 
     /**
-     * Resolves the script by finding and wrapping result expressions.
+     * Resolves the script by finding and wrapping body expressions.
      *
      * @param script the original Python script content (non-null)
      * @param arguments unused map of variables, may be null
-     * @return the processed script with result expressions replaced by JSON serialization assignments
+     * @return the processed script with body expressions replaced by JSON serialization assignments
      */
     @Override
     public String resolve(String script, Map<String, Object> arguments) {

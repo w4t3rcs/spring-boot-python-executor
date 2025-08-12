@@ -10,13 +10,18 @@ import io.w4t3rcs.python.properties.PythonAspectProperties;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Spring Boot autoconfiguration for registering beans required to process
@@ -156,8 +161,35 @@ public class PythonAspectConfiguration {
      */
     @Bean
     @ConditionalOnBean(PythonAnnotationEvaluator.class)
-    public PythonAnnotationEvaluator asyncPythonAnnotationEvaluator(PythonAnnotationEvaluator annotationEvaluator) {
-        return new AsyncPythonAnnotationEvaluator(annotationEvaluator);
+    public PythonAnnotationEvaluator asyncPythonAnnotationEvaluator(PythonAnnotationEvaluator annotationEvaluator,
+                                                                    @Qualifier("pythonAspectTaskExecutor") TaskExecutor taskExecutor) {
+        return new AsyncPythonAnnotationEvaluator(annotationEvaluator, taskExecutor);
+    }
+
+    /**
+     * Creates the {@link TaskExecutor} for handling async executions.
+     *
+     * @param aspectProperties non-null configuration properties
+     * @return non-null {@link TaskExecutor} instance
+     */
+    @Bean
+    @ConditionalOnProperty(name = "spring.python.aspect.async.scopes")
+    public TaskExecutor pythonAspectTaskExecutor(PythonAspectProperties aspectProperties) {
+        var asyncProperties = aspectProperties.async();
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(asyncProperties.corePoolSize());
+        executor.setMaxPoolSize(asyncProperties.maxPoolSize());
+        executor.setQueueCapacity(asyncProperties.queueCapacity());
+        executor.setThreadNamePrefix(asyncProperties.threadNamePrefix());
+        RejectedExecutionHandler handler = switch (asyncProperties.rejectionPolicy()) {
+            case CALLER_RUNS -> new ThreadPoolExecutor.CallerRunsPolicy();
+            case ABORT -> new ThreadPoolExecutor.AbortPolicy();
+            case DISCARD_OLDEST -> new ThreadPoolExecutor.DiscardOldestPolicy();
+            case DISCARD -> new ThreadPoolExecutor.DiscardPolicy();
+        };
+        executor.setRejectedExecutionHandler(handler);
+        executor.initialize();
+        return executor;
     }
 
     /**
@@ -172,7 +204,7 @@ public class PythonAspectConfiguration {
     public PythonBeforeAspect pythonBeforeAspect(PythonAspectProperties aspectProperties,
                                                  @Qualifier("basicPythonAnnotationEvaluator") PythonAnnotationEvaluator basicPythonAnnotationEvaluator,
                                                  @Qualifier("asyncPythonAnnotationEvaluator") PythonAnnotationEvaluator asyncPythonAnnotationEvaluator) {
-        return new PythonBeforeAspect(this.isAsync(aspectProperties, PythonAspectProperties.AsyncScope.BEFORE) ? asyncPythonAnnotationEvaluator : basicPythonAnnotationEvaluator);
+        return new PythonBeforeAspect(this.isAsync(aspectProperties, PythonAspectProperties.AsyncProperties.Scope.BEFORE) ? asyncPythonAnnotationEvaluator : basicPythonAnnotationEvaluator);
     }
 
     /**
@@ -187,17 +219,18 @@ public class PythonAspectConfiguration {
     public PythonAfterAspect pythonAfterAspect(PythonAspectProperties aspectProperties,
                                                @Qualifier("basicPythonAnnotationEvaluator") PythonAnnotationEvaluator basicPythonAnnotationEvaluator,
                                                @Qualifier("asyncPythonAnnotationEvaluator") PythonAnnotationEvaluator asyncPythonAnnotationEvaluator) {
-        return new PythonAfterAspect(this.isAsync(aspectProperties, PythonAspectProperties.AsyncScope.AFTER) ? asyncPythonAnnotationEvaluator : basicPythonAnnotationEvaluator);
+        return new PythonAfterAspect(this.isAsync(aspectProperties, PythonAspectProperties.AsyncProperties.Scope.AFTER) ? asyncPythonAnnotationEvaluator : basicPythonAnnotationEvaluator);
     }
 
     /**
-     * Checks whether a given {@link PythonAspectProperties.AsyncScope} is configured for asynchronous execution.
+     * Checks whether a given {@link PythonAspectProperties.AsyncProperties.Scope} is configured for asynchronous execution.
      *
      * @param aspectProperties non-null configuration properties
      * @param scope non-null scope to check
      * @return {@code true} if asynchronous execution is enabled for the given scope, {@code false} otherwise
      */
-    private boolean isAsync(PythonAspectProperties aspectProperties, PythonAspectProperties.AsyncScope scope) {
-        return Arrays.asList(aspectProperties.asyncScopes()).contains(scope);
+    private boolean isAsync(PythonAspectProperties aspectProperties, PythonAspectProperties.AsyncProperties.Scope scope) {
+        var scopes = aspectProperties.async().scopes();
+        return Arrays.asList(scopes).contains(scope);
     }
 }

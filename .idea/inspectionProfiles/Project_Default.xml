@@ -6,6 +6,7 @@
         <set>
           <option value="X-Password" />
           <option value="X-Username" />
+          <option value="X-Token" />
         </set>
       </option>
     </inspection_tool>

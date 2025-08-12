@@ -1,12 +1,14 @@
 package io.w4t3rcs.python.executor;
 
+import io.w4t3rcs.python.dto.PythonExecutionResponse;
+
 /**
- * Defines the contract for executing Python scripts and mapping the execution result
+ * Defines the contract for executing Python scripts and mapping the execution body
  * to a Java object of the specified type.
  *
  * <p>Implementations of this interface are responsible for executing Python code
  * in a controlled environment (such as a sandbox, container, or embedded interpreter)
- * and converting the execution result to the requested Java type.
+ * and converting the execution body to the requested Java type.
  * This interface is typically used by higher-level components
  * to integrate Python execution into Java applications.</p>
  *
@@ -21,16 +23,16 @@ package io.w4t3rcs.python.executor;
  */
 public interface PythonExecutor {
     /**
-     * Executes the given Python script and converts the result to the specified Java type.
+     * Executes the given Python script and converts the body to the specified Java type.
      *
      * <p>Implementations must execute the script in a safe and isolated context and perform type conversion to the given {@code resultClass}.
      * The execution order and environment are defined by the specific implementation.</p>
      *
-     * @param <R> the expected result type
+     * @param <R> the expected body type
      * @param script non-{@code null} Python script to execute
-     * @param resultClass the Java class representing the expected result type, may be {@code null} if the script produces no output
-     * @return the result of the script execution mapped to {@code resultClass}, may be {@code null} if the script produces no output
+     * @param resultClass the Java class representing the expected body type, may be {@code null} if the script produces no output
+     * @return the body of the script execution mapped to {@code resultClass}, may be {@code null} if the script produces no output
      */
-    <R> R execute(String script, Class<? extends R> resultClass);
+    <R> PythonExecutionResponse<R> execute(String script, Class<? extends R> resultClass);
 }
 

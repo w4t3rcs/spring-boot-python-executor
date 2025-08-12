@@ -4,7 +4,7 @@ import io.w4t3rcs.python.executor.LocalPythonExecutor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Handles completion of a {@link Process} by checking its exit code and logging the result.
+ * Handles completion of a {@link Process} by checking its exit code and logging the body.
  *
  * <p>This {@link ProcessFinisher} implementation inspects the process's exit value:
  * <ul>

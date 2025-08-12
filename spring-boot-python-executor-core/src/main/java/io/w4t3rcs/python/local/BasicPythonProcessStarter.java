@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  * <p><b>Execution order:</b> After starting the process via {@link ProcessBuilder#start()},
  * this implementation waits for its completion using {@link Process#waitFor()} before returning.
- * As a result, the returned process is always in a terminated state.</p>
+ * As a body, the returned process is always in a terminated state.</p>
  *
  * <p>Example usage:
  * <pre>{@code

@@ -7,19 +7,18 @@ import org.springframework.boot.autoconfigure.service.connection.ConnectionDetai
  *
  * <p>This interface extends {@link ConnectionDetails} and provides
  * credentials and the target server URI in a structured manner. It is intended
- * for use in Spring Boot auto-configuration and connection management components.</p>
+ * for use in Spring Boot autoconfiguration and connection management components.</p>
  *
  * <p><strong>Thread safety:</strong> Implementations of this interface must be immutable
  * and thread-safe. All returned values must be consistent throughout the lifecycle of the object.</p>
  *
  * <p><strong>Null safety:</strong> All methods must return non-{@code null} values. Null parameters passed to
- * {@link #of(String, String, String)} will cause a {@link NullPointerException}.</p>
+ * {@link #of(String, String)} will cause a {@link NullPointerException}.</p>
  *
  * <p><strong>Example usage:</strong></p>
  * <pre>{@code
  * PythonServerConnectionDetails details = PythonServerConnectionDetails.of(
- *     "admin",
- *     "secret",
+ *     "secret-api-key",
  *     "http://localhost:8080"
  * );
  *
@@ -32,18 +31,11 @@ import org.springframework.boot.autoconfigure.service.connection.ConnectionDetai
  */
 public interface PythonServerConnectionDetails extends ConnectionDetails {
     /**
-     * Returns the username used for authenticating with the Python server.
+     * Returns the token used for authenticating with the Python server.
      *
-     * @return non-{@code null} username
+     * @return non-{@code null} token
      */
-    String getUsername();
-
-    /**
-     * Returns the password used for authenticating with the Python server.
-     *
-     * @return non-{@code null} password
-     */
-    String getPassword();
+    String getToken();
 
     /**
      * Returns the URI of the target Python server.
@@ -58,24 +50,17 @@ public interface PythonServerConnectionDetails extends ConnectionDetails {
      * <p>The returned instance is thread-safe and all values are stored as provided.
      * Null values are not allowed.</p>
      *
-     * @param username non-{@code null} username
-     * @param password non-{@code null} password
+     * @param token non-{@code null} token
      * @param uri non-{@code null} URI of the Python server, including protocol and port if applicable
      * @return non-{@code null} {@link PythonServerConnectionDetails} instance
      * @throws NullPointerException if any parameter is {@code null}
      */
-    static PythonServerConnectionDetails of(String username, String password, String uri) {
+    static PythonServerConnectionDetails of(String token, String uri) {
         return new PythonServerConnectionDetails() {
             @Override
-            public String getUsername() {
-                if (username == null) throw new NullPointerException("Username is null");
-                return username;
-            }
-
-            @Override
-            public String getPassword() {
-                if (password == null) throw new NullPointerException("Password is null");
-                return password;
+            public String getToken() {
+                if (token == null) throw new NullPointerException("Token is null");
+                return token;
             }
 
             @Override

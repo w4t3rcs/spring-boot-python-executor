@@ -10,7 +10,7 @@ import lombok.Getter;
  * {@link PythonResolverProperties.DeclaredResolver#RESULT} resolver
  * is declared in the Spring environment property {@code spring.python.resolver.declared}.
  * <p>
- * This condition activates components related to result processing
+ * This condition activates components related to body processing
  * only if the {@code RESULT} resolver is explicitly declared.
  * </p>
  *

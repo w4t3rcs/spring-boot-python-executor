@@ -2,10 +2,12 @@ package io.w4t3rcs.python.executor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.w4t3rcs.python.connection.PythonServerConnectionDetails;
+import io.w4t3rcs.python.dto.PythonExecutionResponse;
 import io.w4t3rcs.python.dto.ScriptRequest;
 import io.w4t3rcs.python.exception.PythonScriptExecutionException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -22,14 +24,14 @@ import java.net.http.HttpResponse;
  * <ul>
  *   <li>Serializing the Python script wrapped in a {@link ScriptRequest} to JSON.</li>
  *   <li>Sending an HTTP POST request to the configured REST endpoint with authentication headers.</li>
- *   <li>Receiving the JSON response and deserializing it into the expected result type.</li>
+ *   <li>Receiving the JSON response and deserializing it into the expected body type.</li>
  * </ul>
  * <p>
  * Usage example:
  * <pre>{@code
  * PythonExecutor executor = new RestPythonExecutor(connectionDetails, objectMapper, httpClient);
  * String script = "print('Hello from Python via REST')";
- * String result = executor.execute(script, String.class);
+ * String body = executor.execute(script, String.class);
  * }</pre>
  *
  * @see PythonExecutor
@@ -45,8 +47,7 @@ import java.net.http.HttpResponse;
 public class RestPythonExecutor implements PythonExecutor {
     private static final String CONTENT_TYPE_HEADER = "Content-Type";
     private static final String JSON_CONTENT_TYPE = "application/json";
-    private static final String USERNAME_HEADER = "X-Username";
-    private static final String PASSWORD_HEADER = "X-Password";
+    private static final String TOKEN_HEADER = "X-Token";
     public static final String EMPTY_BODY = "\"\"";
     private final PythonServerConnectionDetails connectionDetails;
     private final ObjectMapper objectMapper;
@@ -58,30 +59,31 @@ public class RestPythonExecutor implements PythonExecutor {
      * The method serializes the script into a JSON body, sends it as an HTTP POST request,
      * and deserializes the JSON response into the specified {@code resultClass}.
      *
-     * @param <R> the expected result type
+     * @param <R> the expected body type
      * @param script the Python script to execute (non-null, non-empty recommended)
-     * @param resultClass the {@link Class} representing the expected return type, may be null if no result expected
+     * @param resultClass the {@link Class} representing the expected return type, may be null if no body expected
      * @return an instance of {@code R} parsed from the REST response body, or {@code null} if {@code resultClass} is null, or the response body is empty or blank
      * @throws PythonScriptExecutionException if an error occurs during HTTP communication, JSON serialization/deserialization, or other execution errors
      */
     @Override
-    public <R> R execute(String script, Class<? extends R> resultClass) {
+    public <R> PythonExecutionResponse<R> execute(String script, Class<? extends R> resultClass) {
         try {
             ScriptRequest scriptRequest = new ScriptRequest(script);
             String scriptJson = objectMapper.writeValueAsString(scriptRequest);
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(connectionDetails.getUri()))
                     .header(CONTENT_TYPE_HEADER, JSON_CONTENT_TYPE)
-                    .header(USERNAME_HEADER, connectionDetails.getUsername())
-                    .header(PASSWORD_HEADER, connectionDetails.getPassword())
+                    .header(TOKEN_HEADER, connectionDetails.getToken())
                     .POST(HttpRequest.BodyPublishers.ofString(scriptJson))
                     .build();
             HttpResponse.BodyHandler<String> handler = HttpResponse.BodyHandlers.ofString();
             HttpResponse<String> response = httpClient.send(request, handler);
+            if (response.statusCode() != HttpStatus.OK.value()) throw new PythonScriptExecutionException("Request failed with status code: " + response.statusCode());
             String body = response.body();
-            return resultClass == null || body == null || body.isBlank() || EMPTY_BODY.equals(body)
+            R result = resultClass == null || body == null || body.isBlank() || EMPTY_BODY.equals(body)
                     ? null
                     : objectMapper.readValue(body, resultClass);
+            return new PythonExecutionResponse<>(result);
         } catch (Exception e) {
             throw new PythonScriptExecutionException(e);
         }

@@ -40,21 +40,16 @@ import org.springframework.grpc.client.GrpcChannelFactory;
 @ConditionalOnProperty(name = "spring.python.executor.type", havingValue = "grpc")
 public class GrpcConfiguration {
     /**
-     * HTTP header name used for passing the username in gRPC metadata.
+     * HTTP header name used for passing the token in gRPC metadata.
      * <p>This header is attached to every outgoing gRPC request.</p>
      */
-    public static final String USERNAME_KEY = "x-username";
-    /**
-     * HTTP header name used for passing the password in gRPC metadata.
-     * <p>This header is attached to every outgoing gRPC request.</p>
-     */
-    public static final String PASSWORD_KEY = "x-password";
+    public static final String TOKEN_KEY = "x-token";
 
     /**
      * Creates a {@link PythonServiceGrpc.PythonServiceBlockingStub} bean configured with:
      * <ul>
      *   <li>Managed channel targeting the Python gRPC server URI</li>
-     *   <li>Authentication metadata containing username and password</li>
+     *   <li>Authentication metadata containing username and token</li>
      * </ul>
      *
      * <p>The bean is only created if:</p>
@@ -63,7 +58,7 @@ public class GrpcConfiguration {
      *   <li>No other {@link PythonServiceGrpc.PythonServiceBlockingStub} bean exists in the context</li>
      * </ul>
      *
-     * @param connectionDetails non-null connection configuration, including URI, username, and password
+     * @param connectionDetails non-null connection configuration, including URI, username, and token
      * @param channels non-null {@link GrpcChannelFactory} for creating managed gRPC channels
      * @return non-null gRPC blocking stub ready for synchronous communication with the Python service
      */
@@ -73,10 +68,8 @@ public class GrpcConfiguration {
         ManagedChannel channel = channels.createChannel(connectionDetails.getUri());
         Metadata headers = new Metadata();
         var marshaller = Metadata.ASCII_STRING_MARSHALLER;
-        Metadata.Key<String> usernameKey = Metadata.Key.of(USERNAME_KEY, marshaller);
-        Metadata.Key<String> passwordKey = Metadata.Key.of(PASSWORD_KEY, marshaller);
-        headers.put(usernameKey, connectionDetails.getUsername());
-        headers.put(passwordKey, connectionDetails.getPassword());
+        Metadata.Key<String> tokenKey = Metadata.Key.of(TOKEN_KEY, marshaller);
+        headers.put(tokenKey, connectionDetails.getToken());
         return PythonServiceGrpc.newBlockingStub(channel)
                 .withInterceptors(MetadataUtils.newAttachHeadersInterceptor(headers));
     }

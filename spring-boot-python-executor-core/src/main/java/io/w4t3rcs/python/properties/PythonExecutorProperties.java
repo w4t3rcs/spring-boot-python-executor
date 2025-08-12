@@ -66,11 +66,10 @@ public record PythonExecutorProperties(Type type, LocalProperties local, RestPro
      *
      * @param host REST service host, must not be null or blank
      * @param port REST service port
-     * @param username authentication username, may be null if no auth
-     * @param password authentication password, may be null if no auth
+     * @param token authentication token
      * @param uri full URI to REST endpoint, must not be null or blank
      */
-    public record RestProperties(String host, int port, String username, String password, String uri) {
+    public record RestProperties(String host, int port, String token, String uri) {
     }
 
     /**
@@ -78,10 +77,9 @@ public record PythonExecutorProperties(Type type, LocalProperties local, RestPro
      *
      * @param host gRPC service host, must not be null or blank
      * @param port gRPC service port
-     * @param username authentication username, may be null if no auth
-     * @param password authentication password, may be null if no auth
+     * @param token authentication token
      * @param uri full URI to gRPC endpoint, must not be null or blank
      */
-    public record GrpcProperties(String host, int port, String username, String password, String uri) {
+    public record GrpcProperties(String host, int port, String token, String uri) {
     }
 }

@@ -1,6 +1,7 @@
 package io.w4t3rcs.python.executor;
 
 import io.w4t3rcs.python.cache.CacheKeyGenerator;
+import io.w4t3rcs.python.dto.PythonExecutionResponse;
 import io.w4t3rcs.python.exception.PythonCacheException;
 import io.w4t3rcs.python.properties.PythonCacheProperties;
 import org.springframework.cache.Cache;
@@ -11,7 +12,7 @@ import org.springframework.cache.CacheManager;
  * <p>
  * This executor delegates script execution to a wrapped {@link PythonExecutor} instance,
  * caching results based on generated cache keys to improve performance on repeated executions
- * with identical scripts and result types.
+ * with identical scripts and body types.
  * </p>
  *
  * <p>Usage example:</p>
@@ -52,31 +53,32 @@ public class CachingPythonExecutor implements PythonExecutor {
     }
 
     /**
-     * Executes the given Python script and returns the result of the specified type.
+     * Executes the given Python script and returns the body of the specified type.
      * <p>
-     * If a cached result is available for the generated cache key, it is returned immediately.
+     * If a cached body is available for the generated cache key, it is returned immediately.
      * Otherwise, the script is executed using the delegate {@link PythonExecutor},
-     * and the result is cached before returning.
+     * and the body is cached before returning.
      * </p>
      * <p>
-     * Cache keys are generated using the configured {@link CacheKeyGenerator} with the script and result class.
+     * Cache keys are generated using the configured {@link CacheKeyGenerator} with the script and body class.
      * </p>
      *
-     * @param <R> the expected result type
+     * @param <R> the expected body type
      * @param script non-null Python script to execute
-     * @param resultClass non-null {@link Class} representing the expected result type
-     * @return the execution result; guaranteed non-null if the delegate returns non-null
+     * @param resultClass non-null {@link Class} representing the expected body type
+     * @return the execution body, guaranteed non-null if the delegate returns non-null
      * @throws PythonCacheException if any caching or execution error occurs
      */
     @Override
-    public <R> R execute(String script, Class<? extends R> resultClass) {
+    @SuppressWarnings("unchecked")
+    public <R> PythonExecutionResponse<R> execute(String script, Class<? extends R> resultClass) {
         try {
             String key = keyGenerator.generateKey(script, resultClass);
-            R cachedResult = cache.get(key, resultClass);
+            PythonExecutionResponse<R> cachedResult = (PythonExecutionResponse<R>) cache.get(key, PythonExecutionResponse.class);
             if (cachedResult != null) {
                 return cachedResult;
             } else {
-                R result = pythonExecutor.execute(script, resultClass);
+                PythonExecutionResponse<R> result = pythonExecutor.execute(script, resultClass);
                 cache.put(key, result);
                 return result;
             }

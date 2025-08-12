@@ -1,5 +1,6 @@
 package io.w4t3rcs.python.processor;
 
+import io.w4t3rcs.python.dto.PythonExecutionResponse;
 import io.w4t3rcs.python.executor.PythonExecutor;
 import io.w4t3rcs.python.resolver.PythonResolver;
 import io.w4t3rcs.python.resolver.PythonResolverHolder;
@@ -30,12 +31,12 @@ import java.util.Map;
  */
 public interface PythonProcessor {
     /**
-     * Processes and executes a Python script without additional arguments or result mapping.
+     * Processes and executes a Python script without additional arguments or body mapping.
      *
      * @param script non-{@code null} Python script to execute
      */
-    default void process(String script) {
-        this.process(script, Map.of());
+    default PythonExecutionResponse<?> process(String script) {
+        return this.process(script, null, Map.of());
     }
 
     /**
@@ -44,30 +45,30 @@ public interface PythonProcessor {
      * @param script non-{@code null} Python script to execute
      * @param arguments a map of arguments accessible to resolvers during preprocessing
      */
-    default void process(String script, Map<String, Object> arguments) {
-        this.process(script, null, arguments);
+    default PythonExecutionResponse<?> process(String script, Map<String, Object> arguments) {
+        return this.process(script, null, arguments);
     }
 
     /**
-     * Processes and executes a Python script, mapping the result to the specified type.
+     * Processes and executes a Python script, mapping the body to the specified type.
      *
-     * @param <R> the type of result expected from script execution
+     * @param <R> the type of body expected from script execution
      * @param script non-{@code null} Python script to execute
-     * @param resultClass the class representing the expected result type (nullable)
-     * @return the result of execution cast to {@code R}, or {@code null} if the script returns nothing
+     * @param resultClass the class representing the expected body type (nullable)
+     * @return the body of execution cast to {@code R}, or {@code null} if the script returns nothing
      */
-    default <R> R process(String script, Class<? extends R> resultClass) {
+    default <R> PythonExecutionResponse<R> process(String script, Class<? extends R> resultClass) {
         return this.process(script, resultClass, Map.of());
     }
 
     /**
-     * Processes and executes a Python script with arguments and optional result mapping.
+     * Processes and executes a Python script with arguments and optional body mapping.
      *
-     * @param <R> the type of result expected from script execution
+     * @param <R> the type of body expected from script execution
      * @param script non-{@code null} Python script to execute
-     * @param resultClass the class representing the expected result type (nullable)
+     * @param resultClass the class representing the expected body type (nullable)
      * @param arguments a map of arguments accessible to resolvers during preprocessing
-     * @return the result of execution cast to {@code R}, or {@code null} if the script returns nothing
+     * @return the body of execution cast to {@code R}, or {@code null} if the script returns nothing
      */
-    <R> R process(String script, Class<? extends R> resultClass, Map<String, Object> arguments);
+    <R> PythonExecutionResponse<R> process(String script, Class<? extends R> resultClass, Map<String, Object> arguments);
 }

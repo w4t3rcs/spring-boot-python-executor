@@ -2,6 +2,7 @@ package io.w4t3rcs.python.executor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.w4t3rcs.python.connection.PythonServerConnectionDetails;
+import io.w4t3rcs.python.dto.PythonExecutionResponse;
 import io.w4t3rcs.python.exception.PythonScriptExecutionException;
 import io.w4t3rcs.python.proto.PythonRequest;
 import io.w4t3rcs.python.proto.PythonResponse;
@@ -14,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
  * <p>
  * This class uses a gRPC blocking stub to send Python code for execution on a remote Python service.
  * It handles communication with the gRPC server, processes the response, and converts the
- * returned JSON result into the specified Java type.
+ * returned JSON body into the specified Java type.
  * <p>
  * This executor abstracts the complexity of starting and managing Python processes,
  * relying on the gRPC service to execute scripts and return results.
@@ -23,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
  * <pre>{@code
  * PythonExecutor executor = new GrpcPythonExecutor(stub, objectMapper);
  * String script = "print('Hello, World!')";
- * String result = executor.execute(script, String.class);
+ * String body = executor.execute(script, String.class);
  * }</pre>
  *
  * @see PythonExecutor
@@ -43,24 +44,25 @@ public class GrpcPythonExecutor implements PythonExecutor {
     private final ObjectMapper objectMapper;
 
     /**
-     * Executes the given Python {@code script} via the gRPC Python service and converts the result to the specified type.
+     * Executes the given Python {@code script} via the gRPC Python service and converts the body to the specified type.
      *
-     * @param <R> the expected result type
+     * @param <R> the expected body type
      * @param script the Python script to execute (non-null, non-empty recommended)
-     * @param resultClass the {@link Class} representing the expected type of the result, may be null if no result expected
+     * @param resultClass the {@link Class} representing the expected type of the body, may be null if no body expected
      * @return an instance of {@code R} parsed from the Python script output, or {@code null} if {@code resultClass} is null or output is blank
-     * @throws PythonScriptExecutionException if any error occurs during script execution or result parsing
+     * @throws PythonScriptExecutionException if any error occurs during script execution or body parsing
      */
     @Override
-    public <R> R execute(String script, Class<? extends R> resultClass) {
+    public <R> PythonExecutionResponse<R> execute(String script, Class<? extends R> resultClass) {
         try {
             PythonResponse response = stub.sendCode(PythonRequest.newBuilder()
                     .setScript(script)
                     .build());
-            String result = response.getResult();
-            return resultClass == null || result.isBlank()
+            String responseResult = response.getResult();
+            R result = resultClass == null || responseResult.isBlank()
                     ? null
-                    : objectMapper.readValue(result, resultClass);
+                    : objectMapper.readValue(responseResult, resultClass);
+            return new PythonExecutionResponse<>(result);
         } catch (Exception e) {
             throw new PythonScriptExecutionException(e);
         }

@@ -1,7 +1,9 @@
 package io.w4t3rcs.python.aspect;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
+import org.springframework.core.task.TaskExecutor;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
@@ -31,9 +33,11 @@ import java.util.concurrent.CompletableFuture;
  * @author w4t3rcs
  * @since 1.0.0
  */
+@Slf4j
 @RequiredArgsConstructor
 public class AsyncPythonAnnotationEvaluator implements PythonAnnotationEvaluator {
     private final PythonAnnotationEvaluator annotationEvaluator;
+    private final TaskExecutor taskExecutor;
 
     /**
      * Evaluates the specified Python-related annotation asynchronously.
@@ -45,6 +49,13 @@ public class AsyncPythonAnnotationEvaluator implements PythonAnnotationEvaluator
      */
     @Override
     public <A extends Annotation> void evaluate(JoinPoint joinPoint, Class<? extends A> annotationClass, Map<String, Object> additionalArguments) {
-        CompletableFuture.runAsync(() -> annotationEvaluator.evaluate(joinPoint, annotationClass, additionalArguments));
+        taskExecutor.execute(() -> {
+            try {
+                annotationEvaluator.evaluate(joinPoint, annotationClass, additionalArguments);
+            } catch (Exception e) {
+                log.error("Exception occurred during async execution", e);
+                throw new RuntimeException(e);
+            }
+        });
     }
 }

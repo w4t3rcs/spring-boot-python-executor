@@ -41,7 +41,7 @@ class RestPythonExecutorTests {
         Mockito.when(objectMapper.writeValueAsString(scriptRequest)).thenReturn("{\"script\": \"%s\"}".formatted(script));
         Mockito.when(connectionDetails.getUri()).thenReturn("http://localhost:8000/script");
         Mockito.when(connectionDetails.getUsername()).thenReturn("username");
-        Mockito.when(connectionDetails.getPassword()).thenReturn("password");
+        Mockito.when(connectionDetails.getToken()).thenReturn("token");
         Mockito.when(client.send(Mockito.any(HttpRequest.class), Mockito.any(HttpResponse.BodyHandler.class))).thenReturn(response);
         Mockito.when(response.body()).thenReturn(OK);
         Mockito.when((String) objectMapper.readValue(OK, STRING_CLASS)).thenReturn(OK);

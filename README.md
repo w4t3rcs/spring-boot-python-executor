@@ -333,19 +333,17 @@ implementation 'io.github.w4t3rcs:spring-boot-python-executor-testcontainers'
 |----------------------------------------|---------------------------|----------------------------------------------------------------------------------|
 | `spring.python.executor.rest.host`     | REST server host          | `http://localhost`                                                               |
 | `spring.python.executor.rest.port`     | REST server port          | `8000`                                                                           |
-| `spring.python.executor.rest.username` | Authentication username   | `-` (required)                                                                   |
-| `spring.python.executor.rest.password` | Authentication password   | `-` (required)                                                                   |
+| `spring.python.executor.rest.token`    | Authentication token      | `-` (required)                                                                   |
 | `spring.python.executor.rest.uri`      | Full URI to REST endpoint | `${spring.python.executor.rest.host}:${spring.python.executor.rest.port}/script` |
 
 #### gRPC Executor Properties
 
-| Property                               | Description              | Default                                                                   |
-|----------------------------------------|--------------------------|---------------------------------------------------------------------------|
-| `spring.python.executor.grpc.host`     | gRPC server host         | `localhost`                                                               |
-| `spring.python.executor.grpc.port`     | gRPC server port         | `50051`                                                                   |
-| `spring.python.executor.grpc.username` | Authentication username  | `-` (required)                                                            |
-| `spring.python.executor.grpc.password` | Authentication password  | `-` (required)                                                            |
-| `spring.python.executor.grpc.uri`      | Full URI to gRPC service | `${spring.python.executor.grpc.host}:${spring.python.executor.grpc.port}` |
+| Property                            | Description              | Default                                                                   |
+|-------------------------------------|--------------------------|---------------------------------------------------------------------------|
+| `spring.python.executor.grpc.host`  | gRPC server host         | `localhost`                                                               |
+| `spring.python.executor.grpc.port`  | gRPC server port         | `50051`                                                                   |
+| `spring.python.executor.grpc.token` | Authentication token     | `-` (required)                                                            |
+| `spring.python.executor.grpc.uri`   | Full URI to gRPC service | `${spring.python.executor.grpc.host}:${spring.python.executor.grpc.port}` |
 
 ### Resolver Properties
 
@@ -421,6 +419,9 @@ implementation 'io.github.w4t3rcs:spring-boot-python-executor-testcontainers'
 | `spring.python.cache.key.charset`        | Key body charset                                                                                                                                 | `UTF-8`                |
 | `spring.python.cache.key.delimiter`      | Key delimiter between key prefix, key body and key suffix                                                                                        | `_`                    |
 
+Note that if you want to specify your own cache instances using `spring.cache.cache-names`,
+you must also add names from `spring.python.cache.names` or it will fail with `NullPointerException`
+
 ### Aspect Properties
 
 | Property                            | Description                                            | Default         |
@@ -458,8 +459,7 @@ The REST server provides an HTTP endpoint for executing Python scripts.
 
 ```bash
 docker run -p 8000:8000 \
-  -e PYTHON_SERVER_USERNAME=<your-username> \
-  -e PYTHON_SERVER_PASSWORD=<your-password> \
+  -e PYTHON_SERVER_TOKEN=<your-security-token> \
   w4t3rcs/spring-boot-python-executor-python-rest-server
 ```
 
@@ -468,8 +468,7 @@ docker run -p 8000:8000 \
 ```bash
 curl -X POST http://localhost:8000/script \
   -H "Content-Type: application/json" \
-  -H "X-Username: <your-username>" \
-  -H "X-Password: <your-password>" \
+  -H "X-Token: <your-security-token>" \
   -d '{\"script": \"r4java = 2 + 2\"}'
 ```
 
@@ -481,8 +480,7 @@ The gRPC server provides a high-performance interface for executing Python scrip
 
 ```bash
 docker run -p 50051:50051 \
-  -e PYTHON_SERVER_USERNAME=<your-username> \
-  -e PYTHON_SERVER_PASSWORD=<your-password> \
+  -e PYTHON_SERVER_TOKEN=<your-security-token> \
   w4t3rcs/spring-boot-python-executor-python-grpc-server
 ```
 
@@ -490,23 +488,22 @@ docker run -p 50051:50051 \
 
 ```bash
 grpcurl -plaintext -d '{\"script": \"r4java = 2 + 2\"}' \
-  -H 'x-username: <your-username>' \
-  -H 'x-password: <your-password>' \
+  -H 'x-token: <your-security-token>' \
   localhost:50051 PythonService/SendCode
 ```
 
 ### Environment Variables
 
-| Variable                                | Description                | Default                    | Server    |
-|-----------------------------------------|----------------------------|----------------------------|-----------|
-| `PYTHON_SERVER_USERNAME`                | Authentication username    | -                          | Both      |
-| `PYTHON_SERVER_PASSWORD`                | Authentication password    | -                          | Both      |
-| `PYTHON_SERVER_HOST`                    | Server bind address        | 0.0.0.0                    | Both      |
-| `PYTHON_SERVER_PORT`                    | Server port                | 8000 (REST) / 50051 (gRPC) | Both      |
-| `PYTHON_SERVER_THREAD_POOL_MAX_WORKERS` | Max worker threads         | 10                         | gRPC only |
-| `PYTHON_RESULT_APPEARANCE`              | Result variable name       | r4java                     | Both      |
-| `PYTHON_ADDITIONAL_IMPORTS`             | Additional Python packages | -                          | Both      |
-| `PYTHON_ADDITIONAL_IMPORTS_DELIMITER`   | Delimiter for imports      | ,                          | Both      |
+| Variable                                | Description                      | Default                    | Server    |
+|-----------------------------------------|----------------------------------|----------------------------|-----------|
+| `PYTHON_SERVER_TOKEN`                   | Authentication token             | -                          | Both      |
+| `PYTHON_SERVER_HOST`                    | Server bind address              | 0.0.0.0                    | Both      |
+| `PYTHON_SERVER_PORT`                    | Server port                      | 8000 (REST) / 50051 (gRPC) | Both      |
+| `PYTHON_SERVER_THREAD_POOL_MAX_WORKERS` | Max worker threads               | 10                         | gRPC only |
+| `PYTHON_RESULT_APPEARANCE`              | Result variable name             | r4java                     | Both      |
+| `PYTHON_ADDITIONAL_IMPORTS`             | Additional Python packages       | -                          | Both      |
+| `PYTHON_ADDITIONAL_IMPORTS_DELIMITER`   | Delimiter for imports            | ,                          | Both      |
+| `PYTHON_LOGGING_ENABLED`                | Whether request logs are enabled | True                       | Both      |
 
 #### PYTHON_ADDITIONAL_IMPORTS
 

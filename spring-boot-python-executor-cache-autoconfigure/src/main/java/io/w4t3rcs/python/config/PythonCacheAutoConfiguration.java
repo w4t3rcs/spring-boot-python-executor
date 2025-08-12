@@ -88,7 +88,9 @@ public class PythonCacheAutoConfiguration {
     @Primary
     @ConditionalOnBean(PythonFileHandler.class)
     @Conditional(FileCacheLevelCondition.class)
-    public PythonFileHandler cachingPythonFileHandler(PythonCacheProperties cacheProperties, PythonFileHandler pythonFileHandler, CacheManager cacheManager) {
+    public PythonFileHandler cachingPythonFileHandler(PythonCacheProperties cacheProperties,
+                                                      PythonFileHandler pythonFileHandler,
+                                                      CacheManager cacheManager) {
         return new CachingPythonFileHandler(cacheProperties, pythonFileHandler, cacheManager);
     }
 
@@ -107,7 +109,11 @@ public class PythonCacheAutoConfiguration {
     @Primary
     @ConditionalOnBean(PythonResolverHolder.class)
     @Conditional(ResolverCacheLevelCondition.class)
-    public PythonResolverHolder cachingPythonResolverHolder(PythonCacheProperties cacheProperties, PythonResolverHolder pythonResolverHolder, CacheManager cacheManager, CacheKeyGenerator keyGenerator, ObjectMapper objectMapper) {
+    public PythonResolverHolder cachingPythonResolverHolder(PythonCacheProperties cacheProperties,
+                                                            PythonResolverHolder pythonResolverHolder,
+                                                            CacheManager cacheManager,
+                                                            CacheKeyGenerator keyGenerator,
+                                                            ObjectMapper objectMapper) {
         return new CachingPythonResolverHolder(cacheProperties, pythonResolverHolder, cacheManager, keyGenerator, objectMapper);
     }
 
@@ -125,7 +131,10 @@ public class PythonCacheAutoConfiguration {
     @Primary
     @ConditionalOnBean(PythonExecutor.class)
     @Conditional(ExecutorCacheLevelCondition.class)
-    public PythonExecutor cachingPythonExecutor(PythonCacheProperties cacheProperties, PythonExecutor pythonExecutor, CacheManager cacheManager, CacheKeyGenerator keyGenerator) {
+    public PythonExecutor cachingPythonExecutor(PythonCacheProperties cacheProperties,
+                                                PythonExecutor pythonExecutor,
+                                                CacheManager cacheManager,
+                                                CacheKeyGenerator keyGenerator) {
         return new CachingPythonExecutor(cacheProperties, pythonExecutor, cacheManager, keyGenerator);
     }
 
@@ -144,7 +153,11 @@ public class PythonCacheAutoConfiguration {
     @Primary
     @ConditionalOnBean(PythonProcessor.class)
     @Conditional(ProcessorCacheLevelCondition.class)
-    public PythonProcessor cachingPythonProcessor(PythonCacheProperties cacheProperties, PythonProcessor pythonProcessor, CacheManager cacheManager, CacheKeyGenerator keyGenerator, ObjectMapper objectMapper) {
+    public PythonProcessor cachingPythonProcessor(PythonCacheProperties cacheProperties,
+                                                  PythonProcessor pythonProcessor,
+                                                  CacheManager cacheManager,
+                                                  CacheKeyGenerator keyGenerator,
+                                                  ObjectMapper objectMapper) {
         return new CachingPythonProcessor(cacheProperties, pythonProcessor, cacheManager, keyGenerator, objectMapper);
     }
 }

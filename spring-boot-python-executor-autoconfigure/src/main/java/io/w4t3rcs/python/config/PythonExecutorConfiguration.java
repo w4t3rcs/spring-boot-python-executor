@@ -130,7 +130,7 @@ public class PythonExecutorConfiguration {
     @ConditionalOnProperty(name = "spring.python.executor.type", havingValue = "rest")
     public PythonServerConnectionDetails restConnectionDetails(PythonExecutorProperties properties) {
         PythonExecutorProperties.RestProperties restProperties = properties.rest();
-        return PythonServerConnectionDetails.of(restProperties.username(), restProperties.password(), restProperties.uri());
+        return PythonServerConnectionDetails.of(restProperties.token(), restProperties.uri());
     }
 
     /**
@@ -171,6 +171,6 @@ public class PythonExecutorConfiguration {
     @ConditionalOnProperty(name = "spring.python.executor.type", havingValue = "grpc")
     public PythonServerConnectionDetails grpcConnectionDetails(PythonExecutorProperties properties) {
         PythonExecutorProperties.GrpcProperties grpcProperties = properties.grpc();
-        return PythonServerConnectionDetails.of(grpcProperties.username(), grpcProperties.password(), grpcProperties.uri());
+        return PythonServerConnectionDetails.of(grpcProperties.token(), grpcProperties.uri());
     }
 }

@@ -5,10 +5,10 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
 /**
- * {@link PythonResolver} implementation that processes Python scripts to capture and format result expressions
+ * {@link PythonResolver} implementation that processes Python scripts to capture and format body expressions
  * by wrapping them with print statements.
  *
- * <p>This resolver identifies result expressions in the script based on a configured regex pattern
+ * <p>This resolver identifies body expressions in the script based on a configured regex pattern
  * and then ensures these expressions are output during script execution in a structured format.
  * The print statements prepend a unique appearance prefix, allowing downstream processing or log parsing
  * systems to reliably detect and extract these results from the script output.</p>
@@ -29,7 +29,7 @@ public class PrintedResultResolver extends AbstractPythonResolver {
     private final PythonResolverProperties resolverProperties;
 
     /**
-     * Resolves the Python script by wrapping configured result expressions with print statements.
+     * Resolves the Python script by wrapping configured body expressions with print statements.
      *
      * @param script the original Python script to process (non-null)
      * @param arguments unused map of variables, may be null or empty

@@ -15,7 +15,7 @@ import java.util.HashMap;
  * or {@link PythonAfters} to evaluate associated Python scripts after successful method completion.
  * <p>
  * This aspect captures the returned value from the method and passes it as an additional argument
- * named {@code "result"} to the {@link PythonAnnotationEvaluator}.
+ * named {@code "body"} to the {@link PythonAnnotationEvaluator}.
  * <p>
  * The aspect listens to two pointcuts:
  * <ul>
@@ -38,7 +38,7 @@ public class PythonAfterAspect {
 
     /**
      * Advice that executes after successful return of methods annotated with {@link PythonAfters}.
-     * Passes the method return value as an additional argument named {@code "result"}.
+     * Passes the method return value as an additional argument named {@code "body"}.
      *
      * @param joinPoint non-null join point representing the intercepted method call
      * @param result the returned object from the intercepted method, may be null
@@ -50,7 +50,7 @@ public class PythonAfterAspect {
 
     /**
      * Advice that executes after successful return of methods annotated with {@link PythonAfter}.
-     * Passes the method return value as an additional argument named {@code "result"}.
+     * Passes the method return value as an additional argument named {@code "body"}.
      *
      * @param joinPoint non-null join point representing the intercepted method call
      * @param result the returned object from the intercepted method; may be null
@@ -62,7 +62,7 @@ public class PythonAfterAspect {
 
     /**
      * Helper method to invoke the {@link PythonAnnotationEvaluator} with the given join point,
-     * annotation class, and additional arguments containing the method's return value under the key {@code "result"}.
+     * annotation class, and additional arguments containing the method's return value under the key {@code "body"}.
      *
      * @param joinPoint non-null join point representing the intercepted method call
      * @param result the returned object from the intercepted method, may be null

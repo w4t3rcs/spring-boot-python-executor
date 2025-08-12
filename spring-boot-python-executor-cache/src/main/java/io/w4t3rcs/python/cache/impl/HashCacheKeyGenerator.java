@@ -14,7 +14,7 @@ import java.util.Base64;
 
 /**
  * {@link CacheKeyGenerator} implementation that generates cache keys by hashing
- * the {@code body} string using a configurable hashing algorithm and encoding the result in Base64.
+ * the {@code body} string using a configurable hashing algorithm and encoding the body in Base64.
  * <p>
  * The generated key format is: {@code [prefix][delimiter][hashedBody][delimiter][suffix]},
  * where {@code prefix} and {@code suffix} are optional and {@code delimiter} is configurable.
@@ -50,7 +50,7 @@ public class HashCacheKeyGenerator implements CacheKeyGenerator {
 
     /**
      * Generates a cache key by hashing the {@code body} string with the configured
-     * hash algorithm and encoding the result in Base64.
+     * hash algorithm and encoding the body in Base64.
      * <p>
      * The resulting key consists of the optional {@code prefix}, the Base64-encoded
      * hash of the {@code body}, and the optional {@code suffix}, joined by the configured

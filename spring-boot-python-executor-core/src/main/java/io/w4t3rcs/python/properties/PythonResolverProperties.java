@@ -17,7 +17,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * spring:
  *   python:
  *     resolver:
- *       declared: spelython, result, py4j, restricted_python, printed_result
+ *       declared: spelython, body, py4j, restricted_python, printed_result
  *       script-imports-regex: (^import [\\w.]+$)|(^import [\\w.]+ as [\\w.]+$)|(^from [\\w.]+ import [\\w., ]+$)
  *       spelython:
  *         regex: spel\\{.+?}
@@ -36,9 +36,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  *         import-line: from RestrictedPython import compile_restricted
  *         code-variable-name: source_code
  *         local-variables-name: execution_result
- *         safe-result-appearance: r4java_restricted
+ *         safe-body-appearance: r4java_restricted
  *         print-enabled: true
- *       result:
+ *       body:
  *         regex: o4java\\{.+?}
  *         appearance: r4java
  *         position-from-start: 7
@@ -51,7 +51,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @param spelython configuration properties specific to Spelython resolver, non-null
  * @param py4j configuration properties specific to Py4J resolver, non-null
  * @param restrictedPython configuration properties specific to Restricted Python resolver, non-null
- * @param result configuration properties for result parsing, non-null
+ * @param result configuration properties for body parsing, non-null
  * @see PythonResolver
  * @see PythonResolverHolder
  * @author w4t3rcs
@@ -109,8 +109,8 @@ public record PythonResolverProperties(DeclaredResolver[] declared, String scrip
     /**
      * Configuration properties describing how to extract results from Python execution output.
      *
-     * @param regex regular expression to match result lines, non-null
-     * @param appearance prefix string indicating result presence, non-null
+     * @param regex regular expression to match body lines, non-null
+     * @param appearance prefix string indicating body presence, non-null
      * @param positionFromStart number of characters to skip from start, >= 0
      * @param positionFromEnd number of characters to skip from end, >= 0
      * @see ResultResolver

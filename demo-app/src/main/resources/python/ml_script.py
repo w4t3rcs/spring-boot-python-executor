@@ -23,7 +23,7 @@ model.fit(X_train, y_train)
 predictions = model.predict(X_test)
 report = classification_report(y_test, predictions, output_dict=True)
 
-# Output the result back to Java
+# Output the body back to Java
 result = {
     'accuracy': report['accuracy'],
     'macro_avg': report['macro avg'],

@@ -1,6 +1,7 @@
 package io.w4t3rcs.python.executor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.w4t3rcs.python.dto.PythonExecutionResponse;
 import io.w4t3rcs.python.exception.PythonScriptExecutionException;
 import io.w4t3rcs.python.local.ProcessFinisher;
 import io.w4t3rcs.python.local.ProcessHandler;
@@ -24,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
  * <pre>{@code
  * PythonExecutor executor = new LocalPythonExecutor(processStarter, inputHandler, errorHandler, objectMapper, processFinisher);
  * String script = "print('Hello from Python')";
- * String result = executor.execute(script, String.class);
+ * String body = executor.execute(script, String.class);
  * }</pre>
  *
  * @see PythonExecutor
@@ -52,22 +53,23 @@ public class LocalPythonExecutor implements PythonExecutor {
      * The method starts a new Python process, processes the output and error streams,
      * and waits for the process termination.
      *
-     * @param <R> the expected result type
+     * @param <R> the expected body type
      * @param script the Python script to execute (non-null, non-empty recommended)
-     * @param resultClass the {@link Class} representing the expected return type, may be null if no result expected
+     * @param resultClass the {@link Class} representing the expected return type, may be null if no body expected
      * @return an instance of {@code R} parsed from the Python script output, or {@code null} if {@code resultClass} is null or output is blank
      * @throws PythonScriptExecutionException if an error occurs during process execution, I/O handling, or JSON deserialization
      */
     @Override
-    public <R> R execute(String script, Class<? extends R> resultClass) {
+    public <R> PythonExecutionResponse<R> execute(String script, Class<? extends R> resultClass) {
         try {
             Process process = processStarter.start(script);
             String jsonResult = inputProcessHandler.handle(process);
             errorProcessHandler.handle(process);
             processFinisher.finish(process);
-            return resultClass == null || jsonResult == null || jsonResult.isBlank()
+            R result = resultClass == null || jsonResult == null || jsonResult.isBlank()
                     ? null
                     : objectMapper.readValue(jsonResult, resultClass);
+            return new PythonExecutionResponse<>(result);
         } catch (Exception e) {
             throw new PythonScriptExecutionException(e);
         }

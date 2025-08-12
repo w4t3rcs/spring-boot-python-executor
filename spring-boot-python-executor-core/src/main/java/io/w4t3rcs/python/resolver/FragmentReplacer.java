@@ -10,9 +10,9 @@ import java.util.regex.Matcher;
  * to replace parts of a script based on regular expression matches.</p>
  *
  * <pre>{@code
- * FragmentReplacer replacer = (matcher, fragment, result) -> {
+ * FragmentReplacer replacer = (matcher, fragment, body) -> {
  *     // Example: wrap matched text in quotes
- *     return result.append('"').append(fragment.toString()).append('"');
+ *     return body.append('"').append(fragment.toString()).append('"');
  * };
  * }</pre>
  *
@@ -29,8 +29,8 @@ public interface FragmentReplacer {
      *
      * @param matcher non-null {@link Matcher} representing the match in the original text
      * @param fragment non-null {@link StringBuilder} containing the matched fragment to transform
-     * @param result non-null {@link StringBuilder} that will hold the transformation result
-     * @return non-null {@code result} containing the replacement text
+     * @param result non-null {@link StringBuilder} that will hold the transformation body
+     * @return non-null {@code body} containing the replacement text
      */
     StringBuilder replace(Matcher matcher, StringBuilder fragment, StringBuilder result);
 }

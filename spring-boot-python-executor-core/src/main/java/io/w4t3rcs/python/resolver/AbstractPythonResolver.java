@@ -61,7 +61,7 @@ public abstract class AbstractPythonResolver implements PythonResolver {
      *
      * <pre>{@code
      * StringBuilder script = new StringBuilder("print(42)");
-     * StringBuilder updated = replaceScriptFragments(script, "\\d+", 0, 0, (matcher, fragment, result) -> result.append("100"));
+     * StringBuilder updated = replaceScriptFragments(script, "\\d+", 0, 0, (matcher, fragment, body) -> body.append("100"));
      * // Result: print(100)
      * }</pre>
      *

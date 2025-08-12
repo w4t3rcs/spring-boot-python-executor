@@ -7,10 +7,12 @@ spring:
     cache:
       enabled: true
     executor:
-      type: grpc
-      grpc:
-        username: root
-        password: pass
+      type: rest
+      rest:
+        token: secret
+  cache:
+    type: caffeine
+    cache-names: bobi, fileBodiesCache, filePathsCache, pythonResolverCache, pythonExecutorCache, pythonProcessorCache
   docker:
     compose:
       file: ./demo-app/docker-compose.yaml

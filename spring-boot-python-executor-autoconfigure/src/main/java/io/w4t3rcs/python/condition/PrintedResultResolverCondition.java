@@ -10,7 +10,7 @@ import lombok.Getter;
  * {@link PythonResolverProperties.DeclaredResolver#PRINTED_RESULT} resolver
  * is declared in the Spring environment property {@code spring.python.resolver.declared}.
  * <p>
- * This condition is used to enable components related to printed result processing
+ * This condition is used to enable components related to printed body processing
  * only when the {@code PRINTED_RESULT} resolver is explicitly declared.
  * </p>
  *
