@@ -49,6 +49,7 @@
 - [Requirements](#-requirements)
 - [License](#-license)
 - [Contributing and Feedback](#-contributing-and-feedback)
+  - [Authors Support](#authors-support)
   - [Reporting Issues](#reporting-issues)
   - [Feature Requests](#feature-requests)
 
