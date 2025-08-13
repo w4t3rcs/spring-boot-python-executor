@@ -10,6 +10,25 @@
         Shared interfaces and contracts for Python Executor modules.
         This module defines core abstractions without any implementation dependencies.
     </description>
+    <url>https://github.com/w4t3rcs/spring-boot-python-executor</url>
+    <licenses>
+        <license>
+            <name>The MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>w4t3rcs</name>
+            <email>w4t3rofficial@gmail.com</email>
+        </developer>
+    </developers>
+    <scm>
+        <url>https://github.com/w4t3rcs/spring-boot-python-executor</url>
+        <connection>scm:git:git://github.com/w4t3rcs/spring-boot-python-executor.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:w4t3rcs/spring-boot-python-executor.git</developerConnection>
+    </scm>
     <parent>
         <groupId>io.github.w4t3rcs</groupId>
         <artifactId>spring-boot-python-executor-parent</artifactId>
@@ -22,17 +41,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
+            <version>${spring-boot.version}</version>
         </dependency>
     </dependencies>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 </project>

@@ -8,13 +8,13 @@ import java.util.Map;
 
 import static io.w4t3rcs.python.constant.TestConstants.*;
 
-class ResultResolverTests {
+class PrintedResultResolverTests {
     @ParameterizedTest
-    @ValueSource(strings = {RESULT_SCRIPT_0, RESULT_SCRIPT_1, RESULT_SCRIPT_2, RESULT_SCRIPT_3, COMPOUND_SCRIPT_0, COMPOUND_SCRIPT_1})
+    @ValueSource(strings = {PRINTED_RESULT_SCRIPT_0, PRINTED_RESULT_SCRIPT_1, PRINTED_RESULT_SCRIPT_2, PRINTED_RESULT_SCRIPT_3})
     void testResolve(String script) {
-        String resolved = RESULT_RESOLVER.resolve(script, Map.of());
+        String resolved = PRINTED_RESULT_RESOLVER.resolve(script, Map.of());
         System.out.println(resolved);
         Assertions.assertTrue(resolved.contains(RESULT_PROPERTIES.appearance()));
-        Assertions.assertTrue(resolved.contains(RESULT_PROPERTIES.appearance() + " = json.loads(json.dumps(test_var))"));
+        Assertions.assertTrue(resolved.contains("print('" + RESULT_PROPERTIES.appearance() + "' + json.dumps(" + RESULT_PROPERTIES.appearance() + "))"));
     }
 }

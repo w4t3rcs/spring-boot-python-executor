@@ -29,10 +29,12 @@ async def execute_script(request: ScriptRequest,
             logging.info(f"Client failed to connect to the server: {request}")
         raise HTTPException(401, detail="Incorrect token")
     try:
-        execution_result = {}
-        exec(request.script, {}, execution_result)
+        java_execution_context = {}
+        exec(request.script, java_execution_context, java_execution_context)
         if LOGGING_ENABLED:
             logging.info(f"Client executed the script: {request}")
-        return execution_result.get(APPEARANCE)
+        return java_execution_context.get(APPEARANCE)
     except Exception as e:
+        if LOGGING_ENABLED:
+            logging.info(f"Client failed to execute the script: {request}, {str(e)}")
         raise HTTPException(400, detail=str(e))

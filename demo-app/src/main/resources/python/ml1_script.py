@@ -5,12 +5,13 @@ from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 
 # Input parameters from Java via SpEL expressions
-data = spel{#request.data()}
-labels = spel{#request.labels()}
-test_size = spel{#request.testSize()}
-random_state = spel{#request.randomState()}
-max_depth = spel{#request.maxDepth()}
-n_estimators = spel{#request.nEstimators()}
+request = spel{#request}
+data = request['data']
+labels = request['labels']
+test_size = request['testSize']
+random_state = request['randomState']
+max_depth = request['maxDepth']
+n_estimators = request['nEstimators']
 
 X = pd.DataFrame(data)
 y = pd.Series(labels)
@@ -23,7 +24,7 @@ model.fit(X_train, y_train)
 predictions = model.predict(X_test)
 report = classification_report(y_test, predictions, output_dict=True)
 
-# Output the body back to Java
+# Output the result back to Java
 result = {
     'accuracy': report['accuracy'],
     'macro_avg': report['macro avg'],

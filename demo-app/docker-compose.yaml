@@ -1,15 +1,15 @@
 services:
-#  python-server:
-#    image: "w4t3rcs/spring-boot-python-executor-python-grpc-server"
-#    ports:
-#      - "50051:50051"
-#    environment:
-#      PYTHON_SERVER_TOKEN: secret
-#      PYTHON_ADDITIONAL_IMPORTS: scikit-learn,numpy,pandas
-  python-server:
-    image: "w4t3rcs/spring-boot-python-executor-python-rest-server"
+  python-grpc-server:
+    image: "w4t3rcs/spring-boot-python-executor-python-grpc-server:latest"
     ports:
-      - "8000:8000"
+      - "50051:50051"
     environment:
       PYTHON_SERVER_TOKEN: secret
-      PYTHON_ADDITIONAL_IMPORTS: scikit-learn,numpy,pandas
+      PYTHON_ADDITIONAL_IMPORTS: scikit-learn,numpy,pandas,scipy
+#  python-rest-server:
+#    image: "w4t3rcs/spring-boot-python-executor-python-rest-server:latest"
+#    ports:
+#      - "8000:8000"
+#    environment:
+#      PYTHON_SERVER_TOKEN: secret
+#      PYTHON_ADDITIONAL_IMPORTS: scikit-learn,numpy,pandas,scipy

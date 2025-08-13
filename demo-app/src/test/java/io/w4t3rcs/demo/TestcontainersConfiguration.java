@@ -11,8 +11,13 @@ class TestcontainersConfiguration {
     @ServiceConnection
     PythonGrpcServerContainer pythonGrpcServerContainer() {
         return new PythonGrpcServerContainer("w4t3rcs/spring-boot-python-executor-python-grpc-server")
-                .withUsername("user")
-                .withPassword("pass")
-                .withAdditionalImports(new String[]{"scikit-learn", "numpy", "pandas"});
+                .withAdditionalImports(new String[]{"scikit-learn", "numpy", "pandas", "scipy"});
     }
+
+//    @Bean
+//    @ServiceConnection
+//    PythonRestServerContainer pythonRestServerContainer() {
+//        return new PythonRestServerContainer("w4t3rcs/spring-boot-python-executor-python-rest-server")
+//                .withAdditionalImports(new String[]{"scikit-learn", "numpy", "pandas", "scipy"});
+//    }
 }

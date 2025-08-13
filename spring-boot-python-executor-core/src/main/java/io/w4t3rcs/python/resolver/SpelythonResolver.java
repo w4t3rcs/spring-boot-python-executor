@@ -72,7 +72,15 @@ public class SpelythonResolver extends AbstractPythonResolver {
                     try {
                         Expression expression = parser.parseExpression(fragment.toString());
                         Object expressionValue = expression.getValue(context, Object.class);
-                        String jsonResult = objectMapper.writeValueAsString(expressionValue);
+                        String jsonResult = objectMapper.writeValueAsString(expressionValue).replace("'", "\\'");
+                        if (jsonResult.startsWith("\"\\\"") && jsonResult.endsWith("\\\"\"")) {
+                            int beginIndex = 3;
+                            int endIndex = jsonResult.length() - beginIndex;
+                            jsonResult = jsonResult.substring(beginIndex, endIndex);
+                            return result.append("'")
+                                    .append(jsonResult)
+                                    .append("'");
+                        }
                         return result.append("json.loads('")
                                 .append(jsonResult)
                                 .append("')");

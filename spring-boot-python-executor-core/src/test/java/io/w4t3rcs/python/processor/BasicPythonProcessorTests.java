@@ -1,5 +1,6 @@
 package io.w4t3rcs.python.processor;
 
+import io.w4t3rcs.python.dto.PythonExecutionResponse;
 import io.w4t3rcs.python.executor.PythonExecutor;
 import io.w4t3rcs.python.file.PythonFileHandler;
 import io.w4t3rcs.python.resolver.PythonResolverHolder;
@@ -34,10 +35,10 @@ class BasicPythonProcessorTests {
     })
     void testProcess(String script) {
         Mockito.when(pythonFileHandler.isPythonFile(script)).thenReturn(false);
-        Mockito.when(pythonResolverHolder.resolveAll(script)).thenReturn(script);
-        Mockito.when((String) pythonExecutor.execute(script, STRING_CLASS)).thenReturn(OK);
+        Mockito.when(pythonResolverHolder.resolveAll(script, EMPTY_ARGUMENTS)).thenReturn(script);
+        Mockito.when((PythonExecutionResponse<String>) pythonExecutor.execute(script, STRING_CLASS)).thenReturn(OK_RESPONSE);
 
-        String processed = pythonProcessor.process(script, STRING_CLASS, EMPTY_ARGUMENTS);
+        String processed = pythonProcessor.process(script, STRING_CLASS, EMPTY_ARGUMENTS).body();
         Assertions.assertEquals(OK, processed);
     }
 }

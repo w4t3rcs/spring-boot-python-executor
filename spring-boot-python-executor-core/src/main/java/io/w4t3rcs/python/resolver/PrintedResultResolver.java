@@ -41,7 +41,7 @@ public class PrintedResultResolver extends AbstractPythonResolver {
         this.insertUniqueLineToStart(resolvedScript, AbstractPythonResolver.IMPORT_JSON);
         var resultProperties = resolverProperties.result();
         if (this.containsString(resolvedScript, resultProperties.appearance())) {
-            this.appendNextLine(resolvedScript, builder -> builder.append("print('")
+            this.appendNextLine(resolvedScript, builder -> builder.append("\nprint('")
                     .append(resultProperties.appearance())
                     .append("' + json.dumps(")
                     .append(resultProperties.appearance())

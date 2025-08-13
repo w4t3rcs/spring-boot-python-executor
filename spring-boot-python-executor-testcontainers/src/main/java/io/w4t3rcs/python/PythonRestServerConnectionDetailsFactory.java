@@ -76,7 +76,7 @@ public class PythonRestServerConnectionDetailsFactory extends ContainerConnectio
         /** {@inheritDoc} */
         @Override
         public String getToken() {
-            return this.getContainer().getPassword();
+            return this.getContainer().getToken();
         }
 
         /** {@inheritDoc} */

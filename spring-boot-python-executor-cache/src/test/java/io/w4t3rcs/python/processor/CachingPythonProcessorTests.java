@@ -2,6 +2,7 @@ package io.w4t3rcs.python.processor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.w4t3rcs.python.cache.CacheKeyGenerator;
+import io.w4t3rcs.python.dto.PythonExecutionResponse;
 import io.w4t3rcs.python.properties.PythonCacheProperties;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
@@ -59,9 +60,9 @@ class CachingPythonProcessorTests {
 
         Mockito.when(objectMapper.writeValueAsString(sortedMap)).thenReturn(EMPTY);
         Mockito.when(keyGenerator.generateKey(script, STRING_CLASS)).thenReturn(CACHE_KEY);
-        Mockito.when((String) cache.get(CACHE_KEY, STRING_CLASS)).thenReturn(OK);
+        Mockito.when((PythonExecutionResponse<String>) cache.get(CACHE_KEY, STRING_RESPONSE_CLASS)).thenReturn(OK_RESPONSE);
 
-        String executed = cachingPythonProcessor.process(script, STRING_CLASS, EMPTY_ARGUMENTS);
+        String executed = cachingPythonProcessor.process(script, STRING_CLASS, EMPTY_ARGUMENTS).body();
         Assertions.assertEquals(OK, executed);
     }
 
@@ -78,11 +79,11 @@ class CachingPythonProcessorTests {
 
         Mockito.when(objectMapper.writeValueAsString(sortedMap)).thenReturn(EMPTY);
         Mockito.when(keyGenerator.generateKey(script, STRING_CLASS)).thenReturn(CACHE_KEY);
-        Mockito.when((String) cache.get(CACHE_KEY, STRING_CLASS)).thenReturn(null);
-        Mockito.when((String) pythonProcessor.process(script, STRING_CLASS, EMPTY_ARGUMENTS)).thenReturn(OK);
-        Mockito.doNothing().when(cache).put(CACHE_KEY, OK);
+        Mockito.when((PythonExecutionResponse<String>) cache.get(CACHE_KEY, STRING_RESPONSE_CLASS)).thenReturn(null);
+        Mockito.when((PythonExecutionResponse<String>) pythonProcessor.process(script, STRING_CLASS, EMPTY_ARGUMENTS)).thenReturn(OK_RESPONSE);
+        Mockito.doNothing().when(cache).put(CACHE_KEY, OK_RESPONSE);
 
-        String executed = cachingPythonProcessor.process(script, STRING_CLASS, EMPTY_ARGUMENTS);
+        String executed = cachingPythonProcessor.process(script, STRING_CLASS, EMPTY_ARGUMENTS).body();
         Assertions.assertEquals(OK, executed);
     }
 }

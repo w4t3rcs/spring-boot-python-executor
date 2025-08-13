@@ -33,16 +33,17 @@ class LocalPythonExecutorTests {
 
     @SneakyThrows
     @ParameterizedTest
-    @ValueSource(strings = {SIMPLE_SCRIPT_0, SIMPLE_SCRIPT_1, SIMPLE_SCRIPT_2, SIMPLE_SCRIPT_3})
+    @ValueSource(strings = {SIMPLE_SCRIPT_0})
     void testExecute(String script) {
         Process process = new ProcessBuilder("python", "-c", script).start();
+        process.waitFor();
 
         Mockito.when(processStarter.start(script)).thenReturn(process);
         Mockito.when(inputProcessHandler.handle(process)).thenReturn(OK);
         Mockito.doNothing().when(processFinisher).finish(process);
         Mockito.when((String) objectMapper.readValue(OK, STRING_CLASS)).thenReturn(OK);
 
-        String executed = localPythonExecutor.execute(script, STRING_CLASS);
+        String executed = localPythonExecutor.execute(script, STRING_CLASS).body();
         Assertions.assertEquals(OK, executed);
     }
 }

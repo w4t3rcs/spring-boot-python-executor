@@ -39,7 +39,7 @@ class GrpcPythonExecutorTests {
         Mockito.when(stub.sendCode(scriptRequest)).thenReturn(scriptResponse);
         Mockito.when((String) objectMapper.readValue(OK, STRING_CLASS)).thenReturn(OK);
 
-        String executed = grpcPythonExecutor.execute(script, STRING_CLASS);
+        String executed = grpcPythonExecutor.execute(script, STRING_CLASS).body();
         Assertions.assertEquals(OK, executed);
     }
 }

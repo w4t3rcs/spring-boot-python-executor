@@ -1,5 +1,6 @@
 package io.w4t3rcs.python.local;
 
+import io.w4t3rcs.python.exception.PythonReadingException;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,8 +17,7 @@ class BasicPythonErrorProcessHandlerTests {
     void testHandle(String script) {
         Process process = new ProcessBuilder("python", "-c", script).start();
         process.waitFor();
-        Void handled = ERROR_PROCESS_HANDLER.handle(process);
-        Assertions.assertNull(handled);
+        Assertions.assertThrows(PythonReadingException.class, () -> ERROR_PROCESS_HANDLER.handle(process));
         Assertions.assertNotEquals(0, process.exitValue());
     }
 }

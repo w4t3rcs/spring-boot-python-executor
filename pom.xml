@@ -29,7 +29,6 @@
     </scm>
     <modules>
         <module>python-server-testcontainers</module>
-        <module>spring-boot-python-executor-dependencies</module>
         <module>spring-boot-python-executor-common</module>
         <module>spring-boot-python-executor-core</module>
         <module>spring-boot-python-executor-autoconfigure</module>
@@ -38,6 +37,7 @@
         <module>spring-boot-python-executor-cache-autoconfigure</module>
         <module>spring-boot-python-executor-cache-starter</module>
         <module>spring-boot-python-executor-testcontainers</module>
+        <module>spring-boot-python-executor-dependencies</module>
     </modules>
     <properties>
         <java.version>17</java.version>

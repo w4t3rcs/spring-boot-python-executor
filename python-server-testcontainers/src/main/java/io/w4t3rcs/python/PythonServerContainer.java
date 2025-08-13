@@ -14,15 +14,13 @@ import org.testcontainers.utility.DockerImageName;
  * fluent API chaining returning the subclass type.
  * </p>
  * <p>
- * Default username: {@value #DEFAULT_USERNAME}
- * Default password: {@value #DEFAULT_PASSWORD}
+ * Default token: {@value #DEFAULT_TOKEN}
  * Default additional imports delimiter: {@value #DEFAULT_ADDITIONAL_IMPORTS_DELIMITER}
  * </p>
  *
  * <p>Environment variables used:</p>
  * <ul>
- *   <li>{@value #PYTHON_SERVER_USERNAME_ENV} — username for authentication</li>
- *   <li>{@value #PYTHON_SERVER_PASSWORD_ENV} — password for authentication</li>
+ *   <li>{@value #PYTHON_SERVER_TOKEN_ENV} — token for authentication</li>
  *   <li>{@value #PYTHON_ADDITIONAL_IMPORTS_ENV} — additional Python imports as a delimiter-separated string</li>
  *   <li>{@value #PYTHON_ADDITIONAL_IMPORTS_DELIMITER_ENV} — delimiter used in additional imports</li>
  *   <li>{@value #PYTHON_RESULT_APPEARANCE_ENV} — controls Python result appearance/formatting</li>
@@ -36,16 +34,13 @@ import org.testcontainers.utility.DockerImageName;
  * @since 1.0.0
  */
 public class PythonServerContainer<SELF extends PythonServerContainer<SELF>> extends GenericContainer<SELF> {
-    public static final String PYTHON_SERVER_USERNAME_ENV = "PYTHON_SERVER_USERNAME";
-    public static final String PYTHON_SERVER_PASSWORD_ENV = "PYTHON_SERVER_PASSWORD";
+    public static final String PYTHON_SERVER_TOKEN_ENV = "PYTHON_SERVER_TOKEN";
     public static final String PYTHON_ADDITIONAL_IMPORTS_ENV = "PYTHON_ADDITIONAL_IMPORTS";
     public static final String PYTHON_ADDITIONAL_IMPORTS_DELIMITER_ENV = "PYTHON_ADDITIONAL_IMPORTS_DELIMITER";
     public static final String PYTHON_RESULT_APPEARANCE_ENV = "PYTHON_RESULT_APPEARANCE";
-    protected static final String DEFAULT_USERNAME = "root";
-    protected static final String DEFAULT_PASSWORD = "password";
+    protected static final String DEFAULT_TOKEN = "secret";
     protected static final String DEFAULT_ADDITIONAL_IMPORTS_DELIMITER = ",";
-    private String username = DEFAULT_USERNAME;
-    private String password = DEFAULT_PASSWORD;
+    private String token = DEFAULT_TOKEN;
 
     /**
      * Creates a container from the specified Docker image name string.
@@ -63,30 +58,18 @@ public class PythonServerContainer<SELF extends PythonServerContainer<SELF>> ext
      */
     public PythonServerContainer(final DockerImageName dockerImageName) {
         super(dockerImageName);
-        this.withUsername(DEFAULT_USERNAME).withPassword(DEFAULT_PASSWORD);
+        this.withToken(DEFAULT_TOKEN);
     }
 
     /**
-     * Sets the username for the Python server container and corresponding environment variable.
+     * Sets the authentication token for the Python server container and corresponding environment variable.
      *
-     * @param username username to use
+     * @param token token to use
      * @return this container instance for chaining
      */
-    public SELF withUsername(String username) {
-        this.withEnv(PYTHON_SERVER_USERNAME_ENV, username);
-        this.username = username;
-        return this.self();
-    }
-
-    /**
-     * Sets the password for the Python server container and corresponding environment variable.
-     *
-     * @param password password to use
-     * @return this container instance for chaining
-     */
-    public SELF withPassword(String password) {
-        this.withEnv(PYTHON_SERVER_PASSWORD_ENV, password);
-        this.password = password;
+    public SELF withToken(String token) {
+        this.withEnv(PYTHON_SERVER_TOKEN_ENV, token);
+        this.token = token;
         return this.self();
     }
 
@@ -135,20 +118,11 @@ public class PythonServerContainer<SELF extends PythonServerContainer<SELF>> ext
     }
 
     /**
-     * Returns the currently configured username.
+     * Returns the currently configured token.
      *
-     * @return username string
+     * @return token string
      */
-    public String getUsername() {
-        return username;
-    }
-
-    /**
-     * Returns the currently configured password.
-     *
-     * @return password string
-     */
-    public String getPassword() {
-        return password;
+    public String getToken() {
+        return token;
     }
 }

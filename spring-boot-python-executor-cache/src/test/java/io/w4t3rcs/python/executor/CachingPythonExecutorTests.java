@@ -1,6 +1,7 @@
 package io.w4t3rcs.python.executor;
 
 import io.w4t3rcs.python.cache.CacheKeyGenerator;
+import io.w4t3rcs.python.dto.PythonExecutionResponse;
 import io.w4t3rcs.python.properties.PythonCacheProperties;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,9 +50,9 @@ class CachingPythonExecutorTests {
     })
     void testExistentKeyExecute(String script) {
         Mockito.when(keyGenerator.generateKey(script, STRING_CLASS)).thenReturn(CACHE_KEY);
-        Mockito.when((String) cache.get(CACHE_KEY, STRING_CLASS)).thenReturn(OK);
+        Mockito.when((PythonExecutionResponse<String>) cache.get(CACHE_KEY, STRING_RESPONSE_CLASS)).thenReturn(OK_RESPONSE);
 
-        String executed = cachingPythonExecutor.execute(script, STRING_CLASS);
+        String executed = cachingPythonExecutor.execute(script, STRING_CLASS).body();
         Assertions.assertEquals(OK, executed);
     }
 
@@ -64,11 +65,11 @@ class CachingPythonExecutorTests {
     })
     void testNonexistentKeyExecute(String script) {
         Mockito.when(keyGenerator.generateKey(script, STRING_CLASS)).thenReturn(CACHE_KEY);
-        Mockito.when((String) cache.get(CACHE_KEY, STRING_CLASS)).thenReturn(null);
-        Mockito.when((String) pythonExecutor.execute(script, STRING_CLASS)).thenReturn(OK);
-        Mockito.doNothing().when(cache).put(CACHE_KEY, OK);
+        Mockito.when((PythonExecutionResponse<String>) cache.get(CACHE_KEY, STRING_RESPONSE_CLASS)).thenReturn(null);
+        Mockito.when((PythonExecutionResponse<String>) pythonExecutor.execute(script, STRING_CLASS)).thenReturn(OK_RESPONSE);
+        Mockito.doNothing().when(cache).put(CACHE_KEY, OK_RESPONSE);
 
-        String executed = cachingPythonExecutor.execute(script, STRING_CLASS);
+        String executed = cachingPythonExecutor.execute(script, STRING_CLASS).body();
         Assertions.assertEquals(OK, executed);
     }
 }

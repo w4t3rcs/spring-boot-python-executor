@@ -23,30 +23,25 @@ if LOGGING_ENABLED:
 
 class PythonService(python_pb2_grpc.PythonServiceServicer):
     def SendCode(self, request, context):
-        peer_info = context.peer()
-        if peer_info.startswith("ipv4:"):
-            client_ip = peer_info.split(":")[1]
-        elif peer_info.startswith("ipv6:"):
-            client_ip = peer_info.split(":")[1].strip("[]")
-        else:
-            client_ip = "unknown"
         if LOGGING_ENABLED:
-            logging.info(f"Client wants to execute script: {client_ip}")
+            logging.info(f"Client wants to execute script: {request}")
         script = request.script
         meta = dict(context.invocation_metadata())
         if meta.get("x-token") != TOKEN:
             if LOGGING_ENABLED:
-                logging.info(f"Client failed to connect to the server: {client_ip}")
+                logging.info(f"Client failed to connect to the server: {request}")
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details("Invalid credentials")
             return python_pb2.PythonResponse(result="")
         try:
-            execution_result = {}
-            exec(script, {}, execution_result)
+            java_execution_context = {}
+            exec(script, java_execution_context, java_execution_context)
             if LOGGING_ENABLED:
-                logging.info(f"Client executed the script: {client_ip}")
-            return python_pb2.PythonResponse(result=json.dumps(execution_result.get(APPEARANCE)))
+                logging.info(f"Client executed the script: {request}")
+            return python_pb2.PythonResponse(result=json.dumps(java_execution_context.get(APPEARANCE)))
         except Exception as e:
+            if LOGGING_ENABLED:
+                logging.info(f"Client failed to execute the script: {request}, {str(e)}")
             context.set_details(str(e))
             context.set_code(grpc.StatusCode.INTERNAL)
             return python_pb2.PythonResponse(result="")

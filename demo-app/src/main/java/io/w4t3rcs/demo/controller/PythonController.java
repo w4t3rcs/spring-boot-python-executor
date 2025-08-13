@@ -1,8 +1,11 @@
 package io.w4t3rcs.demo.controller;
 
+import io.w4t3rcs.demo.dto.CalculatorRequest;
 import io.w4t3rcs.demo.dto.MLScriptRequest;
 import io.w4t3rcs.demo.dto.MLScriptResponse;
-import io.w4t3rcs.demo.service.PythonService;
+import io.w4t3rcs.demo.service.MLPythonService;
+import io.w4t3rcs.demo.service.PriceCalculatorPythonService;
+import io.w4t3rcs.demo.service.SimplePythonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,22 +17,40 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/python")
 @RequiredArgsConstructor
 public class PythonController {
-    private final PythonService pythonService;
+    private final SimplePythonService simplePythonService;
+    private final PriceCalculatorPythonService priceCalculatorPythonService;
+    private final MLPythonService mlPythonService;
 
     @PostMapping("/before")
-    public ResponseEntity<String> executeBefore(@RequestBody MLScriptRequest request) {
-        pythonService.doSomethingWithPythonBefore(request);
+    public ResponseEntity<?> doSomethingBefore() {
+        simplePythonService.doSomethingWithPythonBefore();
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/inside")
-    public ResponseEntity<MLScriptResponse> executeInside(@RequestBody MLScriptRequest request) {
-        return ResponseEntity.ok().body(pythonService.doSomethingWithPythonInside(request));
+    public ResponseEntity<?> doSomethingInside() {
+        simplePythonService.doSomethingWithPythonInside();
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/after")
-    public ResponseEntity<MLScriptResponse> executeAfter(@RequestBody MLScriptRequest request) {
-        pythonService.doSomethingWithPythonAfter(request);
+    public ResponseEntity<?> doSomethingAfter() {
+        simplePythonService.doSomethingWithPythonAfter();
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/calculator")
+    public ResponseEntity<Double> calculatePrice(@RequestBody CalculatorRequest request) {
+        return ResponseEntity.ok(priceCalculatorPythonService.calculatePrice(request.product(), request.customer()));
+    }
+
+    @PostMapping("/ml1")
+    public ResponseEntity<MLScriptResponse> executeML1Script(@RequestBody MLScriptRequest mlScriptRequest) {
+        return ResponseEntity.ok(mlPythonService.processML1Script(mlScriptRequest));
+    }
+
+    @PostMapping("/ml2")
+    public ResponseEntity<Double> executeML2Script(@RequestBody String text) {
+        return ResponseEntity.ok(mlPythonService.processML2Script(text));
     }
 }

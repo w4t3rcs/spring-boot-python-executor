@@ -40,13 +40,13 @@ class RestPythonExecutorTests {
 
         Mockito.when(objectMapper.writeValueAsString(scriptRequest)).thenReturn("{\"script\": \"%s\"}".formatted(script));
         Mockito.when(connectionDetails.getUri()).thenReturn("http://localhost:8000/script");
-        Mockito.when(connectionDetails.getUsername()).thenReturn("username");
         Mockito.when(connectionDetails.getToken()).thenReturn("token");
         Mockito.when(client.send(Mockito.any(HttpRequest.class), Mockito.any(HttpResponse.BodyHandler.class))).thenReturn(response);
+        Mockito.when(response.statusCode()).thenReturn(200);
         Mockito.when(response.body()).thenReturn(OK);
         Mockito.when((String) objectMapper.readValue(OK, STRING_CLASS)).thenReturn(OK);
 
-        String executed = restPythonExecutor.execute(script, STRING_CLASS);
+        String executed = restPythonExecutor.execute(script, STRING_CLASS).body();
         Assertions.assertEquals(OK, executed);
     }
 }

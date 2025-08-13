@@ -83,7 +83,7 @@ class CachingPythonResolverHolderTests {
         Mockito.when(objectMapper.writeValueAsString(sortedMap)).thenReturn(EMPTY);
         Mockito.when(keyGenerator.generateKey(script)).thenReturn(CACHE_KEY);
         Mockito.when((String) cache.get(CACHE_KEY, STRING_CLASS)).thenReturn(null);
-        Mockito.when(pythonResolverHolder.resolveAll(script)).thenReturn(OK);
+        Mockito.when(pythonResolverHolder.resolveAll(script, EMPTY_ARGUMENTS)).thenReturn(OK);
         Mockito.doNothing().when(cache).put(CACHE_KEY, OK);
 
         String executed = cachingPythonResolverHolder.resolveAll(script);

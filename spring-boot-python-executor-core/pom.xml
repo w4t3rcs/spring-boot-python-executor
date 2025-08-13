@@ -12,6 +12,25 @@
         in the Spring Boot ecosystem. Includes resolver abstractions, script transformation mechanisms,
         and interfaces for safe execution.
     </description>
+    <url>https://github.com/w4t3rcs/spring-boot-python-executor</url>
+    <licenses>
+        <license>
+            <name>The MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>w4t3rcs</name>
+            <email>w4t3rofficial@gmail.com</email>
+        </developer>
+    </developers>
+    <scm>
+        <url>https://github.com/w4t3rcs/spring-boot-python-executor</url>
+        <connection>scm:git:git://github.com/w4t3rcs/spring-boot-python-executor.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:w4t3rcs/spring-boot-python-executor.git</developerConnection>
+    </scm>
     <parent>
         <groupId>io.github.w4t3rcs</groupId>
         <artifactId>spring-boot-python-executor-parent</artifactId>
@@ -19,8 +38,9 @@
     </parent>
     <properties>
         <spring-boot.version>3.5.3</spring-boot.version>
+        <lombok.version>1.18.38</lombok.version>
         <grpc.version>1.72.0</grpc.version>
-        <protobuf-java.version>3.25.3</protobuf-java.version>
+        <protobuf-java.version>3.25.5</protobuf-java.version>
         <spring-grpc.version>0.9.0</spring-grpc.version>
         <py4j.version>0.10.9.7</py4j.version>
     </properties>
@@ -33,19 +53,23 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
+            <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
             <scope>annotationProcessor</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-json</artifactId>
+            <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
+            <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>io.grpc</groupId>
@@ -55,6 +79,7 @@
         <dependency>
             <groupId>org.springframework.grpc</groupId>
             <artifactId>spring-grpc-spring-boot-starter</artifactId>
+            <version>${spring-grpc.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>io.grpc</groupId>
@@ -80,27 +105,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring-boot.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.grpc</groupId>
-                <artifactId>spring-grpc-dependencies</artifactId>
-                <version>${spring-grpc.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
     <build>
         <plugins>
             <plugin>
@@ -130,6 +138,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
             </plugin>
         </plugins>
     </build>

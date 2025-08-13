@@ -6,7 +6,7 @@ import org.junit.Test;
 
 public class PythonRestServerContainerTests {
     @Rule
-    public PythonRestServerContainer pythonRestServer = new PythonRestServerContainer("w4t3rcs/spring-boot-python-executor-python-grpc-server")
+    public PythonRestServerContainer pythonRestServer = new PythonRestServerContainer("w4t3rcs/spring-boot-python-executor-python-rest-server")
             .withAdditionalImports(new String[]{"numpy"});
 
     @Test

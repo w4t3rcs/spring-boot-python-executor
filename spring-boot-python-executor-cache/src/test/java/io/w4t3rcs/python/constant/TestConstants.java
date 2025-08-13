@@ -1,12 +1,16 @@
 package io.w4t3rcs.python.constant;
 
+import io.w4t3rcs.python.dto.PythonExecutionResponse;
+
 import java.nio.file.Path;
 import java.util.Map;
 
 public class TestConstants {
     public static final String EMPTY = "";
     public static final String OK = "OK";
+    public static final PythonExecutionResponse<String> OK_RESPONSE = new PythonExecutionResponse<>(OK);
     public static final Class<? extends String> STRING_CLASS = String.class;
+    public static final Class<? extends PythonExecutionResponse<String>> STRING_RESPONSE_CLASS = (Class<? extends PythonExecutionResponse<String>>) OK_RESPONSE.getClass();
     public static final Class<? extends Path> PATH_CLASS = Path.class;
     public static final Map<String, Object> EMPTY_ARGUMENTS = Map.of();
     public static final String SIMPLE_SCRIPT_0 = "print(2 + 2)";

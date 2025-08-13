@@ -2,12 +2,15 @@
 
 <img src="logo.svg" alt="logo :D">
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.w4t3rcs/spring-boot-python-executor.svg)](https://central.sonatype.com/artifact/io.github.w4t3rcs/spring-boot-python-executor-starter)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.w4t3rcs/spring-boot-python-executor-starter.svg)](https://central.sonatype.com/artifact/io.github.w4t3rcs/spring-boot-python-executor-starter)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.w4t3rcs/spring-boot-python-executor-cache-starter.svg)](https://central.sonatype.com/artifact/io.github.w4t3rcs/spring-boot-python-executor-cache-starter)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.w4t3rcs/spring-boot-python-executor-testcontainers.svg)](https://central.sonatype.com/artifact/io.github.w4t3rcs/spring-boot-python-executor-testcontainers)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.w4t3rcs/spring-boot-python-executor-dependencies.svg)](https://central.sonatype.com/artifact/io.github.w4t3rcs/spring-boot-python-executor-dependencies)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Java: 17+](https://img.shields.io/badge/Java-17%2B-blue.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 [![Spring Boot: 3.5.3+](https://img.shields.io/badge/Spring%20Boot-3.5.3%2B-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Python: 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
-![Tests Passed: 90%](https://img.shields.io/badge/Tests%20Passed-80%25-green.svg)
+![Tests Passed: 99%](https://img.shields.io/badge/Tests%20Passed-99%25-green.svg)
 
 <hr>
 
@@ -424,9 +427,14 @@ you must also add names from `spring.python.cache.names` or it will fail with `N
 
 ### Aspect Properties
 
-| Property                            | Description                                            | Default         |
-|-------------------------------------|--------------------------------------------------------|-----------------|
-| `spring.python.aspect.async-scopes` | What annotations should process scripts asynchronously | `before, after` |
+| Property                                        | Description                                                                              | Default        |
+|-------------------------------------------------|------------------------------------------------------------------------------------------|----------------|
+| `spring.python.aspect.async.scopes`             | What annotations should process scripts asynchronously (`before`, `after`)               | `before,after` |
+| `spring.python.aspect.async.core-pool-size`     | Core thread pool size for async Python execution                                         | `10`           |
+| `spring.python.aspect.async.max-pool-size`      | Maximum thread pool size for async Python execution                                      | `50`           |
+| `spring.python.aspect.async.queue-capacity`     | Queue capacity for pending async Python tasks                                            | `100`          |
+| `spring.python.aspect.async.thread-name-prefix` | Prefix for async Python executor thread names                                            | `AsyncPython-` |
+| `spring.python.aspect.async.rejection-policy`   | Policy for handling rejected tasks (`caller_runs`, `abort`, `discard`, 'discard_oldest') | `caller_runs`  |
 
 ## 🔄 Execution Modes
 
@@ -494,16 +502,16 @@ grpcurl -plaintext -d '{\"script": \"r4java = 2 + 2\"}' \
 
 ### Environment Variables
 
-| Variable                                | Description                      | Default                    | Server    |
-|-----------------------------------------|----------------------------------|----------------------------|-----------|
-| `PYTHON_SERVER_TOKEN`                   | Authentication token             | -                          | Both      |
-| `PYTHON_SERVER_HOST`                    | Server bind address              | 0.0.0.0                    | Both      |
-| `PYTHON_SERVER_PORT`                    | Server port                      | 8000 (REST) / 50051 (gRPC) | Both      |
-| `PYTHON_SERVER_THREAD_POOL_MAX_WORKERS` | Max worker threads               | 10                         | gRPC only |
-| `PYTHON_RESULT_APPEARANCE`              | Result variable name             | r4java                     | Both      |
-| `PYTHON_ADDITIONAL_IMPORTS`             | Additional Python packages       | -                          | Both      |
-| `PYTHON_ADDITIONAL_IMPORTS_DELIMITER`   | Delimiter for imports            | ,                          | Both      |
-| `PYTHON_LOGGING_ENABLED`                | Whether request logs are enabled | True                       | Both      |
+| Variable                                | Description                    | Default                    | Server    |
+|-----------------------------------------|--------------------------------|----------------------------|-----------|
+| `PYTHON_SERVER_TOKEN`                   | Authentication token           | -                          | Both      |
+| `PYTHON_SERVER_HOST`                    | Server bind address            | 0.0.0.0                    | Both      |
+| `PYTHON_SERVER_PORT`                    | Server port                    | 8000 (REST) / 50051 (gRPC) | Both      |
+| `PYTHON_SERVER_THREAD_POOL_MAX_WORKERS` | Max worker threads             | 10                         | gRPC only |
+| `PYTHON_RESULT_APPEARANCE`              | Result variable name           | r4java                     | Both      |
+| `PYTHON_ADDITIONAL_IMPORTS`             | Additional Python packages     | -                          | Both      |
+| `PYTHON_ADDITIONAL_IMPORTS_DELIMITER`   | Delimiter for imports          | ,                          | Both      |
+| `PYTHON_LOGGING_ENABLED`                | Whether to enable request logs | True                       | Both      |
 
 #### PYTHON_ADDITIONAL_IMPORTS
 
@@ -562,7 +570,8 @@ public class CalculationService {
                 o4java{result}  # This value will be returned to Java
                 """;
         Map<String, Object> arguments = Map.of("a", a, "b", b);
-        return pythonProcessor.process(script, Integer.class, arguments);
+        PythonExecutionResponse<Integer> response = pythonProcessor.process(script, Integer.class, arguments);
+        return response.body();
     }
 }
 ```
@@ -600,7 +609,8 @@ public class PricingService {
             "customer", customer
         );
         
-        return pythonProcessor.process(script, Double.class, arguments);
+        PythonExecutionResponse<Double> response = pythonProcessor.process(script, Double.class, arguments);
+        return response.body();
     }
 }
 ```
@@ -644,8 +654,9 @@ public class SentimentAnalysisService {
                 """;
         
         Map<String, Object> arguments = Map.of("text", text);
-        
-        return pythonProcessor.process(script, Double.class, arguments);
+
+        PythonExecutionResponse<Double> response = pythonProcessor.process(script, Double.class, arguments);
+        return response.body();
     }
 }
 ```
