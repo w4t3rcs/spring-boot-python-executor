@@ -2,8 +2,6 @@
 
 <img src="logo.svg" alt="logo :D">
 
-<hr>
-
 <!-- Maven Central -->
 [![Starter](https://img.shields.io/maven-central/v/io.github.w4t3rcs/spring-boot-python-executor-starter?style=for-the-badge&logo=apache-maven&color=dgreen&label=starter)](https://central.sonatype.com/artifact/io.github.w4t3rcs/spring-boot-python-executor-starter)
 [![Cache Starter](https://img.shields.io/maven-central/v/io.github.w4t3rcs/spring-boot-python-executor-cache-starter?style=for-the-badge&logo=apache-maven&color=dgreen&label=cache-starter)](https://central.sonatype.com/artifact/io.github.w4t3rcs/spring-boot-python-executor-cache-starter)
@@ -18,8 +16,6 @@
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge&logo=open-source-initiative)](https://opensource.org/licenses/MIT)
 ![Tests Passed](https://img.shields.io/badge/Tests%20Passed-99%25-green?style=for-the-badge&logo=checkmarx)
-
-<hr>
 
 ## 📋 Table of Contents
 
