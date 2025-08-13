@@ -689,6 +689,11 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## 🤝 Contributing and Feedback
 
+### Authors Support
+
+If you want to support the main creators of the `spring-boot-python-executor`,
+you may help us by donating [here](https://ko-fi.com/w4t3rcs).
+
 ### Reporting Issues
 
 If you encounter any issues or have suggestions for improvements, please create an issue in the GitHub repository.
