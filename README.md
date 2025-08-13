@@ -2,15 +2,22 @@
 
 <img src="logo.svg" alt="logo :D">
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.w4t3rcs/spring-boot-python-executor-starter.svg)](https://central.sonatype.com/artifact/io.github.w4t3rcs/spring-boot-python-executor-starter)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.w4t3rcs/spring-boot-python-executor-cache-starter.svg)](https://central.sonatype.com/artifact/io.github.w4t3rcs/spring-boot-python-executor-cache-starter)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.w4t3rcs/spring-boot-python-executor-testcontainers.svg)](https://central.sonatype.com/artifact/io.github.w4t3rcs/spring-boot-python-executor-testcontainers)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.w4t3rcs/spring-boot-python-executor-dependencies.svg)](https://central.sonatype.com/artifact/io.github.w4t3rcs/spring-boot-python-executor-dependencies)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Java: 17+](https://img.shields.io/badge/Java-17%2B-blue.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
-[![Spring Boot: 3.5.3+](https://img.shields.io/badge/Spring%20Boot-3.5.3%2B-brightgreen.svg)](https://spring.io/projects/spring-boot)
-[![Python: 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
-![Tests Passed: 99%](https://img.shields.io/badge/Tests%20Passed-99%25-green.svg)
+<hr>
+
+<!-- Maven Central -->
+[![Starter](https://img.shields.io/maven-central/v/io.github.w4t3rcs/spring-boot-python-executor-starter?style=for-the-badge&logo=apache-maven&color=blue&label=starter)](https://central.sonatype.com/artifact/io.github.w4t3rcs/spring-boot-python-executor-starter)
+[![Cache Starter](https://img.shields.io/maven-central/v/io.github.w4t3rcs/spring-boot-python-executor-cache-starter?style=for-the-badge&logo=apache-maven&color=blue&label=cache-starter)](https://central.sonatype.com/artifact/io.github.w4t3rcs/spring-boot-python-executor-cache-starter)
+[![Testcontainers](https://img.shields.io/maven-central/v/io.github.w4t3rcs/spring-boot-python-executor-testcontainers?style=for-the-badge&logo=apache-maven&color=blue&label=testcontainers)](https://central.sonatype.com/artifact/io.github.w4t3rcs/spring-boot-python-executor-testcontainers)
+[![BOM](https://img.shields.io/maven-central/v/io.github.w4t3rcs/spring-boot-python-executor-dependencies?style=for-the-badge&logo=apache-maven&color=blue&label=dependencies)](https://central.sonatype.com/artifact/io.github.w4t3rcs/spring-boot-python-executor-dependencies)
+
+<!-- Tech Requirements -->
+![Java](https://img.shields.io/badge/Java-17%2B-orange?style=for-the-badge&logo=openjdk)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.3%2B-brightgreen?style=for-the-badge&logo=spring-boot)
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python)
+
+<!-- License -->
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge&logo=open-source-initiative)](https://opensource.org/licenses/MIT)
+![Tests Passed](https://img.shields.io/badge/Tests%20Passed-99%25-green?style=for-the-badge&logo=checkmarx)
 
 <hr>
 
