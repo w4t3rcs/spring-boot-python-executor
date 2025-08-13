@@ -225,6 +225,7 @@ classDiagram
 ### Security
 
 The library uses RestrictedPython to create a sandboxed environment for Python execution, preventing potentially harmful operations while allowing controlled script execution.
+Also, you can acknowledge the security policy of the project [here](https://github.com/w4t3rcs/spring-boot-python-executor/blob/master/SECURITY.md).
 
 ### Cache
 
@@ -519,7 +520,8 @@ This environment variable allows you to specify additional Python packages to in
 
 ## 💻 Usage Examples
 
-If you want to check out how the library works, you can check `demo-app` module or examples below
+If you want to check out how the library works,
+you can check [demo-app](https://github.com/w4t3rcs/spring-boot-python-executor/tree/master/demo-app) module or examples below
 
 ### Basic Examples
 
