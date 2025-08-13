@@ -58,8 +58,6 @@ git checkout -b feature/my-feature
 
 3. Make your changes following the project’s coding standards.
 4. Write clear and concise commit messages:
-
-   * Use the present tense, e.g., "Add support for X" instead of "Added support for X".
    * Include issue numbers if applicable, e.g., `Fixes #123`.
 5. Push your branch and open a pull request against `main`.
 

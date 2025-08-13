@@ -5,4 +5,5 @@ gen
 /*/target
 /*/venv
 
+/target/
 *.asc
