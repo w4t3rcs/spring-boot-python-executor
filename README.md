@@ -525,7 +525,7 @@ This environment variable allows you to specify additional Python packages to in
 ## 💻 Usage Examples
 
 If you want to check out how the library works,
-you can check [demo-app](https://github.com/w4t3rcs/spring-boot-python-executor/tree/master/demo-app) module or examples below
+you can check [demo-app](https://github.com/w4t3rcs/spring-boot-python-executor-demo-app) or examples below
 
 ### Basic Examples
 

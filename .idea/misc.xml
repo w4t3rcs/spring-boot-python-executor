@@ -26,6 +26,7 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/demo-app/pom.xml" />
         <option value="$PROJECT_DIR$/spring-python-executor/pom.xml" />
       </set>
     </option>
